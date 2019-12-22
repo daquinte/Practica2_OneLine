@@ -11,10 +11,13 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour {
     //Atributos publicos
     [Tooltip("Prefab of a Tile")]
-    public GameObject prefabTile;
+    public Tile prefabTile;
 
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
+
+    public InputManager inputManager;
+
 
     //Atributos privados
 
@@ -22,11 +25,6 @@ public class BoardManager : MonoBehaviour {
     /// Array con los tiles
     /// </summary>
     private Tile[,] tiles;
-
-    /// <summary>
-    /// Array de booleanos de si está pulsado o no.
-    /// </summary>
-    private bool[,] boolTiles;
 
     /// <summary>
     /// El camino de las pistas, que creo que está en ints.
@@ -41,21 +39,26 @@ public class BoardManager : MonoBehaviour {
     private int _anchoTile;     
     private int _altoTile;
 
-
-
 	// Use this for initialization
 	void Start () {
-		
-	}
+        tiles = new Tile[3,1];
+        Camera.main.transform.position = new Vector3(tiles.GetLength(0)/2, tiles.GetLength(1)/2, Camera.main.transform.position.z);
+        for (int filas = 0; filas < tiles.GetLength(1); filas++)
+        {
+            for (int cols = 0; cols < tiles.GetLength(0); cols++)
+            {
+                Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
+                tile.gameObject.name = "Bloque" + cols + filas;
+                tiles[cols, filas] = tile;
+            }
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
-
-
-
-
+        Vector3 click = inputManager.getInputPosition();
+        
+    }
 
     
     private bool EsAdyacente()
