@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e777f8f79032df54f81743aca34de3a6, type: 3}
+  m_Name: Rosa
+  m_EditorClassIdentifier: 
+  spriteTilePulsado: {fileID: 21300000, guid: 906b3321162a5164daf34e8792b4e347, type: 3}
+  spriteTilePista: {fileID: 21300000, guid: ae0ac75ceaabe2c4f847da5094dab617, type: 3}
+  spriteDedo: {fileID: 21300000, guid: cfc69c82b2f797447aa016ba233c41f4, type: 3}
