@@ -75,8 +75,7 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 click = inputManager.getInputPosition();
-        Debug.Log(click);
+        
     }
 
     /// <summary>
@@ -123,15 +122,15 @@ public class BoardManager : MonoBehaviour
 
     public void SetTilePulsado(int x, int y)
     {
-        tiles[x, y].Pulsar();
+        
         // Asumimos que es una jugada legal
         if (tiles[x, y].GetPulsado())
         {
-            Debug.Log("skr");
             DeshacerCamino(tiles[x, y]);
         }
         else
         {
+            tiles[x, y].Pulsar();
             caminoTiles.Push(tiles[x, y]);
         }
     }
@@ -145,6 +144,7 @@ public class BoardManager : MonoBehaviour
     {
         while (caminoTiles.Peek() != bloquePulsado)
         {
+            Debug.Log("ESKERE");
             caminoTiles.Peek().Despulsar();
             caminoTiles.Pop();
             //caminoTiles.Peek().QuitaCamino(); //<- El caminito entre dos bloques que habrá que hacer

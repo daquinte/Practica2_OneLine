@@ -40,6 +40,7 @@ public class Tile : MonoBehaviour
     public void SetTileInicial()
     {
         _tileInicial = true;
+        _pulsado = true;
         GetComponent<SpriteRenderer>().sprite = spritePulsado;
     }
 
@@ -56,7 +57,6 @@ public class Tile : MonoBehaviour
     {
         _pulsado = true;
         GetComponent<SpriteRenderer>().sprite = spritePulsado;
-        Debug.Log("Me han pulsado");
     }
 
     /// <summary>
