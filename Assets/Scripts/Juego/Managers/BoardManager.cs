@@ -119,15 +119,36 @@ public class BoardManager : MonoBehaviour
     /// Métodos de lógica de juego y comprobaciones del mismo.
     /// </summary>
     #region Logic Methods
-    void TilePulsado()
+
+
+    public void SetTilePulsado(int x, int y)
     {
-
-    }
-
-    public void SetTilePulsado(int x, int y) {
         tiles[x, y].Pulsar();
         // Asumimos que es una jugada legal
-        caminoTiles.Push(tiles[x, y]);
+        if (tiles[x, y].GetPulsado())
+        {
+            Debug.Log("skr");
+            DeshacerCamino(tiles[x, y]);
+        }
+        else
+        {
+            caminoTiles.Push(tiles[x, y]);
+        }
+    }
+
+    /// <summary>
+    /// Deshace el camino hasta que el top del stack 
+    /// es el bloque que queremos
+    /// </summary>
+    /// <param name="bloquePulsado"></param>
+    private void DeshacerCamino(Tile bloquePulsado)
+    {
+        while (caminoTiles.Peek() != bloquePulsado)
+        {
+            caminoTiles.Peek().Despulsar();
+            caminoTiles.Pop();
+            //caminoTiles.Peek().QuitaCamino(); //<- El caminito entre dos bloques que habrá que hacer
+        }
     }
     #endregion
 
