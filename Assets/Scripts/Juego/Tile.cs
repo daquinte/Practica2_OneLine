@@ -9,12 +9,10 @@ using UnityEngine;
 */
 public class Tile : MonoBehaviour
 {
+    [Tooltip("Skin de tile no pulsado.")]
+    public Sprite spriteNoPulsado;      //Sprite de tile no pulsado
 
-    [Tooltip("Sprite para cuando no haya camino")]
-    public Sprite pulsado;
-
-    [Tooltip("Sprite para cuando haya camino")]
-    public Sprite noPulsado;
+    private Sprite spritePulsado;        //Sprite de tile pulsado
 
 
     /// <summary>
@@ -32,7 +30,7 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         if(!_tileInicial)
-            GetComponent<SpriteRenderer>().sprite = noPulsado;
+            GetComponent<SpriteRenderer>().sprite = spriteNoPulsado;
     }
 
     /// <summary>
@@ -42,7 +40,12 @@ public class Tile : MonoBehaviour
     public void SetTileInicial()
     {
         _tileInicial = true;
-        GetComponent<SpriteRenderer>().sprite = pulsado;
+        GetComponent<SpriteRenderer>().sprite = spritePulsado;
+    }
+
+    public void SetTileSkin(TileSkin tileSkin)
+    {
+        spritePulsado = tileSkin.spriteTilePulsado;
     }
 
     /// <summary>
@@ -52,7 +55,7 @@ public class Tile : MonoBehaviour
     public void Pulsar()
     {
         _pulsado = true;
-        GetComponent<SpriteRenderer>().sprite = pulsado;
+        GetComponent<SpriteRenderer>().sprite = spritePulsado;
     }
 
     /// <summary>
@@ -65,7 +68,7 @@ public class Tile : MonoBehaviour
         if (!_tileInicial)
         {
             _pulsado = false;
-            GetComponent<SpriteRenderer>().sprite = noPulsado;
+            GetComponent<SpriteRenderer>().sprite = spriteNoPulsado;
         }
     }
 

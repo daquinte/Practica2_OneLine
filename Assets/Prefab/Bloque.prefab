@@ -52,8 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b167325ab1e9e249b659bda5d720bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pulsado: {fileID: 21300000, guid: 906b3321162a5164daf34e8792b4e347, type: 3}
-  noPulsado: {fileID: 21300000, guid: c3df0dc3bfff2a840ab36da2428d9085, type: 3}
+  spriteNoPulsado: {fileID: 21300000, guid: c3df0dc3bfff2a840ab36da2428d9085, type: 3}
 --- !u!212 &212330655617234930
 SpriteRenderer:
   m_ObjectHideFlags: 1

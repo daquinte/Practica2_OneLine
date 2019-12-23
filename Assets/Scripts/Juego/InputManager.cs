@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour {
 	void Update () {
 		if (Input.GetMouseButton(0)) {
 			position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log(position);
 		}
 	}
 

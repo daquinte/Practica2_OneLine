@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e777f8f79032df54f81743aca34de3a6, type: 3}
+  m_Name: Morado
+  m_EditorClassIdentifier: 
+  spriteTilePulsado: {fileID: 21300000, guid: c9fb8a8215f846245a557b0a99e37aac, type: 3}
+  spriteTilePista: {fileID: 21300000, guid: 8d513db6fdcd661479c7c0d3bad38cdf, type: 3}
+  spriteDedo: {fileID: 21300000, guid: 7775112b786f598439f69a2687f6d088, type: 3}
