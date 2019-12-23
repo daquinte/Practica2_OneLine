@@ -60,21 +60,23 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Todo: actualizar con los valores del txt
-        nFils = 3;
-        nCols = 1;
+        nCols = 3;
+        nFils = 1;
+        tiles = new Tile[nCols, nFils];
 
         caminoTiles = new Stack<Tile>();
-        Camera.main.transform.position = new Vector3(nFils / 2, nCols / 2, Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3(nCols / 2, nFils / 2, Camera.main.transform.position.z);
 
         GetRandomSkin();
         InitTiles();
+        GameManager.instance.SetBoardManager(this);
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector3 click = inputManager.getInputPosition();
-
+        Debug.Log(click);
     }
 
     /// <summary>
@@ -83,12 +85,12 @@ public class BoardManager : MonoBehaviour
     #region Start Methods
     private void InitTiles()
     {
-        tiles = new Tile[nFils, nCols];
         for (int filas = 0; filas < tiles.GetLength(1); filas++)
         {
             for (int cols = 0; cols < tiles.GetLength(0); cols++)
             {
                 Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
+                //tile.transform.SetParent(gameObject.transform);
                 tile.gameObject.name = "Bloque" + cols + filas;
                 tile.SetTileSkin(currentTileSkin);
                 tiles[cols, filas] = tile;
@@ -97,7 +99,6 @@ public class BoardManager : MonoBehaviour
                 {
                     tile.SetTileInicial();
                     caminoTiles.Push(tiles[cols, filas]);
-
                 }
             }
         }
@@ -121,6 +122,12 @@ public class BoardManager : MonoBehaviour
     void TilePulsado()
     {
 
+    }
+
+    public void SetTilePulsado(int x, int y) {
+        tiles[x, y].Pulsar();
+        // Asumimos que es una jugada legal
+        caminoTiles.Push(tiles[x, y]);
     }
     #endregion
 

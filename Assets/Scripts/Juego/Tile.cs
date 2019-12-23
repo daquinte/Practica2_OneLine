@@ -56,6 +56,7 @@ public class Tile : MonoBehaviour
     {
         _pulsado = true;
         GetComponent<SpriteRenderer>().sprite = spritePulsado;
+        Debug.Log("Me han pulsado");
     }
 
     /// <summary>
@@ -78,6 +79,9 @@ public class Tile : MonoBehaviour
     /// <returns>Estado del bool "Pulsado" interno</returns>
     public bool GetPulsado() { return _pulsado; }
 
-
+    void OnMouseDown()
+    {
+        GameManager.instance.GetBoardManager().SetTilePulsado((int)this.transform.position.x, (int)this.transform.position.y);
+    }
 
 }

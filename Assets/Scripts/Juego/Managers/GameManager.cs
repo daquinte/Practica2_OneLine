@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
-   
+
+    BoardManager boardManager = null;
+
     //Awake is always called before any Start functions
     void Awake()
     {
@@ -23,16 +26,27 @@ public class GameManager : MonoBehaviour {
 
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
-		
-	}
+
+    }
 
     void Start()
     {
+        boardManager = GetBoardManager();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public void SetBoardManager(BoardManager instance)
+    {
+        boardManager = instance;
+    }
+
+    public BoardManager GetBoardManager()
+    {
+      return boardManager;
+    }
 }
