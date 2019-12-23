@@ -41,14 +41,18 @@ public class BoardManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
         tiles = new Tile[3,1];
-        Camera.main.transform.position = new Vector3(tiles.GetLength(0)/2, tiles.GetLength(1)/2, Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3(tiles.GetLength(0) / 2, tiles.GetLength(1) / 2, Camera.main.transform.position.z);
         for (int filas = 0; filas < tiles.GetLength(1); filas++)
         {
             for (int cols = 0; cols < tiles.GetLength(0); cols++)
             {
                 Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
                 tile.gameObject.name = "Bloque" + cols + filas;
+
+                if (cols == 0 && filas == 0) tile.SetTileInicial();
                 tiles[cols, filas] = tile;
             }
         }
