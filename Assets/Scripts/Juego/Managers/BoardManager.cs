@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,16 +15,16 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Prefab of a Tile")]
     public Tile prefabTile;
 
-    [Tooltip("Input Manager")]
-    public InputManager inputManager;
-
     [Space]
     [Tooltip("Si quieres una skin en particular, añadela aquí.")]
     public TileSkin preferedSkin;
 
+    public Cursor cursor;
+
+    public InputManager inputManager;
+
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
-
 
 
 
@@ -46,8 +47,6 @@ public class BoardManager : MonoBehaviour
 
     private TileSkin currentTileSkin;
 
-    private Sprite fingerSprite;
-
     private int nFils; //numero filas del tablero
     private int nCols; //numero columnas del tablero
 
@@ -60,14 +59,15 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Todo: actualizar con los valores del txt
-        nCols = 3;
-        nFils = 1;
+        nCols = 5;
+        nFils = 9;
         tiles = new Tile[nCols, nFils];
 
         caminoTiles = new Stack<Tile>();
         Camera.main.transform.position = new Vector3(nCols / 2, nFils / 2, Camera.main.transform.position.z);
 
         GetRandomSkin();
+        cursor.SetSprite(currentTileSkin.spriteDedo);
         InitTiles();
         GameManager.instance.SetBoardManager(this);
     }
@@ -75,7 +75,10 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (inputManager.getInputInfo().pulsado)
+        {
+            coordsDentroMatriz((int)Math.Round(inputManager.getInputInfo().position.x), (int)Math.Round(inputManager.getInputInfo().position.y));
+        }
     }
 
     /// <summary>
@@ -107,7 +110,7 @@ public class BoardManager : MonoBehaviour
     {
         if (preferedSkin == null)
         {
-            int rnd = Random.Range(0, tileSkins.Count);
+            int rnd = UnityEngine.Random.Range(0, tileSkins.Count);
             currentTileSkin = tileSkins[rnd];
         }
         else currentTileSkin = preferedSkin;
@@ -118,11 +121,17 @@ public class BoardManager : MonoBehaviour
     /// Métodos de lógica de juego y comprobaciones del mismo.
     /// </summary>
     #region Logic Methods
-
+    private bool esCandidato(Tile tileCandidato)
+    {
+        Tile top = caminoTiles.Peek();
+        int diferenciaX = Math.Abs((int)(tileCandidato.gameObject.transform.position.x - top.gameObject.transform.position.x));
+        int diferenciaY = Math.Abs((int)(tileCandidato.gameObject.transform.position.y - top.gameObject.transform.position.y));
+        return (diferenciaX == 1 && diferenciaY == 0) || (diferenciaX == 0 && diferenciaY == 1);
+    }
 
     public void SetTilePulsado(int x, int y)
     {
-        
+
         // Asumimos que es una jugada legal
         if (tiles[x, y].GetPulsado())
         {
@@ -130,8 +139,19 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            tiles[x, y].Pulsar();
-            caminoTiles.Push(tiles[x, y]);
+            if (esCandidato(tiles[x, y]))
+            {
+                tiles[x, y].Pulsar();
+                caminoTiles.Push(tiles[x, y]);
+            }
+        }
+    }
+
+    public void coordsDentroMatriz(int x, int y)
+    {
+        if ((x >= 0 && x < tiles.GetLength(0)) && (y >= 0 && y < tiles.GetLength(1)))
+        {
+            SetTilePulsado(x, y);
         }
     }
 
@@ -144,7 +164,6 @@ public class BoardManager : MonoBehaviour
     {
         while (caminoTiles.Peek() != bloquePulsado)
         {
-            Debug.Log("ESKERE");
             caminoTiles.Peek().Despulsar();
             caminoTiles.Pop();
             //caminoTiles.Peek().QuitaCamino(); //<- El caminito entre dos bloques que habrá que hacer
