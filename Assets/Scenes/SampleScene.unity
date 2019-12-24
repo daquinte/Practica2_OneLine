@@ -322,11 +322,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 212990083516928280, guid: d18d19047f5234c4c88e90e7474265d0,
-        type: 2}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 114183845954007070, guid: d18d19047f5234c4c88e90e7474265d0,
         type: 2}
       propertyPath: inputManager

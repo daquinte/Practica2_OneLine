@@ -5,13 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class Cursor : MonoBehaviour {
 
-	private Sprite fingerSprite;
+	//private Sprite fingerSprite;
 	private SpriteRenderer renderer;
 	public InputManager inputManager;
 
-	// Use this for initialization
-	void Start()
+	void Awake()
 	{
+		Debug.Log("Antes");
 		renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = false;
 	}
@@ -31,7 +31,6 @@ public class Cursor : MonoBehaviour {
 
 	public void SetSprite(Sprite fingerSprite)
 	{
-		this.fingerSprite = fingerSprite;
-		renderer.sprite = this.fingerSprite;
+		renderer.sprite = fingerSprite;
 	}
 }

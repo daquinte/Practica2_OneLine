@@ -59,8 +59,8 @@ public class BoardManager : MonoBehaviour
     void Start()
     {
         //Todo: actualizar con los valores del txt
-        nCols = 5;
-        nFils = 9;
+        nCols = 3;
+        nFils = 3;
         tiles = new Tile[nCols, nFils];
 
         caminoTiles = new Stack<Tile>();
