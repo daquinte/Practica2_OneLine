@@ -12,6 +12,9 @@ public class Tile : MonoBehaviour
     [Tooltip("Skin de tile no pulsado.")]
     public Sprite spriteNoPulsado;      //Sprite de tile no pulsado
 
+    [Tooltip("Guia de camino")]
+    public GameObject spriteDireccionCamino;      //Sprite de tile no pulsado
+
     private Sprite spritePulsado;        //Sprite de tile pulsado
 
 
@@ -72,6 +75,15 @@ public class Tile : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = spriteNoPulsado;
         }
     }
+    public void DesmarcarCamino()
+    {
+        if (transform.childCount > 0)
+        {
+            Transform child = transform.GetChild(0);
+            child.parent = null;
+            Destroy(child.gameObject);
+        }
+    }
 
     /// <summary>
     /// Devuelve si el tile está pulsado o no
@@ -82,6 +94,13 @@ public class Tile : MonoBehaviour
     void OnMouseDown()
     {
         GameManager.instance.GetBoardManager().SetTilePulsado((int)this.transform.position.x, (int)this.transform.position.y);
+    }
+
+    public void marcarCamino(Tile tile, Vector3 posicion, Vector3 sentido)
+    {
+        GameObject child = Instantiate(spriteDireccionCamino, tile.transform);
+        child.transform.position = tile.transform.position + posicion;
+        child.transform.eulerAngles = sentido;
     }
 
 }

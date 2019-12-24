@@ -11,7 +11,6 @@ public class Cursor : MonoBehaviour {
 
 	void Awake()
 	{
-		Debug.Log("Antes");
 		renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = false;
 	}

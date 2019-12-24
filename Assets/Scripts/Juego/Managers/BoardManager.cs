@@ -121,12 +121,39 @@ public class BoardManager : MonoBehaviour
     /// Métodos de lógica de juego y comprobaciones del mismo.
     /// </summary>
     #region Logic Methods
-    private bool esCandidato(Tile tileCandidato)
+
+    private bool esCandidato(Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
     {
         Tile top = caminoTiles.Peek();
-        int diferenciaX = Math.Abs((int)(tileCandidato.gameObject.transform.position.x - top.gameObject.transform.position.x));
-        int diferenciaY = Math.Abs((int)(tileCandidato.gameObject.transform.position.y - top.gameObject.transform.position.y));
-        return (diferenciaX == 1 && diferenciaY == 0) || (diferenciaX == 0 && diferenciaY == 1);
+        int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - top.gameObject.transform.position.x);
+        int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - top.gameObject.transform.position.y);
+        if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0)
+        {
+            if (diferenciaX < 0)
+            {
+                posicion = new Vector3(-0.5f, 0, 0);
+            }
+            else
+            {
+                posicion = new Vector3(0.5f, 0, 0);
+            }
+            sentido = new Vector3(0, 0, 0);
+            return true;
+        }
+        else if (diferenciaX == 0 && Math.Abs(diferenciaY) == 1)
+        {
+            if (diferenciaY < 0)
+            {
+                posicion = new Vector3(0, -0.5f, 0);
+            }
+            else
+            {
+                posicion = new Vector3(0, 0.5f, 0);
+            }
+            sentido = new Vector3(0, 0, 90);
+            return true;
+        }
+        return false;
     }
 
     public void SetTilePulsado(int x, int y)
@@ -139,9 +166,12 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            if (esCandidato(tiles[x, y]))
+            Vector3 posicion = new Vector3(0, 0, 0);
+            Vector3 sentido = new Vector3(0, 0, 0);
+            if (esCandidato(tiles[x, y], ref posicion, ref sentido))
             {
                 tiles[x, y].Pulsar();
+                tiles[x, y].marcarCamino(caminoTiles.Peek(), posicion, sentido);
                 caminoTiles.Push(tiles[x, y]);
             }
         }
@@ -166,7 +196,7 @@ public class BoardManager : MonoBehaviour
         {
             caminoTiles.Peek().Despulsar();
             caminoTiles.Pop();
-            //caminoTiles.Peek().QuitaCamino(); //<- El caminito entre dos bloques que habrá que hacer
+            caminoTiles.Peek().DesmarcarCamino();
         }
     }
     #endregion
