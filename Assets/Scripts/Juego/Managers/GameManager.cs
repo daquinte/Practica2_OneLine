@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
     BoardManager boardManager = null;
+    InputManager inputManager = null;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -32,12 +33,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         boardManager = GetBoardManager();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        //inputManager = GetInputManager();
     }
 
     public void SetBoardManager(BoardManager instance)
@@ -48,5 +44,15 @@ public class GameManager : MonoBehaviour
     public BoardManager GetBoardManager()
     {
       return boardManager;
+    }
+
+    public void SetInputManager(InputManager instance)
+    {
+        inputManager = instance;
+    }
+
+    public InputManager GetInputManager()
+    {
+        return inputManager;
     }
 }

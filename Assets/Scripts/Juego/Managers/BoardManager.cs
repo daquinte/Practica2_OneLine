@@ -19,16 +19,17 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Si quieres una skin en particular, añadela aquí.")]
     public TileSkin preferedSkin;
 
+    [Tooltip("Objeto cursor de tu escena")]
     public Cursor cursor;
 
-    public InputManager inputManager;
 
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
 
-
+    public InputManager inputManager;
 
     //Atributos privados
+
 
     /// <summary>
     /// Array con los tiles
@@ -45,23 +46,26 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     private Stack<Tile> caminoTiles;
 
-    private TileSkin currentTileSkin;
+    private TileSkin currentTileSkin;   //TileSkin del nivel actual
 
-    private int nFils; //numero filas del tablero
-    private int nCols; //numero columnas del tablero
 
-    //Se supone que el juego tiene dos anchos de tile distintos (enunciado)
-    //Los de Beginner son más anchos, creo.
+    private int nTotalTiles;            //Número total de tiles 
+    private int nFils;                  //numero filas del tablero
+    private int nCols;                  //numero columnas del tablero
+
     private int _anchoTile;
     private int _altoTile;
 
     // Use this for initialization
     void Start()
     {
+
         //Todo: actualizar con los valores del txt
+
         nCols = 3;
         nFils = 3;
         tiles = new Tile[nCols, nFils];
+        nTotalTiles = nCols * nFils;
 
         caminoTiles = new Stack<Tile>();
         Camera.main.transform.position = new Vector3(nCols / 2, nFils / 2, Camera.main.transform.position.z);
@@ -69,7 +73,10 @@ public class BoardManager : MonoBehaviour
         GetRandomSkin();
         cursor.SetSprite(currentTileSkin.spriteDedo);
         InitTiles();
+
         GameManager.instance.SetBoardManager(this);
+        //inputManager = GameManager.instance.GetInputManager();
+
     }
 
     // Update is called once per frame
@@ -122,6 +129,7 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     #region Logic Methods
 
+    // TODO: Comentar
     private bool esCandidato(Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
     {
         Tile top = caminoTiles.Peek();
@@ -173,6 +181,11 @@ public class BoardManager : MonoBehaviour
                 tiles[x, y].Pulsar();
                 tiles[x, y].marcarCamino(caminoTiles.Peek(), posicion, sentido);
                 caminoTiles.Push(tiles[x, y]);
+
+                if (NivelCompletado())
+                {
+                    Debug.Log("Nivel completado :DD:D");
+                }
             }
         }
     }
@@ -182,6 +195,20 @@ public class BoardManager : MonoBehaviour
         if ((x >= 0 && x < tiles.GetLength(0)) && (y >= 0 && y < tiles.GetLength(1)))
         {
             SetTilePulsado(x, y);
+        }
+    }
+
+    /// <summary>
+    /// Reinicia el camino del nivel al inicio del mismo.
+    /// Sólo se respeta el tile inicial
+    /// </summary>
+    public void ReiniciaCamino()
+    {
+        while (caminoTiles.Count != 1)
+        {
+            caminoTiles.Peek().Despulsar();
+            caminoTiles.Pop();
+            caminoTiles.Peek().DesmarcarCamino();
         }
     }
 
@@ -199,6 +226,17 @@ public class BoardManager : MonoBehaviour
             caminoTiles.Peek().DesmarcarCamino();
         }
     }
+
+    /// <summary>
+    /// Encargado de determinar si el nivel se ha completado con éxito o no.
+    /// </summary>
+    /// <returns>-True si se han marcado todas las casillas, false en caso contrario</returns>
+    private bool NivelCompletado()
+    {
+        return (caminoTiles.Count == nTotalTiles);
+    }
+
+   
     #endregion
 
 }

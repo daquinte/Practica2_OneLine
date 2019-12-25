@@ -144,7 +144,6 @@ MonoBehaviour:
     type: 2}
   preferedSkin: {fileID: 0}
   cursor: {fileID: 1849881920}
-  inputManager: {fileID: 1219231810}
   tileSkins:
   - {fileID: 11400000, guid: 6457f3b98d1d0f94da167705e3ee0ddf, type: 2}
   - {fileID: 11400000, guid: cdb0b786c9ab1364aa8178b76add939e, type: 2}
@@ -153,6 +152,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3511e877b89145e4f9c6dccbe09ee14e, type: 2}
   - {fileID: 11400000, guid: 701fc37488924d84cbd02cff6f3ed2a0, type: 2}
   - {fileID: 11400000, guid: 2a9241f1b40bb9d46918e57d61ed9bc7, type: 2}
+  inputManager: {fileID: 1219231810}
 --- !u!4 &491973252
 Transform:
   m_ObjectHideFlags: 0
