@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
+    LectorTxt lectorTxt;
     BoardManager boardManager = null;
     InputManager inputManager = null;
 
@@ -32,8 +33,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        boardManager = GetBoardManager();
-        //inputManager = GetInputManager();
+        lectorTxt = GetComponent<LectorTxt>();
+        lectorTxt.LoadLevel(1);
+        Debug.Log("CARGAO");
     }
 
     public void SetBoardManager(BoardManager instance)

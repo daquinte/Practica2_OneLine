@@ -142,8 +142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabTile: {fileID: 114264903743301520, guid: 624ca05892be813429731df6d20c59dd,
     type: 2}
-  preferedSkin: {fileID: 0}
   cursor: {fileID: 1849881920}
+  preferedSkin: {fileID: 0}
   tileSkins:
   - {fileID: 11400000, guid: 6457f3b98d1d0f94da167705e3ee0ddf, type: 2}
   - {fileID: 11400000, guid: cdb0b786c9ab1364aa8178b76add939e, type: 2}
@@ -152,7 +152,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3511e877b89145e4f9c6dccbe09ee14e, type: 2}
   - {fileID: 11400000, guid: 701fc37488924d84cbd02cff6f3ed2a0, type: 2}
   - {fileID: 11400000, guid: 2a9241f1b40bb9d46918e57d61ed9bc7, type: 2}
-  inputManager: {fileID: 1219231810}
+  TARGET_WIDTH: 1080
+  TARGET_HEIGHT: 1920
+  PIXELS_TO_UNITS: 110
 --- !u!4 &491973252
 Transform:
   m_ObjectHideFlags: 0
@@ -214,7 +216,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -252,6 +254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1073534946}
   - component: {fileID: 1073534945}
+  - component: {fileID: 1073534947}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -283,6 +286,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1073534947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1073534944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d9951d75774dec4b883ea69d0c12459, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1089648090
 Prefab:
   m_ObjectHideFlags: 0

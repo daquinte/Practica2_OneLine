@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		infoInput.pulsado = false;
+		GameManager.instance.SetInputManager(this);
 	}
 	
 	// Update is called once per frame

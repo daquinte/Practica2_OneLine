@@ -15,20 +15,24 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Prefab of a Tile")]
     public Tile prefabTile;
 
-    [Space]
-    [Tooltip("Si quieres una skin en particular, añadela aquí.")]
-    public TileSkin preferedSkin;
-
     [Tooltip("Objeto cursor de tu escena")]
     public Cursor cursor;
 
-
+    [Space]
+    [Tooltip("Si quieres una skin en particular, añadela aquí.")]
+    public TileSkin preferedSkin;
+    
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
 
-    public InputManager inputManager;
+
+    public float TARGET_WIDTH = 1080;
+    public float TARGET_HEIGHT = 1920;
+    public float PIXELS_TO_UNITS = 110;
+
 
     //Atributos privados
+    private InputManager inputManager;
 
 
     /// <summary>
@@ -63,12 +67,13 @@ public class BoardManager : MonoBehaviour
         //Todo: actualizar con los valores del txt
 
         nCols = 3;
-        nFils = 3;
+        nFils = 6;
         tiles = new Tile[nCols, nFils];
         nTotalTiles = nCols * nFils;
 
         caminoTiles = new Stack<Tile>();
-        Camera.main.transform.position = new Vector3(nCols / 2, nFils / 2, Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, (nFils / 2.0f)-0.5f, Camera.main.transform.position.z);
+        ResizeCamera(nCols, nFils);
 
         GetRandomSkin();
         cursor.SetSprite(currentTileSkin.spriteDedo);
@@ -82,9 +87,10 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inputManager.getInputInfo().pulsado)
+        if (GameManager.instance.GetInputManager().getInputInfo().pulsado)
         {
-            coordsDentroMatriz((int)Math.Round(inputManager.getInputInfo().position.x), (int)Math.Round(inputManager.getInputInfo().position.y));
+            coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x), 
+                                (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
         }
     }
 
@@ -121,6 +127,22 @@ public class BoardManager : MonoBehaviour
             currentTileSkin = tileSkins[rnd];
         }
         else currentTileSkin = preferedSkin;
+    }
+
+    void ResizeCamera(int cols, int fils)
+    {
+        float desiredRatio = TARGET_WIDTH / TARGET_HEIGHT;
+        float currentRatio = (float)Screen.width / (float)Screen.height;
+
+        if (currentRatio >= desiredRatio)
+        {
+            Camera.main.orthographicSize = TARGET_WIDTH / PIXELS_TO_UNITS;
+        }
+        else
+        {
+            float differenceInSize = desiredRatio / currentRatio;
+            Camera.main.orthographicSize = TARGET_WIDTH / PIXELS_TO_UNITS * differenceInSize;
+        }
     }
     #endregion
 
@@ -166,8 +188,6 @@ public class BoardManager : MonoBehaviour
 
     public void SetTilePulsado(int x, int y)
     {
-
-        // Asumimos que es una jugada legal
         if (tiles[x, y].GetPulsado())
         {
             DeshacerCamino(tiles[x, y]);
