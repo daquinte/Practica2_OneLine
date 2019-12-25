@@ -99,6 +99,7 @@ public class Tile : MonoBehaviour
     public void marcarCamino(Tile tile, Vector3 posicion, Vector3 sentido)
     {
         GameObject child = Instantiate(spriteDireccionCamino, tile.transform);
+        // Es muy importante hacer esto porque si no, empieza en el origen de coordenadas
         child.transform.position = tile.transform.position + posicion;
         child.transform.eulerAngles = sentido;
     }
