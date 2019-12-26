@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameManager : MonoBehaviour
 {
 
@@ -38,7 +39,11 @@ public class GameManager : MonoBehaviour
        
         //TEMPORAL
         lectorTxt = GetComponent<LectorTxt>();
-        //lectorTxt.LoadLevel(1);
+        lectorTxt.CargaTodosLosNiveles();
+
+        LevelInfo prueba = lectorTxt.CargaNivel(1);
+        Debug.Log("Lenght layout"  + prueba.layout.Length);
+        Debug.Log("Lenght path" + prueba.path.Length);
         
     }
 
