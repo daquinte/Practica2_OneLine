@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour
         //Todo: actualizar con los valores del txt
 
         nCols = 3;
-        nFils = 6;
+        nFils = 1;
         tiles = new Tile[nCols, nFils];
         nTotalTiles = nCols * nFils;
 
@@ -136,12 +136,12 @@ public class BoardManager : MonoBehaviour
 
         if (currentRatio >= desiredRatio)
         {
-            Camera.main.orthographicSize = TARGET_WIDTH / PIXELS_TO_UNITS;
+            Camera.main.orthographicSize = TARGET_WIDTH / 1.5f/ PIXELS_TO_UNITS;
         }
         else
         {
             float differenceInSize = desiredRatio / currentRatio;
-            Camera.main.orthographicSize = TARGET_WIDTH / PIXELS_TO_UNITS * differenceInSize;
+            Camera.main.orthographicSize = TARGET_WIDTH /1.5f/ PIXELS_TO_UNITS * differenceInSize;
         }
     }
     #endregion

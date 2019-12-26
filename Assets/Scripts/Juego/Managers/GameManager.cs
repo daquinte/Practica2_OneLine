@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     BoardManager boardManager = null;
     InputManager inputManager = null;
 
+    DatosJugador datosJugador;
     //Awake is always called before any Start functions
     void Awake()
     {
@@ -33,11 +34,32 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        LoadPlayer();
+       
+        //TEMPORAL
         lectorTxt = GetComponent<LectorTxt>();
-        lectorTxt.LoadLevel(1);
-        Debug.Log("CARGAO");
+        //lectorTxt.LoadLevel(1);
+        
     }
 
+    public void addTest()
+    {
+        datosJugador.test = datosJugador.test+1;
+        ProgressManager.Save(datosJugador);
+        Debug.Log("Saving this: " + datosJugador.test);
+    }
+
+    private void LoadPlayer()
+    {
+        datosJugador = ProgressManager.Load();
+        if(datosJugador == null)
+        {
+            datosJugador = new DatosJugador(0);
+        }
+        Debug.Log(datosJugador.test);
+    }
+
+    #region Set and gets
     public void SetBoardManager(BoardManager instance)
     {
         boardManager = instance;
@@ -57,4 +79,5 @@ public class GameManager : MonoBehaviour
     {
         return inputManager;
     }
+    #endregion
 }

@@ -16,7 +16,7 @@ public class LectorTxt : MonoBehaviour
 
             var dict = Json.Deserialize(path) as Dictionary<string,object>;
 
-            Debug.Log((List<object>)dict["index"]);
+            //Debug.Log((List<object>)dict["index"]);
 
 }
         catch (System.Exception e)
