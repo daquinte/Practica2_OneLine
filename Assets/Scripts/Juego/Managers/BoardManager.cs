@@ -125,7 +125,7 @@ public class BoardManager : MonoBehaviour
                     }
 
                 }
-                //Si es 0, nos lo saltamos.
+                //Si es 0, nos lo saltamos
 
             }
         }

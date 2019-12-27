@@ -9,6 +9,8 @@ using UnityEngine;
 [System.Serializable]
 public class DatosJugador {
     public int test;
+    public bool _noAds;
+    public int _monedas;
     public string hash;
 
 
@@ -20,6 +22,7 @@ public class DatosJugador {
     //Constructora del objeto serializable con datos por defecto
     public DatosJugador(int t)
     {
-        test = t;
+        _monedas = t;
+        _noAds = false;
     }
 }

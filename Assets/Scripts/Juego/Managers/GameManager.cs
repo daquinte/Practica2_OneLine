@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
     LectorNiveles lectorNiveles;
+    AdsManager   adsManager = null;
     BoardManager boardManager = null;
     InputManager inputManager = null;
 
@@ -46,21 +47,34 @@ public class GameManager : MonoBehaviour
         boardManager.InitMap(lectorNiveles.CargaNivel(nivel));
     }
 
-    public void addTest()
+    public void LanzaAnuncio()
     {
-        datosJugador.test = datosJugador.test+1;
-        ProgressManager.Save(datosJugador);
-        Debug.Log("Saving this: " + datosJugador.test);
+        adsManager.ShowAd();
     }
+
+    public void SumaMonedas(int cantidad)
+    {
+        datosJugador._monedas += cantidad;
+        ProgressManager.Save(datosJugador);
+    }
+
+    public void RestaMonedas(int cantidad)
+    {
+        if (datosJugador._monedas - cantidad >= 0)
+            datosJugador._monedas -= cantidad;
+        else datosJugador._monedas = 0;
+    
+    }
+
 
     private void LoadPlayer()
     {
         datosJugador = ProgressManager.Load();
         if(datosJugador == null)
         {
-            datosJugador = new DatosJugador(0);
+            datosJugador = new DatosJugador(100);
         }
-        Debug.Log(datosJugador.test);
+        Debug.Log(datosJugador._monedas);
     }
 
     #region Set and gets
@@ -77,6 +91,11 @@ public class GameManager : MonoBehaviour
     public void SetInputManager(InputManager instance)
     {
         inputManager = instance;
+    }
+
+    public void SetAdsManager(AdsManager instance)
+    {
+        adsManager = instance;
     }
 
     public InputManager GetInputManager()
