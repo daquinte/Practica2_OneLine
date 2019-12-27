@@ -21,7 +21,7 @@ public class BoardManager : MonoBehaviour
     [Space]
     [Tooltip("Si quieres una skin en particular, añadela aquí.")]
     public TileSkin preferedSkin;
-    
+
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
 
@@ -60,37 +60,30 @@ public class BoardManager : MonoBehaviour
     private int _anchoTile;
     private int _altoTile;
 
+    bool init = false; //TEMPORAL, QUITAR CUANDO SE CARGE EL NIVEL DESDE EL MENU
+
     // Use this for initialization
     void Start()
     {
-
-        //Todo: actualizar con los valores del txt
-
-        nCols = 3;
-        nFils = 1;
-        tiles = new Tile[nCols, nFils];
-        nTotalTiles = nCols * nFils;
-
         caminoTiles = new Stack<Tile>();
-        Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, (nFils / 2.0f)-0.5f, Camera.main.transform.position.z);
-        ResizeCamera(nCols, nFils);
 
         GetRandomSkin();
         cursor.SetSprite(currentTileSkin.spriteDedo);
-        InitTiles();
 
         GameManager.instance.SetBoardManager(this);
-        //inputManager = GameManager.instance.GetInputManager();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.GetInputManager().getInputInfo().pulsado)
+        //QUITAR ESTE IF CUANDO EL OBJETO SE CARGE DESDE EL MENU
+        if (init)
         {
-            coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x), 
-                                (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
+            if (GameManager.instance.GetInputManager().getInputInfo().pulsado)
+            {
+                coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x),
+                                    (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
+            }
         }
     }
 
@@ -98,6 +91,49 @@ public class BoardManager : MonoBehaviour
     /// Métodos de inicialización del Board Manager.
     /// </summary>
     #region Start Methods
+
+    public void InitMap(InfoNivel infoNivel)
+    {
+        nFils = infoNivel.layout.Length;
+        nCols = infoNivel.layout[0].Length;
+        tiles = new Tile[nCols, nFils];
+        nTotalTiles = nCols * nFils;
+
+        //Situamos la cámara
+        Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, (nFils / 2.0f) - 0.5f, Camera.main.transform.position.z);
+        ResizeCamera(nCols, nFils);
+
+        //Interpretamos la información del layout
+        for (int filas = 0; filas < tiles.GetLength(1); filas++)
+        {
+            string infoFila = infoNivel.layout[filas];
+            Debug.Log("INFO FILA: " + infoFila);
+            for (int cols = 0; cols < tiles.GetLength(0); cols++)
+            {
+                char tipoTile = infoFila[cols];
+                if (tipoTile != '0')
+                {
+                    Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
+                    tile.gameObject.name = "Bloque" + cols + filas;
+                    tile.SetTileSkin(currentTileSkin);
+                    tiles[cols, filas] = tile;
+
+                    if (tipoTile == '2') //Si es inicial...
+                    {
+                        tile.SetTileInicial();
+                        caminoTiles.Push(tiles[cols, filas]);
+                    }
+
+                }
+                //Si es 0, nos lo saltamos.
+
+            }
+        }
+        init = true;
+
+    }
+
+
     private void InitTiles()
     {
         for (int filas = 0; filas < tiles.GetLength(1); filas++)
@@ -136,12 +172,12 @@ public class BoardManager : MonoBehaviour
 
         if (currentRatio >= desiredRatio)
         {
-            Camera.main.orthographicSize = TARGET_WIDTH / 1.5f/ PIXELS_TO_UNITS;
+            Camera.main.orthographicSize = TARGET_WIDTH / 1.5f / PIXELS_TO_UNITS;
         }
         else
         {
             float differenceInSize = desiredRatio / currentRatio;
-            Camera.main.orthographicSize = TARGET_WIDTH /1.5f/ PIXELS_TO_UNITS * differenceInSize;
+            Camera.main.orthographicSize = TARGET_WIDTH / 1.5f / PIXELS_TO_UNITS * differenceInSize;
         }
     }
     #endregion
@@ -256,7 +292,7 @@ public class BoardManager : MonoBehaviour
         return (caminoTiles.Count == nTotalTiles);
     }
 
-   
+
     #endregion
 
 }

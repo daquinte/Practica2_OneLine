@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
-    LectorTxt lectorTxt;
+    LectorNiveles lectorNiveles;
     BoardManager boardManager = null;
     InputManager inputManager = null;
 
@@ -36,15 +36,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         LoadPlayer();
-       
-        //TEMPORAL
-        lectorTxt = GetComponent<LectorTxt>();
-        lectorTxt.CargaTodosLosNiveles();
 
-        LevelInfo prueba = lectorTxt.CargaNivel(1);
-        Debug.Log("Lenght layout"  + prueba.layout.Length);
-        Debug.Log("Lenght path" + prueba.path.Length);
-        
+        lectorNiveles = GetComponent<LectorNiveles>();
+        lectorNiveles.CargaTodosLosNiveles();
+    }
+
+    public void JuegaNivel(int nivel)
+    {
+        boardManager.InitMap(lectorNiveles.CargaNivel(nivel));
     }
 
     public void addTest()

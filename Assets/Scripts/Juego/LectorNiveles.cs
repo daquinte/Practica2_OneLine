@@ -5,15 +5,15 @@ using SimpleJSON;
 
 using Newtonsoft.Json; //Lo que usabamos en USABILIDAD Y ANALISIS
 
-public class LectorTxt : MonoBehaviour
+public class LectorNiveles : MonoBehaviour
 {
-    private Dictionary<int, LevelInfo> _niveles;
+    private Dictionary<int, InfoNivel> _niveles;
     public void CargaNivel(JSONNode level)
     {
         try
         {
             //Inicializando
-            LevelInfo levelInfo = new LevelInfo();
+            InfoNivel levelInfo = new InfoNivel();
             levelInfo.layout = new string[level["layout"].Count];
             levelInfo.path = new int[level["path"].Count, level["path"][0].Count];
 
@@ -47,7 +47,7 @@ public class LectorTxt : MonoBehaviour
     /// </summary>
     public void CargaTodosLosNiveles()
     {
-        _niveles = new Dictionary<int, LevelInfo>();
+        _niveles = new Dictionary<int, InfoNivel>();
         string json = File.ReadAllText(Application.dataPath + "/Niveles/niveles.json");
         JSONNode niveles = JSON.Parse(json);
 
@@ -59,13 +59,16 @@ public class LectorTxt : MonoBehaviour
     }
 
 
-    public LevelInfo CargaNivel(int nNivel)
+    public InfoNivel CargaNivel(int nNivel)
     {
         return _niveles[nNivel];
     }
 }
-[System.Serializable]
-public class LevelInfo
+
+/// <summary>
+/// Clase en la que almacenamos lo que se va leyendo de los JSON
+/// </summary>
+public class InfoNivel
 {
     //public int index { get; set; }
     public string[] layout { get; set; }
