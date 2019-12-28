@@ -20,7 +20,7 @@ public class LectorNiveles : MonoBehaviour
             for (int i = 0; i < levelInfo.layout.Length; i++)
             {
                 levelInfo.layout[i] = level["layout"][i];
-                Debug.Log("layout[i]" + levelInfo.layout[i]);
+                //Debug.Log("layout[i]" + levelInfo.layout[i]);
 
             }
 
@@ -29,7 +29,7 @@ public class LectorNiveles : MonoBehaviour
                 for (int j = 0; j < levelInfo.path.GetLength(1); j++)
                 {
                     levelInfo.path[i, j] = level["path"][i][j];
-                    Debug.Log( "path["+i +","+j+"]"+levelInfo.path[i, j]);
+                    //Debug.Log( "path["+i +","+j+"]"+levelInfo.path[i, j]);
                 }
             }
 

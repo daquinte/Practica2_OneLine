@@ -79,8 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteNoPulsado: {fileID: 21300000, guid: c3df0dc3bfff2a840ab36da2428d9085, type: 3}
-  spriteDireccionCamino: {fileID: 1388885395858732, guid: 4161be74d47b9804bbb9158250dd45a5,
+  spriteDireccionCamino: {fileID: 212295213331559402, guid: 4161be74d47b9804bbb9158250dd45a5,
     type: 2}
+  pistaSprite: {fileID: 0}
 --- !u!212 &212330655617234930
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -41,6 +41,12 @@ public class BoardManager : MonoBehaviour
     private Tile[,] tiles;
 
     /// <summary>
+    /// Camino a la meta
+    /// </summary>
+    private int[,] pistas;
+
+
+    /// <summary>
     /// El camino de las pistas, que creo que está en ints.
     /// </summary>
     private List<int> caminoPistas;
@@ -96,20 +102,21 @@ public class BoardManager : MonoBehaviour
     {
         nFils = infoNivel.layout.Length;
         nCols = infoNivel.layout[0].Length;
+        pistas = infoNivel.path;
+
         tiles = new Tile[nCols, nFils];
-        nTotalTiles = nCols * nFils;
+        nTotalTiles = 0;
 
         //Situamos la cámara
         Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, (nFils / 2.0f) - 0.5f, Camera.main.transform.position.z);
         ResizeCamera(nCols, nFils);
 
         //Interpretamos la información del layout
-        for (int filas = 0; filas < tiles.GetLength(1); filas++)
-        {
+        int layout = tiles.GetLength(1) - 1;
+        for (int filas = 0; filas < tiles.GetLength(1); filas++) {
             string infoFila = infoNivel.layout[filas];
-            Debug.Log("INFO FILA: " + infoFila);
-            for (int cols = 0; cols < tiles.GetLength(0); cols++)
-            {
+            //Debug.Log("INFO FILA: " + infoFila);
+            for (int cols = 0; cols < tiles.GetLength(0); cols++) {
                 char tipoTile = infoFila[cols];
                 if (tipoTile != '0')
                 {
@@ -117,7 +124,7 @@ public class BoardManager : MonoBehaviour
                     tile.gameObject.name = "Bloque" + cols + filas;
                     tile.SetTileSkin(currentTileSkin);
                     tiles[cols, filas] = tile;
-
+                    nTotalTiles++;
                     if (tipoTile == '2') //Si es inicial...
                     {
                         tile.SetTileInicial();
@@ -128,6 +135,7 @@ public class BoardManager : MonoBehaviour
                 //Si es 0, nos lo saltamos
 
             }
+            //layout--;
         }
         init = true;
 
@@ -186,13 +194,104 @@ public class BoardManager : MonoBehaviour
     /// Métodos de lógica de juego y comprobaciones del mismo.
     /// </summary>
     #region Logic Methods
+    public void SetTilePulsado(int x, int y)
+    {
+        if (tiles[x, y].GetPulsado())
+        {
+            DeshacerCamino(tiles[x, y]);
+        }
+        else
+        {
+            Vector3 posicion = new Vector3(0, 0, 0);
+            Vector3 sentido = new Vector3(0, 0, 0);
+            if (esCandidato(caminoTiles.Peek(), tiles[x, y], ref posicion, ref sentido))
+            {
+                tiles[x, y].Pulsar();
+                tiles[x, y].marcarCamino(false, caminoTiles.Peek(), posicion, sentido);
+                caminoTiles.Push(tiles[x, y]);
 
+                if (NivelCompletado())
+                {
+                    Debug.Log("Nivel completado :DD:D");
+                }
+            }
+        }
+    }
+
+    public void coordsDentroMatriz(int x, int y)
+    {
+        if ((x >= 0 && x < tiles.GetLength(0)) && (y >= 0 && y < tiles.GetLength(1)) && (tiles[x, y] != null))
+        {
+            SetTilePulsado(x, y);
+        }
+    }
+
+    /// <summary>
+    /// Reinicia el camino del nivel al inicio del mismo.
+    /// Sólo se respeta el tile inicial
+    /// </summary>
+    public void ReiniciaCamino()
+    {
+        while (caminoTiles.Count != 1)
+        {
+            caminoTiles.Peek().Despulsar();
+            caminoTiles.Pop();
+            caminoTiles.Peek().DesmarcarCamino();
+        }
+    }
+
+    public void mostrarPista()
+    {
+        if (!NivelCompletado()) {
+            int fila = 0;
+            bool flag = false;
+            int cols = 0;
+            int fils = 0;
+            // A stack can be enumerated without disturbing its contents.
+            foreach (Tile tile in caminoTiles) {
+                if (tiles[pistas[fila, 1], pistas[fila, 0]] == tile) {
+                    fila++;
+                }
+                else {
+                    cols = pistas[fila, 1];
+                    fils = pistas[fila, 0];
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                Debug.Log("X: " +  cols + ", Y:" + fils);
+                DeshacerCamino(tiles[cols, fils]);
+            }
+            MarcarCamino(fila);
+        }
+    }
+
+    private void MarcarCamino(int comienzo)
+    {
+        Vector3 posicion = new Vector3(0, 0, 0);
+        Vector3 sentido = new Vector3(0, 0, 0);
+        int final = 0;
+        Tile anterior;
+        if (nTotalTiles - caminoTiles.Count >= 5) {
+            final = nTotalTiles;//comienzo + 5;
+        }
+        else {
+            final = nTotalTiles;// - caminoTiles.Count;
+        }
+        anterior = caminoTiles.Peek();
+        for (int fils = comienzo; fils < final; fils++) {
+            bool placebo = esCandidato(anterior, tiles[pistas[fils, 1], pistas[fils, 0]], ref posicion, ref sentido);
+            tiles[pistas[fils, 1], pistas[fils, 0]].marcarCamino(false, anterior, posicion, sentido);
+            anterior = tiles[pistas[fils, 1], pistas[fils, 0]];
+        }
+    }
     // TODO: Comentar
-    private bool esCandidato(Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
+    private bool esCandidato(Tile peek, Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
     {
         Tile top = caminoTiles.Peek();
-        int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - top.gameObject.transform.position.x);
-        int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - top.gameObject.transform.position.y);
+        int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - peek.gameObject.transform.position.x);
+        int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - peek.gameObject.transform.position.y);
         if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0)
         {
             if (diferenciaX < 0)
@@ -220,52 +319,6 @@ public class BoardManager : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    public void SetTilePulsado(int x, int y)
-    {
-        if (tiles[x, y].GetPulsado())
-        {
-            DeshacerCamino(tiles[x, y]);
-        }
-        else
-        {
-            Vector3 posicion = new Vector3(0, 0, 0);
-            Vector3 sentido = new Vector3(0, 0, 0);
-            if (esCandidato(tiles[x, y], ref posicion, ref sentido))
-            {
-                tiles[x, y].Pulsar();
-                tiles[x, y].marcarCamino(caminoTiles.Peek(), posicion, sentido);
-                caminoTiles.Push(tiles[x, y]);
-
-                if (NivelCompletado())
-                {
-                    Debug.Log("Nivel completado :DD:D");
-                }
-            }
-        }
-    }
-
-    public void coordsDentroMatriz(int x, int y)
-    {
-        if ((x >= 0 && x < tiles.GetLength(0)) && (y >= 0 && y < tiles.GetLength(1)))
-        {
-            SetTilePulsado(x, y);
-        }
-    }
-
-    /// <summary>
-    /// Reinicia el camino del nivel al inicio del mismo.
-    /// Sólo se respeta el tile inicial
-    /// </summary>
-    public void ReiniciaCamino()
-    {
-        while (caminoTiles.Count != 1)
-        {
-            caminoTiles.Peek().Despulsar();
-            caminoTiles.Pop();
-            caminoTiles.Peek().DesmarcarCamino();
-        }
     }
 
     /// <summary>

@@ -13,7 +13,9 @@ public class Tile : MonoBehaviour
     public Sprite spriteNoPulsado;      //Sprite de tile no pulsado
 
     [Tooltip("Guia de camino")]
-    public GameObject spriteDireccionCamino;      //Sprite de tile no pulsado
+    public SpriteRenderer spriteDireccionCamino;      //Sprite de tile no pulsado
+    
+    private SpriteRenderer pistaSprite;      //Sprite de tile no pulsado
 
     private Sprite spritePulsado;        //Sprite de tile pulsado
 
@@ -50,6 +52,8 @@ public class Tile : MonoBehaviour
     public void SetTileSkin(TileSkin tileSkin)
     {
         spritePulsado = tileSkin.spriteTilePulsado;
+        pistaSprite = GetComponent<SpriteRenderer>();
+        pistaSprite.sprite = tileSkin.spriteTilePista;
     }
 
     /// <summary>
@@ -77,11 +81,12 @@ public class Tile : MonoBehaviour
     }
     public void DesmarcarCamino()
     {
-        if (transform.childCount > 0)
-        {
-            Transform child = transform.GetChild(0);
-            child.parent = null;
-            Destroy(child.gameObject);
+        for (int i = 0; i < transform.childCount; i++) {
+            Transform child = transform.GetChild(i);
+            if (child.GetComponent<SpriteRenderer>().sprite != pistaSprite.sprite) {
+                child.parent = null;
+                Destroy(child.gameObject);
+            }
         }
     }
 
@@ -96,9 +101,10 @@ public class Tile : MonoBehaviour
         GameManager.instance.GetBoardManager().SetTilePulsado((int)this.transform.position.x, (int)this.transform.position.y);
     }
 
-    public void marcarCamino(Tile tile, Vector3 posicion, Vector3 sentido)
+    public void marcarCamino(bool pista, Tile tile, Vector3 posicion, Vector3 sentido)
     {
-        GameObject child = Instantiate(spriteDireccionCamino, tile.transform);
+        SpriteRenderer sevenUp = (pista) ? pistaSprite : spriteDireccionCamino;
+        SpriteRenderer child = Instantiate(sevenUp, tile.transform);
         // Es muy importante hacer esto porque si no, empieza en el origen de coordenadas
         child.transform.position = tile.transform.position + posicion;
         child.transform.eulerAngles = sentido;
