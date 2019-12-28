@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour
     private Sprite spritePulsado;        //Sprite de tile pulsado
 
 
+
     /// <summary>
     /// Bool interno que controla si el tile está pulsado o no
     /// </summary>
@@ -31,6 +32,10 @@ public class Tile : MonoBehaviour
     /// </summary>
     private bool _tileInicial = false;
 
+
+    //TODO: hacer private
+    public int filaLogica;
+    public int columnaLogica;
 
     private void Start()
     {
@@ -108,6 +113,15 @@ public class Tile : MonoBehaviour
         // Es muy importante hacer esto porque si no, empieza en el origen de coordenadas
         child.transform.position = tile.transform.position + posicion;
         child.transform.eulerAngles = sentido;
+    }
+
+
+    public void SetPosicionLogica(int x, int y)
+    {
+        filaLogica = x;
+        columnaLogica = y;
+        
+        Debug.Log("TILE: "+ gameObject.name + "---filaLogica: " + filaLogica + ", columnaLogica: " + columnaLogica);
     }
 
 }

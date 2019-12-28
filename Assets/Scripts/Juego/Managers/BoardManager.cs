@@ -47,11 +47,6 @@ public class BoardManager : MonoBehaviour
 
 
     /// <summary>
-    /// El camino de las pistas, que creo que está en ints.
-    /// </summary>
-    private List<int> caminoPistas;
-
-    /// <summary>
     /// Recorrido efectuado en forma de pila.
     /// </summary>
     private Stack<Tile> caminoTiles;
@@ -113,15 +108,19 @@ public class BoardManager : MonoBehaviour
 
         //Interpretamos la información del layout
         int layout = tiles.GetLength(1) - 1;
+        int filaLogica = nFils-1;
+        int columnaLogica = 0;
+
         for (int filas = 0; filas < tiles.GetLength(1); filas++) {
-            string infoFila = infoNivel.layout[filas];
-            //Debug.Log("INFO FILA: " + infoFila);
+            string infoFila = infoNivel.layout[layout];
             for (int cols = 0; cols < tiles.GetLength(0); cols++) {
                 char tipoTile = infoFila[cols];
                 if (tipoTile != '0')
                 {
+                    ///Si en el futuro hay que escalar los bloques, si quitas que sean hijos de boardManager se pueden escalar!
                     Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
                     tile.gameObject.name = "Bloque" + cols + filas;
+                    tile.SetPosicionLogica(filaLogica, columnaLogica);
                     tile.SetTileSkin(currentTileSkin);
                     tiles[cols, filas] = tile;
                     nTotalTiles++;
@@ -132,36 +131,18 @@ public class BoardManager : MonoBehaviour
                     }
 
                 }
-                //Si es 0, nos lo saltamos
+                //Si es 0, nos lo saltamos pero aumentamos Y logica
+                columnaLogica++;
 
             }
-            //layout--;
+            filaLogica--;
+            columnaLogica = 0;
+            layout--;
         }
         init = true;
 
     }
 
-
-    private void InitTiles()
-    {
-        for (int filas = 0; filas < tiles.GetLength(1); filas++)
-        {
-            for (int cols = 0; cols < tiles.GetLength(0); cols++)
-            {
-                Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
-                //tile.transform.SetParent(gameObject.transform);
-                tile.gameObject.name = "Bloque" + cols + filas;
-                tile.SetTileSkin(currentTileSkin);
-                tiles[cols, filas] = tile;
-
-                if (cols == 0 && filas == 0)
-                {
-                    tile.SetTileInicial();
-                    caminoTiles.Push(tiles[cols, filas]);
-                }
-            }
-        }
-    }
 
     private void GetRandomSkin()
     {
@@ -173,7 +154,7 @@ public class BoardManager : MonoBehaviour
         else currentTileSkin = preferedSkin;
     }
 
-    void ResizeCamera(int cols, int fils)
+    private void ResizeCamera(int cols, int fils)
     {
         float desiredRatio = TARGET_WIDTH / TARGET_HEIGHT;
         float currentRatio = (float)Screen.width / (float)Screen.height;
@@ -240,34 +221,52 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void mostrarPista()
+    public void MostrarPista()
     {
         if (!NivelCompletado()) {
             int fila = 0;
             bool flag = false;
             int cols = 0;
             int fils = 0;
-            // A stack can be enumerated without disturbing its contents.
-            foreach (Tile tile in caminoTiles) {
-                if (tiles[pistas[fila, 1], pistas[fila, 0]] == tile) {
+
+            Tile ultimoCorrecto = null; //Minimo, el primero del camino siempre es igual a la pista.
+            Stack<Tile> reversedStack = new Stack<Tile>();
+            while (caminoTiles.Count != 0)
+            {
+               reversedStack.Push(caminoTiles.Pop());
+            }
+            //Recorremos el stack del camino del jugador buscando en que tile deja de seguir las pistas
+            foreach (Tile tile in reversedStack) {
+                int filaLogicaCamino = tile.filaLogica;
+                int columnaLogicaCamino = tile.columnaLogica;
+                Debug.Log("FILA-L: " + filaLogicaCamino + ", COL-L: " + columnaLogicaCamino);
+                Debug.Log("FILA-P: " + pistas[fila, 0] + ", COL-P: " + pistas[fila, 1]);
+                if(filaLogicaCamino == pistas[fila, 0] && columnaLogicaCamino == pistas[fila, 1]){
                     fila++;
+                    ultimoCorrecto = tile;
+                    Debug.Log("TILE: " + tile.gameObject.name + "Correcto!"); 
                 }
                 else {
-                    cols = pistas[fila, 1];
-                    fils = pistas[fila, 0];
+                    Debug.Log("TILE: " + tile.gameObject.name + "incorrecto. ");
                     flag = true;
                     break;
                 }
             }
             if (flag) {
-                Debug.Log("X: " +  cols + ", Y:" + fils);
-                DeshacerCamino(tiles[cols, fils]);
+                DeshacerCamino(ultimoCorrecto);
             }
-            MarcarCamino(fila);
+            Debug.Log("ultimo correcto: " + ultimoCorrecto.gameObject.name);
+
+            MarcarCaminoPistas(fila);
         }
     }
 
-    private void MarcarCamino(int comienzo)
+    /// <summary>
+    /// Marca el camino de las pistas. Toma, desde el cominezo, las 5 siguientes posiciones
+    /// y las señala como camino a seguir.
+    /// </summary>
+    /// <param name="comienzo">Int de en que posicion debes comenzar a trazar el camino</param>
+    private void MarcarCaminoPistas(int comienzo)
     {
         Vector3 posicion = new Vector3(0, 0, 0);
         Vector3 sentido = new Vector3(0, 0, 0);
