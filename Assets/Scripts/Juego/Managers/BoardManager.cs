@@ -265,7 +265,7 @@ public class BoardManager : MonoBehaviour
             }
             Debug.Log("ultimo correcto: " + ultimoCorrecto.gameObject.name);
 
-            MarcarCaminoPistas(fila);
+            MarcarCaminoPistas(fila, ultimoCorrecto);
         }
     }
 
@@ -274,7 +274,7 @@ public class BoardManager : MonoBehaviour
     /// y las señala como camino a seguir.
     /// </summary>
     /// <param name="comienzo">Int de en que posicion debes comenzar a trazar el camino</param>
-    private void MarcarCaminoPistas(int comienzo)
+    private void MarcarCaminoPistas(int comienzo, Tile ultimoCorrecto)
     {
         Vector3 posicion = new Vector3(0, 0, 0);
         Vector3 sentido = new Vector3(0, 0, 0);
@@ -288,26 +288,45 @@ public class BoardManager : MonoBehaviour
         {
             final = nTotalTiles;// - caminoTiles.Count;
         }
-        anterior = caminoTiles.Peek(); // == ultimoCorrecto.
+        anterior = ultimoCorrecto; //para evitar el OPERATION NOT VALID DUE TO THE CURRENT STATE DE MIERDA
         for (int fils = comienzo; fils < final; fils++)
         {
-            Tile aux = null;
-            foreach  (Tile t in tiles) { 
-                if(t.filaLogica == pistas[fils, 0] && t.filaLogica == pistas[fils, 1])
-                {
-                    aux = t;
-                    break;  //Me siento sucio haciendo esto, a ver si funciona lmaoooo
-                }
-            }
-            bool placebo = esCandidato(anterior, tiles[pistas[fils, 1], pistas[fils, 0]], ref posicion, ref sentido);
+            //Tile aux = BuscaSiguientePista(fils); //Precaucion, no descomentar
+            //Debug.Log("TILE PISTA: " + aux.gameObject.name);
+            Tile aux = caminoTiles.Peek(); //Te va a dar Operation not valid :DD:D
+            bool placebo = esCandidato(anterior, aux, ref posicion, ref sentido);
             tiles[pistas[fils, 1], pistas[fils, 0]].marcarCamino(false, anterior, posicion, sentido);
             anterior = tiles[pistas[fils, 1], pistas[fils, 0]];
         }
     }
+
+    //Si llamas a este método se te cuelga Unity
+    //No es una cosa sorprendente, es más: se veía venir.
+    //Pero así es la vida.
+    private Tile BuscaSiguientePista(int fils)
+    {
+        int f = 0;
+        int c = 0;
+        bool stop = false;
+        Tile aux = null;
+        while (!stop && f < tiles.GetLength(1))
+        {
+            while (!stop && c < tiles.GetLength(0))
+            {
+                Tile t = tiles[f, c];
+                if (t.filaLogica == pistas[fils, 0] && t.filaLogica == pistas[fils, 1])
+                {
+                    aux = t;
+                    stop = true;
+                }
+            }
+        }
+        return aux;
+    }
     // TODO: Comentar
     private bool esCandidato(Tile peek, Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
     {
-        Tile top = caminoTiles.Peek();
+        //Tile top = caminoTiles.Peek();
         int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - peek.gameObject.transform.position.x);
         int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - peek.gameObject.transform.position.y);
         if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0)
