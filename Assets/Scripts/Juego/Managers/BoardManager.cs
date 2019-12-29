@@ -49,7 +49,7 @@ public class BoardManager : MonoBehaviour
     /// <summary>
     /// Recorrido efectuado en forma de pila.
     /// </summary>
-    private Stack<Tile> caminoTiles;
+    private List<Tile> caminoTiles;
 
     private TileSkin currentTileSkin;   //TileSkin del nivel actual
 
@@ -64,9 +64,8 @@ public class BoardManager : MonoBehaviour
     bool init = false; //TEMPORAL, QUITAR CUANDO SE CARGE EL NIVEL DESDE EL MENU
 
     // Use this for initialization
-    void Start()
-    {
-        caminoTiles = new Stack<Tile>();
+    void Start() {
+        caminoTiles = new List<Tile>();
 
         GetRandomSkin();
         cursor.SetSprite(currentTileSkin.spriteDedo);
@@ -75,13 +74,10 @@ public class BoardManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         //QUITAR ESTE IF CUANDO EL OBJETO SE CARGE DESDE EL MENU
-        if (init)
-        {
-            if (GameManager.instance.GetInputManager().getInputInfo().pulsado)
-            {
+        if (init) {
+            if (GameManager.instance.GetInputManager().getInputInfo().pulsado) {
                 coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x),
                                     (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
             }
@@ -93,63 +89,43 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     #region Start Methods
 
-    public void InitMap(InfoNivel infoNivel)
-    {
+    public void InitMap(InfoNivel infoNivel) {
         nFils = infoNivel.layout.Length;
         nCols = infoNivel.layout[0].Length;
         pistas = infoNivel.path;
 
         tiles = new Tile[nCols, nFils];
         nTotalTiles = 0;
-
         //Situamos la cámara
-        Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, (nFils / 2.0f) - 0.5f, Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, -((nFils / 2.0f) - 0.5f), Camera.main.transform.position.z);
         ResizeCamera(nCols, nFils);
 
-        //Interpretamos la información del layout
-        int layout = tiles.GetLength(1) - 1;
-        int filaLogica = nFils - 1;
-        int columnaLogica = 0;
-
-        for (int filas = 0; filas < tiles.GetLength(1); filas++)
-        {
-            string infoFila = infoNivel.layout[layout];
-            for (int cols = 0; cols < tiles.GetLength(0); cols++)
-            {
+        for (int filas = 0; filas < tiles.GetLength(1); filas++) {
+            string infoFila = infoNivel.layout[filas];
+            for (int cols = 0; cols < tiles.GetLength(0); cols++) {
                 char tipoTile = infoFila[cols];
-                if (tipoTile != '0')
-                {
+                if (tipoTile != '0') {
                     ///Si en el futuro hay que escalar los bloques, si quitas que sean hijos de boardManager se pueden escalar!
-                    Tile tile = Instantiate(prefabTile, new Vector3(cols, filas, 0), Quaternion.identity, transform);
+                    Tile tile = Instantiate(prefabTile, new Vector3(cols, -filas, 0), Quaternion.identity, transform);
                     tile.gameObject.name = "Bloque" + cols + filas;
-                    tile.SetPosicionLogica(filaLogica, columnaLogica);
                     tile.SetTileSkin(currentTileSkin);
                     tiles[cols, filas] = tile;
                     nTotalTiles++;
-                    if (tipoTile == '2') //Si es inicial...
-                    {
+                    if (tipoTile == '2') { //Si es inicial...
                         tile.SetTileInicial();
-                        caminoTiles.Push(tiles[cols, filas]);
+                        caminoTiles.Add(tiles[cols, filas]);
                     }
 
                 }
-                //Si es 0, nos lo saltamos pero aumentamos Y logica
-                columnaLogica++;
-
             }
-            filaLogica--;
-            columnaLogica = 0;
-            layout--;
         }
         init = true;
-
     }
 
 
     private void GetRandomSkin()
     {
-        if (preferedSkin == null)
-        {
+        if (preferedSkin == null) {
             int rnd = UnityEngine.Random.Range(0, tileSkins.Count);
             currentTileSkin = tileSkins[rnd];
         }
@@ -161,12 +137,10 @@ public class BoardManager : MonoBehaviour
         float desiredRatio = TARGET_WIDTH / TARGET_HEIGHT;
         float currentRatio = (float)Screen.width / (float)Screen.height;
 
-        if (currentRatio >= desiredRatio)
-        {
+        if (currentRatio >= desiredRatio) {
             Camera.main.orthographicSize = TARGET_WIDTH / 1.5f / PIXELS_TO_UNITS;
         }
-        else
-        {
+        else {
             float differenceInSize = desiredRatio / currentRatio;
             Camera.main.orthographicSize = TARGET_WIDTH / 1.5f / PIXELS_TO_UNITS * differenceInSize;
         }
@@ -179,22 +153,18 @@ public class BoardManager : MonoBehaviour
     #region Logic Methods
     public void SetTilePulsado(int x, int y)
     {
-        if (tiles[x, y].GetPulsado())
-        {
+        if (tiles[x, y].GetPulsado()) {
             DeshacerCamino(tiles[x, y]);
         }
-        else
-        {
+        else {
             Vector3 posicion = new Vector3(0, 0, 0);
             Vector3 sentido = new Vector3(0, 0, 0);
-            if (esCandidato(caminoTiles.Peek(), tiles[x, y], ref posicion, ref sentido))
-            {
+            if (esCandidato(caminoTiles[caminoTiles.Count-1], tiles[x, y], ref posicion, ref sentido)) {
                 tiles[x, y].Pulsar();
-                tiles[x, y].marcarCamino(false, caminoTiles.Peek(), posicion, sentido);
-                caminoTiles.Push(tiles[x, y]);
+                tiles[x, y].MarcarCamino(false, caminoTiles[caminoTiles.Count - 1], posicion, sentido);
+                caminoTiles.Add(tiles[x, y]);
 
-                if (NivelCompletado())
-                {
+                if (NivelCompletado()) {
                     Debug.Log("Nivel completado :DD:D");
                 }
             }
@@ -203,9 +173,11 @@ public class BoardManager : MonoBehaviour
 
     public void coordsDentroMatriz(int x, int y)
     {
-        if ((x >= 0 && x < tiles.GetLength(0)) && (y >= 0 && y < tiles.GetLength(1)) && (tiles[x, y] != null))
-        {
-            SetTilePulsado(x, y);
+        if (y <= 0) {
+            y = Math.Abs(y);
+            if ((x >= 0 && x < tiles.GetLength(0)) && (y < tiles.GetLength(1)) && (tiles[x, y] != null)) {
+                SetTilePulsado(x, y);
+            }
         }
     }
 
@@ -215,57 +187,27 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     public void ReiniciaCamino()
     {
-        while (caminoTiles.Count != 1)
-        {
-            caminoTiles.Peek().Despulsar();
-            caminoTiles.Pop();
-            caminoTiles.Peek().DesmarcarCamino();
-        }
+        DeshacerCamino(caminoTiles[0]);
     }
 
     public void MostrarPista()
     {
-        if (!NivelCompletado())
-        {
-            int fila = 0;
+        if (!NivelCompletado()) {
             bool flag = false;
-
-
-            Tile ultimoCorrecto = null; //Minimo, el primero del camino siempre es igual a la pista.
-            Stack<Tile> reversedStack = new Stack<Tile>();
-            while (caminoTiles.Count != 0)
-            {
-                reversedStack.Push(caminoTiles.Pop());
-            } //Revertimos el stack para recorrerlo
-            //Recorremos el stack del camino del jugador buscando en que tile deja de seguir las pistas
-            foreach (Tile tile in reversedStack)
-            {
-                int filaLogicaCamino = tile.filaLogica;
-                int columnaLogicaCamino = tile.columnaLogica;
-                Debug.Log("FILA-L: " + filaLogicaCamino + ", COL-L: " + columnaLogicaCamino);
-                Debug.Log("FILA-P: " + pistas[fila, 0] + ", COL-P: " + pistas[fila, 1]);
-                if (filaLogicaCamino == pistas[fila, 0] && columnaLogicaCamino == pistas[fila, 1])
-                {
+            int fila = 0;
+            foreach (Tile tile in caminoTiles) {
+                if (tiles[pistas[fila, 1], pistas[fila, 0]] == tile) {
                     fila++;
-                    ultimoCorrecto = tile;
-                    Debug.Log("TILE: " + tile.gameObject.name + "Correcto!");
                 }
-                else
-                {
-                    Debug.Log("TILE: " + tile.gameObject.name + "incorrecto. ");
+                else {
                     flag = true;
                     break;
                 }
             }
-
-            if (flag)
-            {
-                Debug.Log("Deshago el camino hasta: " + ultimoCorrecto.gameObject.name);
-                DeshacerCamino(ultimoCorrecto);
+            if (flag) {
+                DeshacerCamino(tiles[pistas[fila-1, 1], pistas[fila-1, 0]]);
             }
-            Debug.Log("ultimo correcto: " + ultimoCorrecto.gameObject.name);
-
-            MarcarCaminoPistas(fila, ultimoCorrecto);
+            MarcarCaminoPistas(fila);
         }
     }
 
@@ -274,82 +216,53 @@ public class BoardManager : MonoBehaviour
     /// y las señala como camino a seguir.
     /// </summary>
     /// <param name="comienzo">Int de en que posicion debes comenzar a trazar el camino</param>
-    private void MarcarCaminoPistas(int comienzo, Tile ultimoCorrecto)
+    private void MarcarCaminoPistas(int comienzo)
     {
         Vector3 posicion = new Vector3(0, 0, 0);
         Vector3 sentido = new Vector3(0, 0, 0);
         int final = 0;
-        Tile anterior;
-        if (nTotalTiles - caminoTiles.Count >= 5)
-        {
-            final = nTotalTiles;//comienzo + 5;
+        Tile anterior = caminoTiles[0];
+        if (nTotalTiles - (caminoTiles.Count - 1) >= 5) {
+            final = comienzo + 5;
         }
-        else
-        {
-            final = nTotalTiles;// - caminoTiles.Count;
+        else {
+            final = nTotalTiles - (caminoTiles.Count - 1);
         }
-        anterior = ultimoCorrecto; //para evitar el OPERATION NOT VALID DUE TO THE CURRENT STATE DE MIERDA
-        for (int fils = comienzo; fils < final; fils++)
+        if(final >= pistas.GetLength(0))
         {
-            //Tile aux = BuscaSiguientePista(fils); //Precaucion, no descomentar
-            //Debug.Log("TILE PISTA: " + aux.gameObject.name);
-            Tile aux = caminoTiles.Peek(); //Te va a dar Operation not valid :DD:D
-            bool placebo = esCandidato(anterior, aux, ref posicion, ref sentido);
-            tiles[pistas[fils, 1], pistas[fils, 0]].marcarCamino(false, anterior, posicion, sentido);
+            final = pistas.GetLength(0);
+        }
+        Debug.Log(pistas.GetLength(0));
+        for (int fils = 1; fils < final; fils++) {
+            Debug.Log("Fila: " + fils);
+            Debug.Log("X: " + pistas[fils, 1] + ", Y: " + pistas[fils, 0]);
+            bool placebo = esCandidato(anterior, tiles[pistas[fils, 1], pistas[fils, 0]], ref posicion, ref sentido);
+            tiles[pistas[fils, 1], pistas[fils, 0]].MarcarCamino(true, anterior, posicion, sentido);
             anterior = tiles[pistas[fils, 1], pistas[fils, 0]];
         }
     }
 
-    //Si llamas a este método se te cuelga Unity
-    //Si queremos seguir por esta via, diría que la solución es usar una hebra para ello
-    //Y entonces Pepa nos suspende, probablemente.
-    private Tile BuscaSiguientePista(int fils)
-    {
-        int f = 0;
-        int c = 0;
-        bool stop = false;
-        Tile aux = null;
-        while (!stop && f < tiles.GetLength(1))
-        {
-            while (!stop && c < tiles.GetLength(0))
-            {
-                Tile t = tiles[f, c];
-                if (t.filaLogica == pistas[fils, 0] && t.filaLogica == pistas[fils, 1])
-                {
-                    aux = t;
-                    stop = true;
-                }
-            }
-        }
-        return aux;
-    }
     // TODO: Comentar
     private bool esCandidato(Tile peek, Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
     {
         //Tile top = caminoTiles.Peek();
         int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - peek.gameObject.transform.position.x);
         int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - peek.gameObject.transform.position.y);
-        if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0)
-        {
-            if (diferenciaX < 0)
-            {
+        if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0) {
+            if (diferenciaX < 0) {
                 posicion = new Vector3(-0.5f, 0, 0);
             }
-            else
-            {
+            else {
                 posicion = new Vector3(0.5f, 0, 0);
             }
             sentido = new Vector3(0, 0, 0);
             return true;
         }
-        else if (diferenciaX == 0 && Math.Abs(diferenciaY) == 1)
-        {
-            if (diferenciaY < 0)
-            {
+        else if (diferenciaX == 0 && Math.Abs(diferenciaY) == 1) {
+            if (diferenciaY < 0) {
                 posicion = new Vector3(0, -0.5f, 0);
             }
-            else
-            {
+            else {
                 posicion = new Vector3(0, 0.5f, 0);
             }
             sentido = new Vector3(0, 0, 90);
@@ -365,16 +278,10 @@ public class BoardManager : MonoBehaviour
     /// <param name="bloquePulsado"></param>
     private void DeshacerCamino(Tile bloquePulsado)
     {
-        bool stop = false;
-        while (!stop && caminoTiles.Count >= 1)
-        {
-            if (caminoTiles.Peek() != bloquePulsado)
-            {
-                caminoTiles.Peek().Despulsar();
-                caminoTiles.Pop();
-                caminoTiles.Peek().DesmarcarCamino();
-            }
-            else stop = true;
+        while (caminoTiles[caminoTiles.Count - 1] != bloquePulsado) {
+            caminoTiles[caminoTiles.Count - 1].Despulsar();
+            caminoTiles.Remove(caminoTiles[caminoTiles.Count - 1]);
+            caminoTiles[caminoTiles.Count - 1].DesmarcarCamino();
         }
     }
 
@@ -382,12 +289,9 @@ public class BoardManager : MonoBehaviour
     /// Encargado de determinar si el nivel se ha completado con éxito o no.
     /// </summary>
     /// <returns>-True si se han marcado todas las casillas, false en caso contrario</returns>
-    private bool NivelCompletado()
-    {
+    private bool NivelCompletado() {
         return (caminoTiles.Count == nTotalTiles);
     }
-
-
     #endregion
 
 }

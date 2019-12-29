@@ -57,7 +57,7 @@ public class Tile : MonoBehaviour
     public void SetTileSkin(TileSkin tileSkin)
     {
         spritePulsado = tileSkin.spriteTilePulsado;
-        pistaSprite = GetComponent<SpriteRenderer>();
+        pistaSprite = spriteDireccionCamino;
         pistaSprite.sprite = tileSkin.spriteTilePista;
     }
 
@@ -101,27 +101,16 @@ public class Tile : MonoBehaviour
     /// <returns>Estado del bool "Pulsado" interno</returns>
     public bool GetPulsado() { return _pulsado; }
 
-    void OnMouseDown()
-    {
-        GameManager.instance.GetBoardManager().SetTilePulsado((int)this.transform.position.x, (int)this.transform.position.y);
+    void OnMouseDown() {
+        GameManager.instance.GetBoardManager().coordsDentroMatriz((int)this.transform.position.x, Mathf.Abs((int)this.transform.position.y));
     }
 
-    public void marcarCamino(bool pista, Tile tile, Vector3 posicion, Vector3 sentido)
-    {
-        SpriteRenderer sevenUp = (pista) ? pistaSprite : spriteDireccionCamino;
-        SpriteRenderer child = Instantiate(sevenUp, tile.transform);
+    public void MarcarCamino(bool pista, Tile tile, Vector3 posicion, Vector3 sentido) {
+        SpriteRenderer spriteR = (pista) ? pistaSprite : spriteDireccionCamino;
+        SpriteRenderer child = Instantiate(spriteR, tile.transform);
         // Es muy importante hacer esto porque si no, empieza en el origen de coordenadas
         child.transform.position = tile.transform.position + posicion;
         child.transform.eulerAngles = sentido;
-    }
-
-
-    public void SetPosicionLogica(int x, int y)
-    {
-        filaLogica = x;
-        columnaLogica = y;
-        
-        Debug.Log("TILE: "+ gameObject.name + "---filaLogica: " + filaLogica + ", columnaLogica: " + columnaLogica);
     }
 
 }
