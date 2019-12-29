@@ -14,8 +14,10 @@ public class Tile : MonoBehaviour
 
     [Tooltip("Guia de camino")]
     public SpriteRenderer spriteDireccionCamino;      //Sprite de tile no pulsado
-    
-    private SpriteRenderer pistaSprite;      //Sprite de tile no pulsado
+
+    [Tooltip("Pista")]
+    public GameObject pista;            //Sprite de Pista
+    private SpriteRenderer pistaSprite;      
 
     private Sprite spritePulsado;        //Sprite de tile pulsado
 
@@ -57,7 +59,7 @@ public class Tile : MonoBehaviour
     public void SetTileSkin(TileSkin tileSkin)
     {
         spritePulsado = tileSkin.spriteTilePulsado;
-        pistaSprite = spriteDireccionCamino;
+        pistaSprite = pista.GetComponent<SpriteRenderer>();
         pistaSprite.sprite = tileSkin.spriteTilePista;
     }
 
@@ -88,7 +90,7 @@ public class Tile : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++) {
             Transform child = transform.GetChild(i);
-            if (child.GetComponent<SpriteRenderer>().sprite != pistaSprite.sprite) {
+            if (child.GetComponent<SpriteRenderer>().sprite != pistaSprite) {
                 child.parent = null;
                 Destroy(child.gameObject);
             }
