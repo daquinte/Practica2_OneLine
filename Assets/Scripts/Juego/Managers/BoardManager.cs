@@ -301,8 +301,8 @@ public class BoardManager : MonoBehaviour
     }
 
     //Si llamas a este método se te cuelga Unity
-    //No es una cosa sorprendente, es más: se veía venir.
-    //Pero así es la vida.
+    //Si queremos seguir por esta via, diría que la solución es usar una hebra para ello
+    //Y entonces Pepa nos suspende, probablemente.
     private Tile BuscaSiguientePista(int fils)
     {
         int f = 0;
