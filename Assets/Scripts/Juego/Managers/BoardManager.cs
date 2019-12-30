@@ -232,15 +232,11 @@ public class BoardManager : MonoBehaviour
         
         Tile anterior = caminoTiles[0];
         int final = 0;
-        if (nTotalTiles - (caminoTiles.Count - 1) >= 5) {
+        if (nTotalTiles - caminoTiles.Count >= 5) {
             final = comienzo + 5;
         }
         else {
-            final = nTotalTiles - (caminoTiles.Count - 1);
-        }
-        if(final >= pistas.GetLength(0))
-        {
-            final = pistas.GetLength(0);
+            final = nTotalTiles;
         }
         Debug.Log("FINAL: " + final);
         for (int fils = 1; fils < final; fils++) {
