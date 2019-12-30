@@ -190,22 +190,31 @@ public class BoardManager : MonoBehaviour
         DeshacerCamino(caminoTiles[0]);
     }
 
+    /// <summary>
+    /// Muestra las pistas según el estado actual de la partida.
+    /// </summary>
     public void MostrarPista()
     {
         if (!NivelCompletado()) {
             bool flag = false;
             int fila = 0;
-            foreach (Tile tile in caminoTiles) {
-                if (tiles[pistas[fila, 1], pistas[fila, 0]] == tile) {
+            Tile ultimoCorrecto = null;
+            while(!flag && fila < caminoTiles.Count)
+            {
+                if (tiles[pistas[fila, 1], pistas[fila, 0]] == caminoTiles[fila])
+                {
                     fila++;
+                    ultimoCorrecto = caminoTiles[fila-1];
+                    Debug.Log("ultimo correcto: " + ultimoCorrecto.gameObject.name);
                 }
-                else {
+                else
+                {
                     flag = true;
-                    break;
                 }
             }
+
             if (flag) {
-                DeshacerCamino(tiles[pistas[fila-1, 1], pistas[fila-1, 0]]);
+                DeshacerCamino(ultimoCorrecto);
             }
             MarcarCaminoPistas(fila);
         }
@@ -218,10 +227,11 @@ public class BoardManager : MonoBehaviour
     /// <param name="comienzo">Int de en que posicion debes comenzar a trazar el camino</param>
     private void MarcarCaminoPistas(int comienzo)
     {
-        Vector3 posicion = new Vector3(0, 0, 0);
-        Vector3 sentido = new Vector3(0, 0, 0);
-        int final = 0;
+        Vector3 posicion = Vector3.zero;
+        Vector3 sentido = Vector3.zero;
+        
         Tile anterior = caminoTiles[0];
+        int final = 0;
         if (nTotalTiles - (caminoTiles.Count - 1) >= 5) {
             final = comienzo + 5;
         }
@@ -232,7 +242,7 @@ public class BoardManager : MonoBehaviour
         {
             final = pistas.GetLength(0);
         }
-        Debug.Log(pistas.GetLength(0));
+        Debug.Log("FINAL: " + final);
         for (int fils = 1; fils < final; fils++) {
             Debug.Log("Fila: " + fils);
             Debug.Log("X: " + pistas[fils, 1] + ", Y: " + pistas[fils, 0]);

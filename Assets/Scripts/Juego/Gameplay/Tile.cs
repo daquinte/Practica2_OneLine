@@ -10,18 +10,18 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [Tooltip("Skin de tile no pulsado.")]
-    public Sprite spriteNoPulsado;      //Sprite de tile no pulsado
+    public Sprite spriteNoPulsado;                      //Sprite de tile no pulsado
 
     [Tooltip("Guia de camino")]
-    public SpriteRenderer spriteDireccionCamino;      //Sprite de tile no pulsado
+    public SpriteRenderer spriteDireccionCamino;        //Sprite del camino seguido
 
-    [Tooltip("Pista")]
-    public GameObject pista;            //Sprite de Pista
-    private SpriteRenderer pistaSprite;      
-
-    private Sprite spritePulsado;        //Sprite de tile pulsado
+    [Tooltip("Pista. El sprite se escoge dinamicamente.")]
+    public SpriteRenderer pistaSprite;                  //Sprite de Pista
 
 
+
+
+    private Sprite spritePulsado;                       //Sprite de tile pulsado
 
     /// <summary>
     /// Bool interno que controla si el tile está pulsado o no
@@ -33,11 +33,6 @@ public class Tile : MonoBehaviour
     /// Se añadirá al camino y nunca deberá ser retirado aunque se pulse en él
     /// </summary>
     private bool _tileInicial = false;
-
-
-    //TODO: hacer private
-    public int filaLogica;
-    public int columnaLogica;
 
     private void Start()
     {
@@ -59,7 +54,6 @@ public class Tile : MonoBehaviour
     public void SetTileSkin(TileSkin tileSkin)
     {
         spritePulsado = tileSkin.spriteTilePulsado;
-        pistaSprite = pista.GetComponent<SpriteRenderer>();
         pistaSprite.sprite = tileSkin.spriteTilePista;
     }
 
@@ -90,7 +84,7 @@ public class Tile : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++) {
             Transform child = transform.GetChild(i);
-            if (child.GetComponent<SpriteRenderer>().sprite != pistaSprite) {
+            if (child.GetComponent<SpriteRenderer>().sprite != pistaSprite.sprite) {
                 child.parent = null;
                 Destroy(child.gameObject);
             }

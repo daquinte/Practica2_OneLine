@@ -81,9 +81,8 @@ MonoBehaviour:
   spriteNoPulsado: {fileID: 21300000, guid: c3df0dc3bfff2a840ab36da2428d9085, type: 3}
   spriteDireccionCamino: {fileID: 212295213331559402, guid: 4161be74d47b9804bbb9158250dd45a5,
     type: 2}
-  pista: {fileID: 1394949658356726, guid: 4c380a456a645354990a66d49259558f, type: 2}
-  filaLogica: 0
-  columnaLogica: 0
+  pistaSprite: {fileID: 212018847519178696, guid: 4c380a456a645354990a66d49259558f,
+    type: 2}
 --- !u!212 &212330655617234930
 SpriteRenderer:
   m_ObjectHideFlags: 1
