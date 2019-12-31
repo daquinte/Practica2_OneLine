@@ -12,6 +12,8 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     //Atributos publicos
+    public GameScale gameScale;
+
     [Tooltip("Prefab of a Tile")]
     public Tile prefabTile;
 
@@ -26,9 +28,10 @@ public class BoardManager : MonoBehaviour
     public List<TileSkin> tileSkins;
 
 
-    public float TARGET_WIDTH = 1080;
-    public float TARGET_HEIGHT = 1920;
-    public float PIXELS_TO_UNITS = 110;
+
+    private int TARGET_WIDTH;
+    private int TARGET_HEIGHT;
+    private int PIXELS_TO_UNITS = 110;
 
 
     //Atributos privados
@@ -61,6 +64,9 @@ public class BoardManager : MonoBehaviour
     private int _anchoTile;
     private int _altoTile;
 
+    private int screenWidth;
+    private int screenHeight;
+
     bool init = false; //TEMPORAL, QUITAR CUANDO SE CARGE EL NIVEL DESDE EL MENU
 
     // Use this for initialization
@@ -71,6 +77,9 @@ public class BoardManager : MonoBehaviour
         cursor.SetSprite(currentTileSkin.spriteDedo);
 
         GameManager.instance.SetBoardManager(this);
+
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
     }
 
     // Update is called once per frame
@@ -81,6 +90,9 @@ public class BoardManager : MonoBehaviour
                 coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x),
                                     (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
             }
+        }
+        if (screenWidth != Screen.width || screenHeight != Screen.height) {
+            ResizeCamera();
         }
     }
 
@@ -98,7 +110,7 @@ public class BoardManager : MonoBehaviour
         nTotalTiles = 0;
         //Situamos la cámara
         Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, -((nFils / 2.0f) - 0.5f), Camera.main.transform.position.z);
-        ResizeCamera(nCols, nFils);
+        ResizeCamera();
 
         for (int filas = 0; filas < tiles.GetLength(1); filas++) {
             string infoFila = infoNivel.layout[filas];
@@ -132,18 +144,19 @@ public class BoardManager : MonoBehaviour
         else currentTileSkin = preferedSkin;
     }
 
-    private void ResizeCamera(int cols, int fils)
+    private void ResizeCamera()
     {
-        float desiredRatio = TARGET_WIDTH / TARGET_HEIGHT;
-        float currentRatio = (float)Screen.width / (float)Screen.height;
+        //TARGET_WIDTH = gameScale.GetWidth();
+        float screenRatio = (float)Screen.width / (float)Screen.height;
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
 
-        if (currentRatio >= desiredRatio) {
-            Camera.main.orthographicSize = TARGET_WIDTH / 1.5f / PIXELS_TO_UNITS;
-        }
-        else {
-            float differenceInSize = desiredRatio / currentRatio;
-            Camera.main.orthographicSize = TARGET_WIDTH / 1.5f / PIXELS_TO_UNITS * differenceInSize;
-        }
+        float filasNormalizadas = (nFils < 6.0f) ? 6.0f : 8.0f;
+        float alturaTablero = (filasNormalizadas * PIXELS_TO_UNITS) * 1.1f;
+        float targetHeight = (alturaTablero > gameScale.GetHeight()) ? alturaTablero : gameScale.GetHeight();
+        float targetRatio = gameScale.GetWidth() / targetHeight;
+        float differenceInSize = targetRatio / screenRatio;
+        Camera.main.orthographicSize = filasNormalizadas / differenceInSize;
     }
     #endregion
 
