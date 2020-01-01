@@ -43,16 +43,18 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     private Tile[,] tiles;
 
-    /// <summary>
-    /// Camino a la meta
-    /// </summary>
-    private int[,] pistas;
-
 
     /// <summary>
     /// Recorrido efectuado en forma de pila.
     /// </summary>
     private List<Tile> caminoTiles;
+
+
+    /// <summary>
+    /// Camino a la meta
+    /// </summary>
+    private int[,] pistas;
+
 
     private TileSkin currentTileSkin;   //TileSkin del nivel actual
 
@@ -61,13 +63,11 @@ public class BoardManager : MonoBehaviour
     private int nFils;                  //numero filas del tablero
     private int nCols;                  //numero columnas del tablero
 
-    private int _anchoTile;
-    private int _altoTile;
-
     private int screenWidth;
     private int screenHeight;
 
     bool init = false; //TEMPORAL, QUITAR CUANDO SE CARGE EL NIVEL DESDE EL MENU
+    bool isChallenge = false;           //¿Estamos jugando un nivel Challenge?
 
     // Use this for initialization
     void Start() {
@@ -134,6 +134,15 @@ public class BoardManager : MonoBehaviour
         init = true;
     }
 
+    /// <summary>
+    /// Ponemos este mapa a tipo challenge.
+    /// Es decir: no se guarda el progreso "general", y el mapa puede acabar abruptamente.
+    /// </summary>
+    public void SetCurrentMapAsChallenge()
+    {
+        isChallenge = true;
+        //Cambiamos el canvas a "tipo challenge"
+    }
 
     private void GetRandomSkin()
     {

@@ -8,9 +8,14 @@ using UnityEngine;
 /// </summary>
 [System.Serializable]
 public class DatosJugador {
-    public int test;
-    public bool _noAds;
     public int _monedas;
+    public int _medallas;
+
+    public bool[] nivelesDebloqueados; //Ya veremos cómo se hará
+
+    public bool _noAds;
+
+
     public string hash;
 
 
@@ -20,9 +25,10 @@ public class DatosJugador {
     public DatosJugador() { }
 
     //Constructora del objeto serializable con datos por defecto
-    public DatosJugador(int t)
+    public DatosJugador(int monedas, int medallas)
     {
-        _monedas = t;
+        _monedas = monedas;
+        _medallas = medallas;
         _noAds = false;
     }
 }

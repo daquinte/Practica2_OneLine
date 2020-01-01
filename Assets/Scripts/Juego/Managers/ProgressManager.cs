@@ -38,6 +38,7 @@ public static class ProgressManager {
     /// </summary>
     public static DatosJugador Load()
     {
+        Debug.Log(Application.persistentDataPath);
         //Comprobamos si el archivo existe antes de abrirlo
         if (File.Exists(Application.persistentDataPath + "/ProgresoJugador.dat"))
         {
