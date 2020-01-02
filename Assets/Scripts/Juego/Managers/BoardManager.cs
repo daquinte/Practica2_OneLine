@@ -12,7 +12,8 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     //Atributos publicos
-    public GameScale gameScale;
+    [Tooltip("Canvas de la escena de juego. Debe tener los componentes GameScale y CanvasJuego.")]
+    public GameObject _CanvasJuego;
 
     [Tooltip("Prefab of a Tile")]
     public Tile prefabTile;
@@ -28,14 +29,13 @@ public class BoardManager : MonoBehaviour
     public List<TileSkin> tileSkins;
 
 
+    //Atributos privados//
+
 
     private int TARGET_WIDTH;
     private int TARGET_HEIGHT;
     private int PIXELS_TO_UNITS = 110;
 
-
-    //Atributos privados
-    private InputManager inputManager;
 
 
     /// <summary>
@@ -58,6 +58,8 @@ public class BoardManager : MonoBehaviour
 
     private TileSkin currentTileSkin;   //TileSkin del nivel actual
 
+    private GameScale gameScale;        //componente GameScale del objeto canvas de tu escena.
+    private CanvasJuego canvasJuego;    //componente Canvas Juego del objeto canvas de tu escena.
 
     private int nTotalTiles;            //Número total de tiles 
     private int nFils;                  //numero filas del tablero
@@ -80,6 +82,9 @@ public class BoardManager : MonoBehaviour
 
         screenWidth = Screen.width;
         screenHeight = Screen.height;
+
+        gameScale = _CanvasJuego.GetComponent<GameScale>();
+        canvasJuego = _CanvasJuego.GetComponent<CanvasJuego>();
     }
 
     // Update is called once per frame

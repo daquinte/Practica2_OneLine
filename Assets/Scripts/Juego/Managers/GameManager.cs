@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //Necesitamos el lector de niveles para cargarlos desde cualquier escena
 [RequireComponent(typeof(LectorNiveles))]
@@ -43,6 +44,11 @@ public class GameManager : MonoBehaviour
     { 
         lectorNiveles = GetComponent<LectorNiveles>();
         lectorNiveles.CargaTodosLosNiveles();
+    }
+
+    public void ChangeToGameScene()
+    {
+        SceneManager.LoadScene(2);
     }
 
     public void JuegaNivel(int nivel) //bool isChallenge??

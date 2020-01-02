@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Clase de CountDown para el timer de Challenge
+/// Clase de CountDown para el timer de Challenge.
 /// </summary>
 public class CountDown : MonoBehaviour
 {

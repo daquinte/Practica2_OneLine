@@ -47,6 +47,7 @@ public static class ProgressManager {
 
             //Tenemos que castear la deserializacion que ha leido a Datos Jugador
             DatosJugador data = bf.Deserialize(file) as DatosJugador;
+            Debug.Log(data.hash);
             file.Close();
 
             return data;
