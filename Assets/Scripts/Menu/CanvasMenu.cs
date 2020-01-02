@@ -31,6 +31,7 @@ public class CanvasMenu : MonoBehaviour {
 
 
 	private const int precioChallenge = 25; 
+	private const int recompensaLogin = 100; 
 
 
 	// Use this for initialization
@@ -49,6 +50,13 @@ public class CanvasMenu : MonoBehaviour {
 		ActualizaMonedas();
 	}
 
+
+	public void GoToSeleccionNiveles(int dificultad)
+	{
+		GameManager.instance.CargaSeleccionNivel(dificultad);
+	}
+
+
 	/// <summary>
 	/// Callbacks del panel de challenge
 	/// </summary>
@@ -66,7 +74,7 @@ public class CanvasMenu : MonoBehaviour {
 		{
 			GameManager.instance.RestaMonedas(precioChallenge);
 		}
-		//???????
+		GameManager.instance.CargaEscenaJuego(1, true);
 	}
 	#endregion
 
@@ -76,7 +84,9 @@ public class CanvasMenu : MonoBehaviour {
 	#region Login Callbacks
 
 	public void ShowLoginPanel() { loginPanel.SetActive(true); }
-	public void HideLoginPanel() { loginPanel.SetActive(false); }
+	public void HideLoginPanel() {
+		GameManager.instance.SumaMonedas(recompensaLogin);
+		loginPanel.SetActive(false); }
 
 	#endregion
 

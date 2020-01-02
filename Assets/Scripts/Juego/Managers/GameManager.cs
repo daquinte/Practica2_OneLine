@@ -17,6 +17,18 @@ public class GameManager : MonoBehaviour
     InputManager inputManager = null;
 
     DatosJugador datosJugador;
+
+    /// <summary>
+    /// Struct con la información persistente entre escenas
+    /// </summary>
+    public struct InfoEleccionJugador { 
+        public int         tipoDificultadActual;
+        public int         numNivelActual;
+        public bool        isChallenge;
+    }
+
+    public InfoEleccionJugador infoNivel;
+
     //Awake is always called before any Start functions
     void Awake()
     {
@@ -38,23 +50,52 @@ public class GameManager : MonoBehaviour
         //Loads the player, if there is any
         LoadPlayer();
 
-    }
-
-    void Start()
-    { 
         lectorNiveles = GetComponent<LectorNiveles>();
         lectorNiveles.CargaTodosLosNiveles();
+
+        //TEMPORAL
+        infoNivel.numNivelActual = 420;
+        
+
     }
 
-    public void ChangeToGameScene()
+    /// <summary>
+    /// Actualmente, todos los cambios de escena tienen efecto en el *siguiente frame*
+    /// Debido a que usamos LoadScene en lugar de su versión asíncrona
+    /// </summary>
+    #region SceneManagement
+
+    public void CargaEscenaTitulo()
     {
+        SceneManager.LoadScene(0);
+    }
+
+    public void CargaSeleccionNivel(int dificultad)
+    {
+        if(dificultad >= 0 && dificultad <= 4) { 
+            infoNivel.tipoDificultadActual = dificultad;
+        }
+        SceneManager.LoadScene(1);
+    }
+
+   
+    public void CargaEscenaJuego(int nivel, bool isChallenge)
+    {
+        infoNivel.numNivelActual = nivel;
+        infoNivel.isChallenge = isChallenge;
         SceneManager.LoadScene(2);
     }
+    #endregion
 
-    public void JuegaNivel(int nivel) //bool isChallenge??
+
+    public void JuegaNivel(int nivel)
+    {
+        boardManager.InitMap(lectorNiveles.CargaNivel(nivel));
+    }
+    public InfoNivel GetInfoNivel(int nivel)
     {
         //PRIMERO: CAMBIO ESCENA A ESCENA JUEGO
-        boardManager.InitMap(lectorNiveles.CargaNivel(nivel));
+        return lectorNiveles.CargaNivel(nivel);
     }
 
     public void LanzaAnuncio()
@@ -77,6 +118,7 @@ public class GameManager : MonoBehaviour
         SavePlayer();
     }
 
+    #region Save and Load
     /// <summary>
     /// Guarda el estado del jugador
     /// </summary>
@@ -93,6 +135,7 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log(datosJugador._monedas);
     }
+    #endregion
 
     #region Set and gets
 
@@ -147,5 +190,6 @@ public class GameManager : MonoBehaviour
     {
         return datosJugador;
     }
+
     #endregion
 }

@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class CanvasJuego : MonoBehaviour
 {
     public Text textoMonedas;
+    public Text textoDificultad;
 
     //Elementos de la HUD de una partida normal
     public Button botonReset;
@@ -21,17 +22,16 @@ public class CanvasJuego : MonoBehaviour
     //Debe estar inactivo por defecto.
     public CountDown countDown;
 
-
-    private bool isChallenge;
-
     // Start is called before the first frame update
     void Start()
     {
-        isChallenge = false;
         textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
 
-        //Temporal:SetStandardHUD
-        SetStandardHUD();
+        if (GameManager.instance.infoNivel.isChallenge)
+        {
+            SetChallengeHUD();
+        }
+        else SetStandardHUD();
     }
 
     // Update is called once per frame
@@ -41,7 +41,37 @@ public class CanvasJuego : MonoBehaviour
 
     }
 
-    public void SetChallengeHUD()
+    /// <summary>
+    /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
+    /// </summary>
+    public void GoToSeleccionNivel()
+    {
+        GameManager.instance.CargaSeleccionNivel(GameManager.instance.infoNivel.tipoDificultadActual);
+    }
+
+    /// <summary>
+    /// Callback para informar a la instancia del nivel que queremos volver al titulo
+    /// </summary>
+    public void GoToTitulo()
+    {
+        GameManager.instance.CargaEscenaTitulo();
+    }
+
+    /// <summary>
+    /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
+    /// </summary>
+    public void GoToSiguienteNivel()
+    {
+        //TODO: Cambiar el sorting layer del Canvas a "BackGround" Cuando aparezca el panel de Siguiente Nivel
+        //NIVEL ++
+        //GameManager.instance.CargaEscenaJuego(GameManager.instance.infoNivel.numNivelActual++, false);
+    }
+
+    public void DameAnuncio()
+    {
+        GameManager.instance.LanzaAnuncio();
+    }
+    private void SetChallengeHUD()
     {
         botonReset.gameObject.SetActive(false);
         botonAnuncio.gameObject.SetActive(false);
@@ -50,7 +80,7 @@ public class CanvasJuego : MonoBehaviour
         countDown.gameObject.SetActive(true);
     }
 
-    public void SetStandardHUD()
+    private void SetStandardHUD()
     {
         botonReset.gameObject.SetActive(true);
         botonAnuncio.gameObject.SetActive(true);

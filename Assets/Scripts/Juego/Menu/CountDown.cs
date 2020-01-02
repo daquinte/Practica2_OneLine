@@ -18,6 +18,11 @@ public class CountDown : MonoBehaviour
 
     public Text text;
 
+    private void OnEnable()
+    {
+        StartTimer(timeLeft);
+    }
+
     public void StartTimer(float from)
     {
         stop = false;

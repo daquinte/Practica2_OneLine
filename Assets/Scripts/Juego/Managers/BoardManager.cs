@@ -85,6 +85,9 @@ public class BoardManager : MonoBehaviour
 
         gameScale = _CanvasJuego.GetComponent<GameScale>();
         canvasJuego = _CanvasJuego.GetComponent<CanvasJuego>();
+
+        Debug.Log(GameManager.instance.infoNivel.numNivelActual);
+        InitMap(GameManager.instance.GetInfoNivel(GameManager.instance.infoNivel.numNivelActual));
     }
 
     // Update is called once per frame
@@ -97,7 +100,7 @@ public class BoardManager : MonoBehaviour
             }
         }
         if (screenWidth != Screen.width || screenHeight != Screen.height) {
-            ResizeCamera();
+           ResizeCamera();
         }
     }
 
@@ -105,6 +108,16 @@ public class BoardManager : MonoBehaviour
     /// Métodos de inicialización del Board Manager.
     /// </summary>
     #region Start Methods
+
+    /// <summary>
+    /// Ponemos este mapa a tipo challenge.
+    /// Es decir: no se guarda el progreso "general", y el mapa puede acabar abruptamente.
+    /// </summary>
+    public void SetCurrentMapAsChallenge()
+    {
+        isChallenge = true;
+    }
+
 
     public void InitMap(InfoNivel infoNivel) {
         nFils = infoNivel.layout.Length;
@@ -115,7 +128,7 @@ public class BoardManager : MonoBehaviour
         nTotalTiles = 0;
         //Situamos la cámara
         Camera.main.transform.position = new Vector3((nCols / 2.0f) - 0.5f, -((nFils / 2.0f) - 0.5f), Camera.main.transform.position.z);
-        ResizeCamera();
+        //ResizeCamera();
 
         for (int filas = 0; filas < tiles.GetLength(1); filas++) {
             string infoFila = infoNivel.layout[filas];
@@ -139,15 +152,7 @@ public class BoardManager : MonoBehaviour
         init = true;
     }
 
-    /// <summary>
-    /// Ponemos este mapa a tipo challenge.
-    /// Es decir: no se guarda el progreso "general", y el mapa puede acabar abruptamente.
-    /// </summary>
-    public void SetCurrentMapAsChallenge()
-    {
-        isChallenge = true;
-        //Cambiamos el canvas a "tipo challenge"
-    }
+ 
 
     private void GetRandomSkin()
     {
@@ -161,7 +166,7 @@ public class BoardManager : MonoBehaviour
     private void ResizeCamera()
     {
         //TARGET_WIDTH = gameScale.GetWidth();
-        float screenRatio = (float)Screen.width / (float)Screen.height;
+        float screenRatio = (float)Screen.width / (float)Screen.height; // 2160/1080
         screenWidth = Screen.width;
         screenHeight = Screen.height;
 
