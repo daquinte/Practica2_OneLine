@@ -86,7 +86,7 @@ public class BoardManager : MonoBehaviour
         gameScale = _CanvasJuego.GetComponent<GameScale>();
         canvasJuego = _CanvasJuego.GetComponent<CanvasJuego>();
 
-        Debug.Log(GameManager.instance.infoNivel.numNivelActual);
+
         InitMap(GameManager.instance.GetInfoNivel(GameManager.instance.infoNivel.numNivelActual));
     }
 

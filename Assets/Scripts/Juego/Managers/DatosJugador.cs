@@ -16,7 +16,9 @@ public class DatosJugador {
     public bool _noAds;
 
 
-    public string hash;
+    //Serializacion y encriptado
+    public int hash;
+    public int salt;
 
 
     /// <summary>

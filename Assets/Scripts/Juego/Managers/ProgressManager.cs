@@ -7,8 +7,11 @@ using System.IO;
 /// <summary>
 /// Clase encargada de mantener el progreso del jugador. 
 /// </summary>
-public static class ProgressManager { 
+public static class ProgressManager {
 
+
+    static int customSalt;
+    static private int baseSalt = 1234;
     /// <summary>
     /// Guarda el estado del juego en un .dat
     /// crea el archivo y lo guarda.
@@ -20,14 +23,16 @@ public static class ProgressManager {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/ProgresoJugador.dat");
 
-        DatosJugador datosAux = new DatosJugador();
-        string objHash = datosAux.GetHashCode().ToString();
-        datosAux = datosJugador;
-        datosAux.hash = objHash;
-        Debug.Log(datosAux.hash);
+        datosJugador.hash = 0;  //primero se pone a 0
+        datosJugador.salt = baseSalt + datosJugador._monedas;
+        
+        datosJugador.hash = Crypto(bf, datosJugador);
+        Debug.Log("Hash" + datosJugador.hash);
+        Debug.Log("Salt" + datosJugador.salt);
 
         //Serializamos data y lo guardamos en file
-        bf.Serialize(file, datosAux);
+        bf.Serialize(file, datosJugador);
+
         //Cerramos file
         file.Close();
     }
@@ -47,12 +52,40 @@ public static class ProgressManager {
 
             //Tenemos que castear la deserializacion que ha leido a Datos Jugador
             DatosJugador data = bf.Deserialize(file) as DatosJugador;
-            Debug.Log(data.hash);
+            int hashLeida = data.hash;
+            int salLeida = data.salt;
+
+            data.hash = 0;
+            int miHash = Crypto(bf, data);
+            int miSal = baseSalt + data._monedas;   //Si se han modificado de forma externa, la sal cambiará.
             file.Close();
 
-            return data;
+            Debug.Log("mi Hash" + miHash);
+            Debug.Log("mi Sal" + miSal);
+            if (miHash == hashLeida && miSal == salLeida)
+            {
+                return data;
+            }
+            else { 
+                return null;
+            }
         }
         else return null;
+
+    }
+
+    private static int Crypto (BinaryFormatter bf, DatosJugador datos)
+    {
+        MemoryStream memoryStream = new MemoryStream();
+
+        bf.Serialize(memoryStream, datos);
+
+        // This resets the memory stream position for the following read operation
+        memoryStream.Seek(0, SeekOrigin.Begin);
+
+        // Get the bytes
+        var bytes = new byte[memoryStream.Length];
+        return memoryStream.Read(bytes, 0, (int)memoryStream.Length).GetHashCode();
 
     }
 }
