@@ -22,12 +22,12 @@ public class ScaleEffect : MonoBehaviour
         medidor = transform.localScale.x;
         if (upwards)
         {
-            medidor += scaleFactor * Time.fixedUnscaledDeltaTime;
+            medidor += scaleFactor * Time.deltaTime;
             if (medidor > maxValue) upwards = false;
         }
         else
         {
-            medidor -= scaleFactor * Time.fixedUnscaledDeltaTime;
+            medidor -= scaleFactor * Time.deltaTime;
             if (medidor < minValue) upwards = true;
 
         }

@@ -1981,6 +1981,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d5cd560b32b38409d497865cb105a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelSiguienteNivel: {fileID: 387308939}
+  panelChallengeWin: {fileID: 0}
+  panelChallengeLost: {fileID: 0}
   textoMonedas: {fileID: 1040910231}
   textoDificultad: {fileID: 2096496241}
   botonReset: {fileID: 28334877}

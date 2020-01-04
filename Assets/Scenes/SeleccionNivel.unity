@@ -1343,8 +1343,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: GoToSeleccionNivel
+      - m_Target: {fileID: 656834225}
+        m_MethodName: GoBackToMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

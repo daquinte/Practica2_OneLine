@@ -10,6 +10,16 @@ using UnityEngine.UI;
 /// </summary>
 public class CanvasJuego : MonoBehaviour
 {
+    [Tooltip("Panel de siguiente nivel para un nivel normal.")]
+    public GameObject panelSiguienteNivel;
+
+    [Tooltip("Panel de nivel completado para challenge.")]
+    public GameObject panelChallengeWin;
+
+    [Tooltip("Panel de nivel no superado para challenge.")]
+    public GameObject panelChallengeLost;
+
+    //Elementos del banner constantes
     public Text textoMonedas;
     public Text textoDificultad;
 
@@ -19,13 +29,17 @@ public class CanvasJuego : MonoBehaviour
     public Button botonPista;
 
     //Elementos de la HUD para partida de tipo challenge
-    //Debe estar inactivo por defecto.
     public CountDown countDown;
+
+    private Text TextoSigNivelDif; 
+    private Text TextoSigNivelNum;
 
     // Start is called before the first frame update
     void Start()
     {
         textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
+        textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual + "  " + GameManager.instance.infoNivel.numNivelActual.ToString();
+
 
         if (GameManager.instance.infoNivel.isChallenge)
         {
@@ -41,12 +55,21 @@ public class CanvasJuego : MonoBehaviour
 
     }
 
+    public void ShowSiguienteNivelPanel() { panelSiguienteNivel.SetActive(true); }
+    public void HideSiguienteNivelPanel() { panelSiguienteNivel.SetActive(false); }
+
+    ///Callbacks de la escena
+    #region Callbacks
     /// <summary>
     /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
     /// </summary>
     public void GoToSeleccionNivel()
     {
-        GameManager.instance.CargaSeleccionNivel(GameManager.instance.infoNivel.tipoDificultadActual);
+
+        int dif = 0;
+        GameManager.instance.CargaSeleccionNivel(dif);
+        
+
     }
 
     /// <summary>
@@ -71,6 +94,11 @@ public class CanvasJuego : MonoBehaviour
     {
         GameManager.instance.LanzaAnuncio();
     }
+    #endregion
+
+
+    //Cambios privados en la interfaz
+    #region HUD Change
     private void SetChallengeHUD()
     {
         botonReset.gameObject.SetActive(false);
@@ -88,5 +116,5 @@ public class CanvasJuego : MonoBehaviour
 
         countDown.gameObject.SetActive(false);
     }
-
+    #endregion
 }

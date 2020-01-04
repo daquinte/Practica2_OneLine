@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
     LectorNiveles lectorNiveles;
-    AdsManager   adsManager = null;
+    AdsManager adsManager = null;
     BoardManager boardManager = null;
     InputManager inputManager = null;
 
@@ -21,10 +21,11 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Struct con la información persistente entre escenas
     /// </summary>
-    public struct InfoEleccionJugador { 
-        public int         tipoDificultadActual;
-        public int         numNivelActual;
-        public bool        isChallenge;
+    public struct InfoEleccionJugador
+    {
+        public string tipoDificultadActual;
+        public int numNivelActual;
+        public bool isChallenge;
     }
 
     public InfoEleccionJugador infoNivel;
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
         lectorNiveles.CargaTodosLosNiveles();
 
         //TEMPORAL
+        infoNivel.tipoDificultadActual = "DEBUG";
+        infoNivel.numNivelActual = 0;
         infoNivel.numNivelActual = 203;
     }
 
@@ -70,13 +73,36 @@ public class GameManager : MonoBehaviour
 
     public void CargaSeleccionNivel(int dificultad)
     {
-        if(dificultad >= 0 && dificultad <= 4) { 
-            infoNivel.tipoDificultadActual = dificultad;
+        if (dificultad >= 0 && dificultad <= 4)
+        {
+            switch (dificultad)
+            {
+
+                case 0:
+                    infoNivel.tipoDificultadActual = "BEGINNER";
+                    break;
+
+                case 1:
+                    infoNivel.tipoDificultadActual = "REGULAR";
+                    break;
+                case 2:
+                    infoNivel.tipoDificultadActual = "ADVANCED";
+                    break;
+                case 3:
+                    infoNivel.tipoDificultadActual = "EXPERT";
+                    break;
+                case 4:
+                    infoNivel.tipoDificultadActual = "MASTER";
+                    break;
+
+                    //ETC ETC
+            }
+
         }
         SceneManager.LoadScene(1);
     }
 
-   
+
     public void CargaEscenaJuego(int nivel, bool isChallenge)
     {
         infoNivel.numNivelActual = nivel;
@@ -121,13 +147,13 @@ public class GameManager : MonoBehaviour
     /// Guarda el estado del jugador
     /// </summary>
     public void SavePlayer()
-    {        
+    {
         ProgressManager.Save(datosJugador);
     }
     private void LoadPlayer()
     {
         datosJugador = ProgressManager.Load();
-        if(datosJugador == null)
+        if (datosJugador == null)
         {
             datosJugador = new DatosJugador(100, 0);
         }

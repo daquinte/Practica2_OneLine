@@ -26,18 +26,7 @@ public class CanvasSeleccionNivel : MonoBehaviour
     public void GoBackToMenu() { GameManager.instance.CargaEscenaTitulo(); }
     private void AnalizaDificultad()
     {
-        int dificultad = GameManager.instance.infoNivel.tipoDificultadActual;
-        switch (dificultad)
-        {
-            case 0:
-                textoDificultad.text = "BEGINNER";
-                break;
-
-            case 1:
-                textoDificultad.text = "REGULAR";
-                break;
-
-                //ETC ETC
-        }
+        textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual;
+        
     }
 }
