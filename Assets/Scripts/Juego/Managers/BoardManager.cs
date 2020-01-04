@@ -28,8 +28,6 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
 
-    public GameObject test;
-
     //Atributos privados//
 
 
@@ -163,40 +161,6 @@ public class BoardManager : MonoBehaviour
         else currentTileSkin = preferedSkin;
     }
 
-    /*private void ResizeCamera()
-    {
-
-        //TARGET_WIDTH = gameScale.GetWidth();
-        float screenRatio = (float)Screen.width / (float)Screen.height; // 2160/1080
-        screenWidth = Screen.width;
-        screenHeight = Screen.height;
-
-        float filasNormalizadas = (nFils < 6.0f) ? 6.0f : 8.0f;
-
-        Camera.main.transform.position = new Vector3(nCols / 2.0f - 0.5f,
-            -nFils / 2.0f + 0.5f, Camera.main.transform.position.z);
-
-        test.transform.localScale = new Vector3(nCols, filasNormalizadas * 0.95f, 1);
-        //test.transform.parent = this.transform;
-        test.transform.position = new Vector3(nCols / 2.0f - 0.5f,
-            -nFils / 2.0f + 0.5f, 0);
-
-
-        float alturaTablero = (filasNormalizadas * PIXELS_TO_UNITS) * 1.1f;
-        float anchuraTablero = (nCols * PIXELS_TO_UNITS) * 1.05f;
-
-        float targetHeight = (alturaTablero > gameScale.GetHeight()) ? alturaTablero : gameScale.GetHeight();
-        float targetWidth = (anchuraTablero > gameScale.GetWidth()) ? anchuraTablero : gameScale.GetWidth();
-
-        float targetRatio = 720.0f / 1280.0f;
-        float differenceInSize = targetRatio / screenRatio;
-
-        Camera.main.orthographicSize = filasNormalizadas / differenceInSize;
-
-        //float newOrthographicSize = ((float)Screen.height * (gameScale.GetHeight() / PIXELS_TO_UNITS) / gameScale.GetHeight()) / 2.0f;
-        //Camera.main.orthographicSize = newOrthographicSize * 1.1f;
-    }*/
-
     private void ResizeCamera()
     {
         screenWidth = Screen.width;
@@ -205,8 +169,11 @@ public class BoardManager : MonoBehaviour
         float bloquesMargenArriba = gameScale.CubosSpriteArriba(PIXELS_TO_UNITS);
         float bloquesMargenAbajo = gameScale.CubosSpriteAbajo(PIXELS_TO_UNITS);
         float filasNormalizadas = (nFils < 6.0f) ? 5.0f : 8.0f;
-        float bloquesTotales = filasNormalizadas + bloquesMargenAbajo + bloquesMargenArriba + 3;
-        Camera.main.orthographicSize = (bloquesTotales / 2.0f) * 0.95f;
+        float margenSuperior = 3.0f;
+        float margenLateral = gameScale.CubosLaterales(PIXELS_TO_UNITS);
+        float margenes = margenSuperior + margenLateral;
+        float bloquesTotales = filasNormalizadas + bloquesMargenAbajo + bloquesMargenArriba + margenes;
+        Camera.main.orthographicSize = (bloquesTotales / 2.0f) * gameScale.GetMargenSuperior();
         Camera.main.transform.position = new Vector3(nCols / 2.0f - 0.5f,
             -nFils / 2.0f + 0.7f, Camera.main.transform.position.z);
     }
