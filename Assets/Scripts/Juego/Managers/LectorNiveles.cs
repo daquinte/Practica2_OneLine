@@ -48,12 +48,18 @@ public class LectorNiveles : MonoBehaviour
     public void CargaTodosLosNiveles()
     {
         _niveles = new Dictionary<int, InfoNivel>();
-        string json = File.ReadAllText(Application.dataPath + "/Niveles/niveles.json");
+        string json;
+#if !UNITY_EDITOR && UNITY_ANDROID
+        var reader = new WWW("jar:file://" + Application.dataPath + "!/assets/niveles.json");
+        while (!reader.isDone) { }
+        json = reader.text;
+#else
+        json = File.ReadAllText(Application.streamingAssetsPath + "/niveles.json");
+#endif
         JSONNode niveles = JSON.Parse(json);
 
         //Itera sobre la etiqueta "levels"
-        for (int i = 0; i < niveles["levels"].Count; i++)
-        {
+        for (int i = 0; i < niveles["levels"].Count; i++) {
             CargaNivel(niveles["levels"][i]);
         }
     }

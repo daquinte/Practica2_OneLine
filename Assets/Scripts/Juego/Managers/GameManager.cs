@@ -54,9 +54,7 @@ public class GameManager : MonoBehaviour
         lectorNiveles.CargaTodosLosNiveles();
 
         //TEMPORAL
-        infoNivel.numNivelActual = 420;
-        
-
+        infoNivel.numNivelActual = 203;
     }
 
     /// <summary>
