@@ -11,8 +11,7 @@ public class DatosJugador {
     public int _monedas;
     public int _medallas;
 
-    public bool[] nivelesDebloqueados; //Ya veremos cómo se hará
-
+    public Dictionary<int, bool> playedLevels;
     public bool _noAds;
 
 
@@ -29,6 +28,7 @@ public class DatosJugador {
     //Constructora del objeto serializable con datos por defecto
     public DatosJugador(int monedas, int medallas)
     {
+        playedLevels = new Dictionary<int, bool>();
         _monedas = monedas;
         _medallas = medallas;
         _noAds = false;

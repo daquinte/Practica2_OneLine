@@ -112,10 +112,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    public void JuegaNivel(int nivel)
+    /*public void JuegaNivel(int nivel)
     {
         boardManager.InitMap(lectorNiveles.CargaNivel(nivel));
-    }
+    }*/
     public InfoNivel GetInfoNivel(int nivel)
     {
         //PRIMERO: CAMBIO ESCENA A ESCENA JUEGO
@@ -140,6 +140,16 @@ public class GameManager : MonoBehaviour
         else datosJugador._monedas = 0;
 
         SavePlayer();
+    }
+
+    public void NuevoNivelSerializable(int nivel) {
+        GameManager.instance.infoNivel.numNivelActual = nivel;
+        // Serializacion        
+        if (!datosJugador.playedLevels.ContainsKey(GameManager.instance.infoNivel.numNivelActual)) {
+                datosJugador.playedLevels.Add(GameManager.instance.infoNivel.numNivelActual, true);
+            
+        }
+        ProgressManager.Save(datosJugador);
     }
 
     #region Save and Load
