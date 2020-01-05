@@ -8,8 +8,6 @@ public class PopulateGrid : MonoBehaviour
 
     public Button prefab;
 
-    public int numberToCreate = 100;
-
     private void Start() {
         Populate();
     }
@@ -17,7 +15,8 @@ public class PopulateGrid : MonoBehaviour
     void Populate() {
         Button aux;
         GameManager.instance.NuevoNivelSerializable(GameManager.instance.infoNivel.numNivelActual);
-        for (int i = 1; i <= numberToCreate; i++) {
+        int [] margenes = GameManager.instance.GetNumberToCreate();
+        for (int i = margenes[0]; i <= margenes[1]; i++) {
             aux = Instantiate(prefab, transform);
             aux.GetComponent<BotonNivel>().AsignarNivel(i);
         }

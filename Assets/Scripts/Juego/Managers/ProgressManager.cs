@@ -49,7 +49,6 @@ public static class ProgressManager {
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/ProgresoJugador.dat", FileMode.Open);
-
             //Tenemos que castear la deserializacion que ha leido a Datos Jugador
             DatosJugador data = bf.Deserialize(file) as DatosJugador;
             int hashLeida = data.hash;

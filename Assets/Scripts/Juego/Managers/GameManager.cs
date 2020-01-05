@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     private int tipoUltimoAnuncio;
     private int cantidadADuplicar;
 
+    public int numberToCreate = 100;
+
     /// <summary>
     /// Struct con la información persistente entre escenas
     /// </summary>
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
         public string tipoDificultadActual;
         public int numNivelActual;
         public bool isChallenge;
+        public int dificultad;
     }
 
     public InfoEleccionJugador infoNivel;
@@ -109,7 +112,7 @@ public class GameManager : MonoBehaviour
 
                     //ETC ETC
             }
-
+            infoNivel.dificultad = dificultad;
         }
         SceneManager.LoadScene(1);
     }
@@ -212,10 +215,10 @@ public class GameManager : MonoBehaviour
         GameManager.instance.infoNivel.numNivelActual = nivel;
         // Serializacion        
         if (!datosJugador.playedLevels.ContainsKey(GameManager.instance.infoNivel.numNivelActual)) {
-                datosJugador.playedLevels.Add(GameManager.instance.infoNivel.numNivelActual, true);
-            
+            datosJugador.playedLevels.Add(GameManager.instance.infoNivel.numNivelActual, true);
+            ProgressManager.Save(datosJugador);
         }
-        ProgressManager.Save(datosJugador);
+        
     }
 
     #region Save and Load
@@ -288,6 +291,17 @@ public class GameManager : MonoBehaviour
     public DatosJugador GetDatosJugador()
     {
         return datosJugador;
+    }
+
+    public int [] GetNumberToCreate()
+    {
+
+        int numNivelesTotales = lectorNiveles.GetNumNiveles();
+        int topeInferior = numberToCreate * infoNivel.dificultad + 1;
+        int topeSuperior = numberToCreate * infoNivel.dificultad + numberToCreate;
+        topeSuperior = (topeSuperior < numNivelesTotales) ? topeSuperior : numNivelesTotales;
+        int[] array = { topeInferior, topeSuperior };
+        return array;
     }
 
     #endregion

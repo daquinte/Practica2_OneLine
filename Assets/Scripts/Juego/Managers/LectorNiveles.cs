@@ -69,6 +69,11 @@ public class LectorNiveles : MonoBehaviour
     {
         return _niveles[nNivel];
     }
+
+    public int GetNumNiveles()
+    {
+        return _niveles.Count;
+    }
 }
 
 /// <summary>
