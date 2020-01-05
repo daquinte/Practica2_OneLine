@@ -22,9 +22,12 @@ public class BotonNivel : MonoBehaviour
             star.enabled = false;
         }
         else {
+            GetComponent<Button>().enabled = true;
+            star.enabled = true;
             nivel = level;
             numeroNivel.enabled = true;
-            numeroNivel.text = nivel.ToString();
+            string cero = (nivel < 100) ? "0" : "";
+            numeroNivel.text = cero + nivel.ToString();
         }
     }
 
