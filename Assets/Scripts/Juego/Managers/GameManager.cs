@@ -159,12 +159,12 @@ public class GameManager : MonoBehaviour
 
         }
         else SumaMonedas(recompensaChallenge);
-
     }
 
 
     public void OnDailyLoginReward(bool duplicar)
     {
+       
         if (duplicar)
         {
             cantidadADuplicar = recompensaLogin;
@@ -233,7 +233,6 @@ public class GameManager : MonoBehaviour
         {
             datosJugador = new DatosJugador(100, 0);
         }
-        Debug.Log(datosJugador._monedas);
     }
     #endregion
 

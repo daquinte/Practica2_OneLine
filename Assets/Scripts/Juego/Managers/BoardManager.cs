@@ -198,6 +198,7 @@ public class BoardManager : MonoBehaviour
 
                 if (NivelCompletado()) {
                     Debug.Log("Nivel completado :DD:D");
+                    canvasJuego.ShowSiguienteNivelPanel();
                 }
             }
         }

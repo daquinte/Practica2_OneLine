@@ -49,10 +49,6 @@ public class CanvasMenu : MonoBehaviour {
 		ActualizaMonedas();
 	}
 
-	public void LanzaAnuncioDuplicar()
-	{
-		GameManager.instance.LanzaAnuncio(2);
-	}
 
 	public void GoToSeleccionNiveles(int dificultad)
 	{
@@ -84,13 +80,10 @@ public class CanvasMenu : MonoBehaviour {
 	/// </summary>
 	#region Login Callbacks
 
-	public void ShowLoginPanel() { loginPanel.SetActive(true); }
-
+	public void ShowLoginPanel()		  { loginPanel.SetActive(true); }
 	public void SumaRecompensaDiaria()    { GameManager.instance.OnDailyLoginReward(false); }
 	public void DuplicaRecompensaDiaria() { GameManager.instance.OnDailyLoginReward(true); }
-
-	public void HideLoginPanel() {
-		loginPanel.SetActive(false); }
+	public void HideLoginPanel()		  { loginPanel.SetActive(false); }
 
 	#endregion
 

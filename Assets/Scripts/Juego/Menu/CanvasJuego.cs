@@ -55,7 +55,9 @@ public class CanvasJuego : MonoBehaviour
 
     }
 
-    public void ShowSiguienteNivelPanel() { panelSiguienteNivel.SetActive(true); }
+    public void ShowSiguienteNivelPanel() {
+        this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+        panelSiguienteNivel.SetActive(true); }
     public void HideSiguienteNivelPanel() { panelSiguienteNivel.SetActive(false); }
 
     ///Callbacks de la escena
@@ -65,11 +67,8 @@ public class CanvasJuego : MonoBehaviour
     /// </summary>
     public void GoToSeleccionNivel()
     {
-
         int dif = 0;
         GameManager.instance.CargaSeleccionNivel(dif);
-        
-
     }
 
     /// <summary>
