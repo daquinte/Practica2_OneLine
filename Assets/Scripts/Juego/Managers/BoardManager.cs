@@ -117,7 +117,14 @@ public class BoardManager : MonoBehaviour
         isChallenge = true;
     }
 
-
+    public void ResetMap()
+    {
+        caminoTiles = new List<Tile>();
+        for (int i = 0; i < transform.childCount; i++) {
+            Transform child = transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
+    }
     public void InitMap(InfoNivel infoNivel) {
         nFils = infoNivel.layout.Length;
         nCols = infoNivel.layout[0].Length;

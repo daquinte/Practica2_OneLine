@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     public int numberToCreate = 100;
 
+    private int[] nivelesPorDificultad;
+
     /// <summary>
     /// Struct con la información persistente entre escenas
     /// </summary>
@@ -68,6 +70,8 @@ public class GameManager : MonoBehaviour
 
         lectorNiveles = GetComponent<LectorNiveles>();
         lectorNiveles.CargaTodosLosNiveles();
+
+        initNivelesPorDificultad();
 
         //TEMPORAL
         infoNivel.tipoDificultadActual = "DEBUG";
@@ -112,7 +116,7 @@ public class GameManager : MonoBehaviour
                     //ETC ETC
             }
             infoNivel.dificultad = dificultad;
-            datosJugador.asignaNivel(numberToCreate * dificultad + 1);
+            datosJugador.AsignaNivel(numberToCreate * dificultad + 1);
         }
         SceneManager.LoadScene(1);
     }
@@ -124,10 +128,17 @@ public class GameManager : MonoBehaviour
         infoNivel.isChallenge = isChallenge;
         SceneManager.LoadScene(2);
     }
+
+    private void initNivelesPorDificultad() {
+        nivelesPorDificultad = new int[5];
+        for(int i = 0; i < nivelesPorDificultad.Length; i++) {
+            nivelesPorDificultad[i] = datosJugador.GetNumLevels(numberToCreate * i + 1, numberToCreate * i + numberToCreate);
+        }
+    }
     #endregion
 
 
- 
+
     public InfoNivel GetInfoNivel(int nivel)
     {
         //PRIMERO: CAMBIO ESCENA A ESCENA JUEGO
@@ -212,13 +223,20 @@ public class GameManager : MonoBehaviour
     }
 
     public void NuevoNivelSerializable(int nivel) {
-        GameManager.instance.infoNivel.numNivelActual = nivel;
         // Serializacion
-        datosJugador.asignaNivel(GameManager.instance.infoNivel.numNivelActual);
-        ProgressManager.Save(datosJugador);
-        
+        datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
+        ProgressManager.Save(datosJugador);   
     }
 
+    public void cargaSiguienteNivel() {
+        infoNivel.numNivelActual++;
+        NuevoNivelSerializable(infoNivel.numNivelActual);
+        if (infoNivel.numNivelActual > (infoNivel.dificultad * numberToCreate + numberToCreate)) {
+            CargaSeleccionNivel(infoNivel.dificultad);
+        }
+        GetBoardManager().ResetMap();
+        boardManager.InitMap(lectorNiveles.CargaNivel(infoNivel.numNivelActual));
+    }
     #region Save and Load
     /// <summary>
     /// Guarda el estado del jugador
@@ -233,6 +251,7 @@ public class GameManager : MonoBehaviour
         if (datosJugador == null) {
             datosJugador = new DatosJugador(100, 0);
         }
+
     }
     #endregion
 

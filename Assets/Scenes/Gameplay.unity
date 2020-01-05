@@ -2194,6 +2194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b79982dda8d518942a7812e48d8efda8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberToCreate: 100
 --- !u!4 &1073534946
 Transform:
   m_ObjectHideFlags: 0
@@ -2470,7 +2471,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1691342306}
-        m_MethodName: GoToSeleccionNivel
+        m_MethodName: GoToTitulo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

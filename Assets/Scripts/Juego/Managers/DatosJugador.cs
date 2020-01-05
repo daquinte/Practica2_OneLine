@@ -34,12 +34,30 @@ public class DatosJugador {
         _noAds = false;
     }
 
-    public void asignaNivel(int nivel) {
+    public void AsignaNivel(int nivel) {
         if (!playedLevels.ContainsKey(nivel)) {
             playedLevels.Add(nivel, true);
         }
         else {
             playedLevels[nivel] = true;
         }
+    }
+
+    public int GetNumLevels(int topeInferior, int topeSuperior) {
+        int infAux = -1;
+        int supAux = 600;
+        if (playedLevels.Count == 0) return 1;
+        foreach (KeyValuePair<int, bool> entry in playedLevels) {
+            if (infAux <= topeInferior && entry.Key >= topeInferior) {
+                infAux = entry.Key;
+            }
+            if (entry.Key <= topeSuperior) {
+                supAux = entry.Key;
+            }
+            else {
+                break;
+            } 
+        }
+        return supAux - infAux;
     }
 }

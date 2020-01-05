@@ -67,14 +67,13 @@ public class GameScale : MonoBehaviour
 
 	public float CubosLaterales(int pixelesPorUnidad)
 	{
-		float anchoTablero = GetWidth() / pixelesPorUnidad;
-		float diferenciaP = Math.Abs(7.0f * pixelesPorUnidad - GetWidth());
-		float diferenciaC = diferenciaP / pixelesPorUnidad;
-		if (diferenciaC < 1.0f)
-		{
-			return 1.0f;
+		float ratio = (float)Screen.width / (float)Screen.height;
+		if (ratio >  0.56f) {
+			return 3.0f;
+		}
+		else if (ratio < 0.56f) {
+			return 4.0f;
 		}
 		return 0;
-
 	}
 }

@@ -67,30 +67,27 @@ public class CanvasJuego : MonoBehaviour
     /// </summary>
     public void GoToSeleccionNivel()
     {
-        int dif = 0;
-        GameManager.instance.CargaSeleccionNivel(dif);
+        GameManager.instance.CargaSeleccionNivel(GameManager.instance.infoNivel.dificultad);
     }
 
     /// <summary>
     /// Callback para informar a la instancia del nivel que queremos volver al titulo
     /// </summary>
-    public void GoToTitulo()
-    {
+    public void GoToTitulo() {
         GameManager.instance.CargaEscenaTitulo();
     }
 
     /// <summary>
     /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
     /// </summary>
-    public void GoToSiguienteNivel()
-    {
-        //TODO: Cambiar el sorting layer del Canvas a "BackGround" Cuando aparezca el panel de Siguiente Nivel
-        //NIVEL ++
-        //GameManager.instance.CargaEscenaJuego(GameManager.instance.infoNivel.numNivelActual++, false);
+    public void GoToSiguienteNivel() {
+        GameManager.instance.cargaSiguienteNivel();
+        this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
+        this.GetComponent<Canvas>().worldCamera = Camera.main;
+        HideSiguienteNivelPanel();
     }
 
-    public void DameAnuncio()
-    {
+    public void DameAnuncio() {
         GameManager.instance.LanzaAnuncio(1);
     }
     #endregion
