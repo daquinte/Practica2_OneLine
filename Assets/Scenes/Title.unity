@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 230644585}
   - component: {fileID: 230644584}
   m_Layer: 5
-  m_Name: Progreso
+  m_Name: AProgreso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 253172846}
   - component: {fileID: 253172845}
   m_Layer: 5
-  m_Name: Progreso
+  m_Name: MProgreso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -953,7 +953,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textoMonedas: {fileID: 2107291438}
   textoMedallas: {fileID: 1235439832}
-  textoProgresoNiveles: []
+  textoProgresoNiveles:
+  - {fileID: 2004364570}
+  - {fileID: 350965290}
+  - {fileID: 230644584}
+  - {fileID: 788093150}
+  - {fileID: 253172845}
   challengePanel: {fileID: 1774297319}
   loginPanel: {fileID: 1827847796}
 --- !u!1 &315242020
@@ -1116,7 +1121,7 @@ GameObject:
   - component: {fileID: 350965291}
   - component: {fileID: 350965290}
   m_Layer: 5
-  m_Name: Progreso
+  m_Name: RProgreso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1901,7 +1906,7 @@ GameObject:
   - component: {fileID: 788093151}
   - component: {fileID: 788093150}
   m_Layer: 5
-  m_Name: Progreso
+  m_Name: EProgreso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4063,6 +4068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b79982dda8d518942a7812e48d8efda8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberToCreate: 100
 --- !u!114 &1518077546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5615,7 +5621,7 @@ GameObject:
   - component: {fileID: 2004364571}
   - component: {fileID: 2004364570}
   m_Layer: 5
-  m_Name: Progreso
+  m_Name: BProgreso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

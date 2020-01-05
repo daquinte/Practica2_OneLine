@@ -36,10 +36,11 @@ public class CanvasMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		nDificultades = 5;
-		textoProgresoNiveles = new Text[nDificultades];
 
 		datosJugador = GameManager.instance.GetDatosJugador();
 		textoMonedas.text = datosJugador._monedas.ToString();
+
+		AnalizaProgreso();
 	}
 	
 	// Update is called once per frame
@@ -94,7 +95,12 @@ public class CanvasMenu : MonoBehaviour {
 	/// </summary>
 	private void AnalizaProgreso()
 	{
-
+		int [] npd = GameManager.instance.GetNivelesPorDificultad();
+		for(int i = 0; i < 5; i++)
+		{
+			string numtostr = npd[i].ToString();
+			textoProgresoNiveles[i].text = numtostr + "/100";
+		}
 	}
 
 	/// <summary>

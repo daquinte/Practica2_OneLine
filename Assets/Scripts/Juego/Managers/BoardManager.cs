@@ -71,7 +71,7 @@ public class BoardManager : MonoBehaviour
     bool isChallenge = false;           //¿Estamos jugando un nivel Challenge?
 
     // Use this for initialization
-    void Start() {
+    void Start() { 
         caminoTiles = new List<Tile>();
 
         GetRandomSkin();
@@ -85,8 +85,8 @@ public class BoardManager : MonoBehaviour
         gameScale = _CanvasJuego.GetComponent<GameScale>();
         canvasJuego = _CanvasJuego.GetComponent<CanvasJuego>();
 
-
         InitMap(GameManager.instance.GetInfoNivel(GameManager.instance.infoNivel.numNivelActual));
+        isChallenge = GameManager.instance.infoNivel.isChallenge;
     }
 
     // Update is called once per frame
@@ -204,8 +204,11 @@ public class BoardManager : MonoBehaviour
                 caminoTiles.Add(tiles[x, y]);
 
                 if (NivelCompletado()) {
-                    Debug.Log("Nivel completado :DD:D");
-                    canvasJuego.ShowSiguienteNivelPanel();
+
+                    if (isChallenge){
+                         canvasJuego.ShowChallengeCompletado();
+                    }
+                    else canvasJuego.ShowSiguienteNivelPanel();
                 }
             }
         }

@@ -31,8 +31,8 @@ public class CanvasJuego : MonoBehaviour
     //Elementos de la HUD para partida de tipo challenge
     public CountDown countDown;
 
-    private Text TextoSigNivelDif; 
-    private Text TextoSigNivelNum;
+    public Text TextoSigNivelDif; 
+    public Text TextoSigNivelNum;
 
     // Start is called before the first frame update
     void Start()
@@ -57,8 +57,28 @@ public class CanvasJuego : MonoBehaviour
 
     public void ShowSiguienteNivelPanel() {
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-        panelSiguienteNivel.SetActive(true); }
+        TextoSigNivelDif.text = GameManager.instance.infoNivel.tipoDificultadActual;
+        TextoSigNivelNum.text = GameManager.instance.infoNivel.numNivelActual.ToString();
+        panelSiguienteNivel.SetActive(true); 
+    
+    }
     public void HideSiguienteNivelPanel() { panelSiguienteNivel.SetActive(false); }
+
+    public void ShowChallengeCompletado() {
+        this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+        countDown.StopTimer();
+        panelChallengeWin.SetActive(true); 
+    }
+
+    public void ChallengeFallido() {
+        this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+        panelChallengeLost.SetActive(true); 
+    }
+
+    public void HideChallengeFallido() { 
+        
+        panelChallengeLost.SetActive(false); 
+    }
 
     ///Callbacks de la escena
     #region Callbacks
@@ -87,8 +107,17 @@ public class CanvasJuego : MonoBehaviour
         HideSiguienteNivelPanel();
     }
 
-    public void DameAnuncio() {
+    public void AnuncioPorMonedas() {
         GameManager.instance.LanzaAnuncio(1);
+    }
+
+    public void CompletarChallenge()
+    {
+        GameManager.instance.OnChallengeCompleted(false);
+    }
+    public void DuplicarChallenge()
+    {
+        GameManager.instance.OnChallengeCompleted(true); 
     }
     #endregion
 

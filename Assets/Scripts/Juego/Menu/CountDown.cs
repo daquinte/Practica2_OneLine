@@ -8,12 +8,17 @@ using UnityEngine.UI;
 public class CountDown : MonoBehaviour
 {
 
+    public CanvasJuego canvasJuego;
+
     public float timeLeft = 300.0f;
 
     private float minutes;
     private float seconds;
 
     public bool stop = true;
+
+ 
+
 
 
     public Text text;
@@ -31,6 +36,11 @@ public class CountDown : MonoBehaviour
         StartCoroutine(updateCoroutine());
     }
 
+    public void StopTimer()
+    {
+        stop = true;
+    }
+
     void Update()
     {
         if (stop) return;
@@ -45,7 +55,7 @@ public class CountDown : MonoBehaviour
             minutes = 0;
             seconds = 0;
 
-            //TODO: CALLBACK DE "SE ACABÓ EL TIEMPO"
+            canvasJuego.ChallengeFallido();
         }
         //        fraction = (timeLeft * 100) % 100;
     }

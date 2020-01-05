@@ -71,8 +71,6 @@ public class GameManager : MonoBehaviour
         lectorNiveles = GetComponent<LectorNiveles>();
         lectorNiveles.CargaTodosLosNiveles();
 
-        initNivelesPorDificultad();
-
         //TEMPORAL
         infoNivel.tipoDificultadActual = "DEBUG";
         infoNivel.numNivelActual = 0;
@@ -128,13 +126,6 @@ public class GameManager : MonoBehaviour
         infoNivel.isChallenge = isChallenge;
         SceneManager.LoadScene(2);
     }
-
-    private void initNivelesPorDificultad() {
-        nivelesPorDificultad = new int[5];
-        for(int i = 0; i < nivelesPorDificultad.Length; i++) {
-            nivelesPorDificultad[i] = datosJugador.GetNumLevels(numberToCreate * i + 1, numberToCreate * i + numberToCreate);
-        }
-    }
     #endregion
 
 
@@ -143,6 +134,16 @@ public class GameManager : MonoBehaviour
     {
         //PRIMERO: CAMBIO ESCENA A ESCENA JUEGO
         return lectorNiveles.CargaNivel(nivel);
+    }
+
+
+    private void CalculaNivelesPorDificultad()
+    {
+        nivelesPorDificultad = new int[5];
+        for (int i = 0; i < nivelesPorDificultad.Length; i++)
+        {
+            nivelesPorDificultad[i] = datosJugador.GetNumLevels(numberToCreate * i + 1, numberToCreate * i + numberToCreate);
+        }
     }
 
     public void LanzaAnuncio(int tipoAnuncio)
@@ -172,7 +173,14 @@ public class GameManager : MonoBehaviour
             LanzaAnuncio(2);
 
         }
-        else SumaMonedas(recompensaChallenge);
+        else
+        {
+            SumaMonedas(recompensaChallenge);
+        }
+
+        //TODO: SUMAR MEDALLAS MEJOR :DD:D
+        //TODO: Sumar 2 al duplicar
+        datosJugador._medallas = datosJugador._medallas + 1;
     }
 
 
@@ -307,6 +315,12 @@ public class GameManager : MonoBehaviour
     public DatosJugador GetDatosJugador()
     {
         return datosJugador;
+    }
+
+    public int[] GetNivelesPorDificultad()
+    {
+        CalculaNivelesPorDificultad();
+        return nivelesPorDificultad;
     }
 
     public int [] GetNumberToCreate()
