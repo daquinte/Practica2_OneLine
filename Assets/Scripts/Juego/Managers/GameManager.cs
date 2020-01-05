@@ -15,8 +15,20 @@ public class GameManager : MonoBehaviour
     AdsManager adsManager = null;
     BoardManager boardManager = null;
     InputManager inputManager = null;
-
     DatosJugador datosJugador;
+
+
+
+
+    //Constantes
+    private const int precioChallenge = 25;
+    private const int recompensaAnuncio = 25;
+    private const int recompensaChallenge = 50;
+    private const int recompensaLogin = 100;
+
+    //ultimo anuncio
+    private int tipoUltimoAnuncio;
+    private int cantidadADuplicar;
 
     /// <summary>
     /// Struct con la información persistente entre escenas
@@ -112,28 +124,82 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    /*public void JuegaNivel(int nivel)
-    {
-        boardManager.InitMap(lectorNiveles.CargaNivel(nivel));
-    }*/
+ 
     public InfoNivel GetInfoNivel(int nivel)
     {
         //PRIMERO: CAMBIO ESCENA A ESCENA JUEGO
         return lectorNiveles.CargaNivel(nivel);
     }
 
-    public void LanzaAnuncio()
+    public void LanzaAnuncio(int tipoAnuncio)
     {
+        tipoUltimoAnuncio = tipoAnuncio;
         adsManager.ShowAd();
     }
 
-    public void SumaMonedas(int cantidad)
+    public void OnChallengeStart(bool pagadoConMonedas)
+    {
+        if (pagadoConMonedas)
+        {
+            RestaMonedas(precioChallenge);
+            CargaEscenaJuego(1, true);
+
+        }
+        else LanzaAnuncio(0);
+
+    }
+
+    public void OnChallengeCompleted(bool duplicado)
+    {
+        if (duplicado)
+        {
+
+            cantidadADuplicar = recompensaChallenge;
+            LanzaAnuncio(2);
+
+        }
+        else SumaMonedas(recompensaChallenge);
+
+    }
+
+
+    public void OnDailyLoginReward(bool duplicar)
+    {
+        if (duplicar)
+        {
+            cantidadADuplicar = recompensaLogin;
+            LanzaAnuncio(2);
+        }
+        else SumaMonedas(recompensaLogin);
+    }
+
+    public void RecompensaJugador()
+    {
+        switch (tipoUltimoAnuncio)
+        {
+            //0 = Normal, ir gratis a la escena de Challenge
+            case 0:
+                CargaEscenaJuego(1, true);
+                break;
+            //1 = +25 monedas
+            case 1:
+                SumaMonedas(recompensaAnuncio);
+                break;
+            //2 = monedas*2
+            case 2:
+                SumaMonedas(cantidadADuplicar * 2);
+                break;
+        }
+
+    }
+
+    private void SumaMonedas(int cantidad)
     {
         datosJugador._monedas += cantidad;
         SavePlayer();
     }
 
-    public void RestaMonedas(int cantidad)
+    private void RestaMonedas(int cantidad)
     {
         if (datosJugador._monedas - cantidad >= 0)
             datosJugador._monedas -= cantidad;

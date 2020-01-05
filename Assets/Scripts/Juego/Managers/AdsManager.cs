@@ -4,7 +4,6 @@ using UnityEngine.Advertisements;
 
 public class AdsManager : MonoBehaviour, IUnityAdsListener //nuevo de esta versión de los ads
 {
-    private int RecompensaAnuncio = 20;
 
     //ID del juego
     private string gameID = "123456";
@@ -13,6 +12,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener //nuevo de esta versi
     private string placementIdNormal = "video";
     private string placementIdRewarded = "rewardedVideo";
 
+    //private delegate RewardVoid;
     void Awake()
     {
         Advertisement.AddListener(this);
@@ -24,14 +24,13 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener //nuevo de esta versi
         GameManager.instance.SetAdsManager(this);
     }
 
-    //TODO: separar anuncios de dameMonedas de los de DuplicaMonedas
     public void ShowAd()
     {
         if (Advertisement.IsReady(placementIdNormal))
         {
             Advertisement.Show(placementIdNormal);
         }
-        else Debug.Log("not ready");
+        else Debug.Log("Not ready");
 
     }
 
@@ -45,7 +44,9 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener //nuevo de esta versi
     /// <param name="placementId"></param>
     public void OnUnityAdsReady(string placementId)
     {
-        if (placementId == placementIdRewarded) Debug.Log("AD READY");
+    #if UNITY_EDITOR
+         if (placementId == placementIdRewarded) Debug.Log("AD READY");
+    #endif
     }
 
     /// <summary>
@@ -71,6 +72,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener //nuevo de esta versi
             //El usuario ha visto todo el anuncio -> Reward
             case ShowResult.Finished:
                 Debug.Log("MUY BIEN CAMPEON");
+                GameManager.instance.RecompensaJugador();
                 break;
 
             case ShowResult.Skipped:

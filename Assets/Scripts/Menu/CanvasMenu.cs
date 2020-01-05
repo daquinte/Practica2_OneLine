@@ -30,8 +30,7 @@ public class CanvasMenu : MonoBehaviour {
 	private DatosJugador datosJugador;
 
 
-	private const int precioChallenge = 25; 
-	private const int recompensaLogin = 100; 
+	
 
 
 	// Use this for initialization
@@ -50,6 +49,10 @@ public class CanvasMenu : MonoBehaviour {
 		ActualizaMonedas();
 	}
 
+	public void LanzaAnuncioDuplicar()
+	{
+		GameManager.instance.LanzaAnuncio(2);
+	}
 
 	public void GoToSeleccionNiveles(int dificultad)
 	{
@@ -63,6 +66,8 @@ public class CanvasMenu : MonoBehaviour {
 	#region Challenge Callbacks
 
 	public void ShowChallengePanel() { challengePanel.SetActive(true); }
+	
+
 	public void HideChallengePanel() { challengePanel.SetActive(false); }
 
 	/// <summary>
@@ -70,11 +75,7 @@ public class CanvasMenu : MonoBehaviour {
 	/// </summary>
 	/// <param name="paid">¿Has pagado por este anuncio?</param>
 	public void StartChallenge(bool paid) {
-		if (paid)
-		{
-			GameManager.instance.RestaMonedas(precioChallenge);
-		}
-		GameManager.instance.CargaEscenaJuego(1, true);
+		GameManager.instance.OnChallengeStart(paid);
 	}
 	#endregion
 
@@ -84,8 +85,11 @@ public class CanvasMenu : MonoBehaviour {
 	#region Login Callbacks
 
 	public void ShowLoginPanel() { loginPanel.SetActive(true); }
+
+	public void SumaRecompensaDiaria()    { GameManager.instance.OnDailyLoginReward(false); }
+	public void DuplicaRecompensaDiaria() { GameManager.instance.OnDailyLoginReward(true); }
+
 	public void HideLoginPanel() {
-		GameManager.instance.SumaMonedas(recompensaLogin);
 		loginPanel.SetActive(false); }
 
 	#endregion

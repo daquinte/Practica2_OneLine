@@ -92,7 +92,7 @@ public class CanvasJuego : MonoBehaviour
 
     public void DameAnuncio()
     {
-        GameManager.instance.LanzaAnuncio();
+        GameManager.instance.LanzaAnuncio(1);
     }
     #endregion
 
