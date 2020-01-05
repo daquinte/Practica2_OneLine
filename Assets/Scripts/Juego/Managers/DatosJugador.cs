@@ -44,20 +44,13 @@ public class DatosJugador {
     }
 
     public int GetNumLevels(int topeInferior, int topeSuperior) {
-        int infAux = -1;
-        int supAux = 600;
+        int count = 0;
         if (playedLevels.Count == 0) return 1;
         foreach (KeyValuePair<int, bool> entry in playedLevels) {
-            if (infAux <= topeInferior && entry.Key >= topeInferior) {
-                infAux = entry.Key;
+            if (entry.Key >= topeInferior && entry.Key <= topeSuperior) {
+                count++;
             }
-            if (entry.Key <= topeSuperior) {
-                supAux = entry.Key;
-            }
-            else {
-                break;
-            } 
         }
-        return supAux - infAux;
+        return count;
     }
 }

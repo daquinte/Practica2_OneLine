@@ -236,9 +236,11 @@ public class GameManager : MonoBehaviour
         ProgressManager.Save(datosJugador);   
     }
 
-    public void cargaSiguienteNivel() {
+    public void DesBloqueaSiguienteNivel() {
         infoNivel.numNivelActual++;
         NuevoNivelSerializable(infoNivel.numNivelActual);
+    }
+    public void CargaSiguienteNivel() {
         if (infoNivel.numNivelActual > (infoNivel.dificultad * numberToCreate + numberToCreate)) {
             CargaSeleccionNivel(infoNivel.dificultad);
         }

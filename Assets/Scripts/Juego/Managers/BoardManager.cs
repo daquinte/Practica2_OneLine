@@ -205,10 +205,15 @@ public class BoardManager : MonoBehaviour
 
                 if (NivelCompletado()) {
 
-                    if (isChallenge){
-                         canvasJuego.ShowChallengeCompletado();
+                    if (isChallenge)
+                    {
+                        canvasJuego.ShowChallengeCompletado();
                     }
-                    else canvasJuego.ShowSiguienteNivelPanel();
+                    else
+                    {
+                        GameManager.instance.DesBloqueaSiguienteNivel();
+                        canvasJuego.ShowSiguienteNivelPanel();
+                    }
                 }
             }
         }

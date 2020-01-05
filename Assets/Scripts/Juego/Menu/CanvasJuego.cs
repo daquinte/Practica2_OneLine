@@ -59,8 +59,7 @@ public class CanvasJuego : MonoBehaviour
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         TextoSigNivelDif.text = GameManager.instance.infoNivel.tipoDificultadActual;
         TextoSigNivelNum.text = GameManager.instance.infoNivel.numNivelActual.ToString();
-        panelSiguienteNivel.SetActive(true); 
-    
+        panelSiguienteNivel.SetActive(true);
     }
     public void HideSiguienteNivelPanel() { panelSiguienteNivel.SetActive(false); }
 
@@ -101,7 +100,7 @@ public class CanvasJuego : MonoBehaviour
     /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
     /// </summary>
     public void GoToSiguienteNivel() {
-        GameManager.instance.cargaSiguienteNivel();
+        GameManager.instance.CargaSiguienteNivel();
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         this.GetComponent<Canvas>().worldCamera = Camera.main;
         HideSiguienteNivelPanel();
