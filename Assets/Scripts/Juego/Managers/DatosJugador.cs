@@ -33,4 +33,6 @@ public class DatosJugador {
         _medallas = medallas;
         _noAds = false;
     }
+
+    //public void asignaNive
 }

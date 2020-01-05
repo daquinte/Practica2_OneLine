@@ -232,8 +232,7 @@ public class GameManager : MonoBehaviour
     private void LoadPlayer()
     {
         datosJugador = ProgressManager.Load();
-        if (datosJugador == null)
-        {
+        if (datosJugador == null) {
             datosJugador = new DatosJugador(100, 0);
         }
     }
