@@ -92,7 +92,6 @@ public class GameManager : MonoBehaviour
         {
             switch (dificultad)
             {
-
                 case 0:
                     infoNivel.tipoDificultadActual = "BEGINNER";
                     break;
@@ -113,6 +112,7 @@ public class GameManager : MonoBehaviour
                     //ETC ETC
             }
             infoNivel.dificultad = dificultad;
+            datosJugador.asignaNivel(numberToCreate * dificultad + 1);
         }
         SceneManager.LoadScene(1);
     }
@@ -213,11 +213,9 @@ public class GameManager : MonoBehaviour
 
     public void NuevoNivelSerializable(int nivel) {
         GameManager.instance.infoNivel.numNivelActual = nivel;
-        // Serializacion        
-        if (!datosJugador.playedLevels.ContainsKey(GameManager.instance.infoNivel.numNivelActual)) {
-            datosJugador.playedLevels.Add(GameManager.instance.infoNivel.numNivelActual, true);
-            ProgressManager.Save(datosJugador);
-        }
+        // Serializacion
+        datosJugador.asignaNivel(GameManager.instance.infoNivel.numNivelActual);
+        ProgressManager.Save(datosJugador);
         
     }
 

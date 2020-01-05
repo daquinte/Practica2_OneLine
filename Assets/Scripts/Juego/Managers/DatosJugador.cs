@@ -34,5 +34,12 @@ public class DatosJugador {
         _noAds = false;
     }
 
-    //public void asignaNive
+    public void asignaNivel(int nivel) {
+        if (!playedLevels.ContainsKey(nivel)) {
+            playedLevels.Add(nivel, true);
+        }
+        else {
+            playedLevels[nivel] = true;
+        }
+    }
 }
