@@ -513,7 +513,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 272409451}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1518077545}
+        m_MethodName: LanzaAnuncio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &272409451
@@ -4001,6 +4012,7 @@ GameObject:
   - component: {fileID: 1518077544}
   - component: {fileID: 1518077545}
   - component: {fileID: 1518077543}
+  - component: {fileID: 1518077546}
   m_Layer: 5
   m_Name: GameManager
   m_TagString: Untagged
@@ -4049,6 +4061,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b79982dda8d518942a7812e48d8efda8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1518077546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518077542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4936b8b1343961048a5f58b9fcb4df87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1557402446

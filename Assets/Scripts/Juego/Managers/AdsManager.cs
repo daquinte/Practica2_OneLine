@@ -2,14 +2,21 @@
 using System.Collections;
 using UnityEngine.Advertisements;
 
-public class AdsManager : MonoBehaviour
+public class AdsManager : MonoBehaviour, IUnityAdsListener //nuevo de esta versión de los ads
 {
     private int RecompensaAnuncio = 20;
-    private string videoID = "rewardedVideo";
+
+    //ID del juego
+    private string gameID = "123456";
+
+    //Id de los tipos (placement)
+    private string placementIdNormal = "video";
+    private string placementIdRewarded = "rewardedVideo";
 
     void Awake()
     {
-        Advertisement.Initialize(videoID, true);
+        Advertisement.AddListener(this);
+        Advertisement.Initialize(gameID, true);
     }
 
     void Start()
@@ -17,39 +24,74 @@ public class AdsManager : MonoBehaviour
         GameManager.instance.SetAdsManager(this);
     }
 
-    public void ShowAd(string zone = "")
+    //TODO: separar anuncios de dameMonedas de los de DuplicaMonedas
+    public void ShowAd()
     {
-#if UNITY_EDITOR
-        StartCoroutine(WaitForAd());
-#endif
-
-        if (!Advertisement.IsReady(videoID))
-            Debug.LogWarning("Video not available");
-        else
+        if (Advertisement.IsReady(placementIdNormal))
         {
-            ShowOptions options = new ShowOptions();
-            options.resultCallback = AdCallbackHandler;
-            Advertisement.Show(videoID, options);
+            Advertisement.Show(placementIdNormal);
         }
+        else Debug.Log("not ready");
+
     }
 
-    void AdCallbackHandler(ShowResult result)
+
+    ///Callback de la interfaz  IUnityAdsListener
+    #region Unity Ads Callback
+
+    /// <summary>
+    /// Cuando el anuncio esté listo, se llamará a esta función
+    /// </summary>
+    /// <param name="placementId"></param>
+    public void OnUnityAdsReady(string placementId)
     {
-        if(result == ShowResult.Finished)
+        if (placementId == placementIdRewarded) Debug.Log("AD READY");
+    }
+
+    /// <summary>
+    /// En caso de querer acciones aparte cuando se inicie el anuncio, irán aquí
+    /// </summary>
+    /// <param name="placementId">placement ID actual</param>
+    public void OnUnityAdsDidStart(string placementId)
+    {
+        //No queremos hacer nada
+    }
+
+
+    /// <summary>
+    /// Callback de anuncio completado.
+    /// </summary>
+    /// <param name="placementId">Placement ID</param>
+    /// <param name="showResult">Información adicional de lo que ha hecho el jugador</param>
+    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
+    {
+
+        switch (showResult)
         {
-            GameManager.instance.SumaMonedas(RecompensaAnuncio);
+            //El usuario ha visto todo el anuncio -> Reward
+            case ShowResult.Finished:
+                Debug.Log("MUY BIEN CAMPEON");
+                break;
+
+            case ShowResult.Skipped:
+                Debug.Log("TE LO HAS SALTADO >:C");
+
+                break;
+
+            case ShowResult.Failed:
+                throw new System.Exception("Ha fallado el anuncio.");
+
         }
+
     }
 
-    IEnumerator WaitForAd()
+
+    public void OnUnityAdsDidError(string message)
     {
-        float currentTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
-        yield return null;
-
-        while (Advertisement.isShowing)
-            yield return null;
-
-        Time.timeScale = currentTimeScale;
+        throw new System.Exception("Error en el anuncio: " + message);
     }
+
+
+    #endregion
+
 }
