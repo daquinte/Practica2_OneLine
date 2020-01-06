@@ -55,9 +55,6 @@ public class CanvasMenu : MonoBehaviour {
 		textoMonedas.text = datosJugador._monedas.ToString();
 		seePresent = GetComponent<SeePresent>();
 		AnalizaProgreso();
-		if (GameManager.instance.infoNivel.isChallenge) {
-			NoJugarChallenge(panelTiempoChallenge);
-		}
 	}
 	
 	// Update is called once per frame
@@ -140,17 +137,12 @@ public class CanvasMenu : MonoBehaviour {
 		textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
 	}
 
-	public void PosibleJugarChallenge(GameObject deactivateObjects, GameObject[] activateObjects)
+	public void PosibleJugarChallenge(GameObject deactivateObjects, GameObject[] activateObjects, Button challengeButton)
 	{
 		deactivateObjects.SetActive(false);
-		foreach (GameObject uiMember in activateObjects)
-		{
+		foreach (GameObject uiMember in activateObjects) {
 			uiMember.SetActive(true);
 		}
-	}
-
-	public void NoJugarChallenge(GameObject timerChallenge)
-	{
-		timerChallenge.SetActive(true);
+		challengeButton.interactable = true;
 	}
 }

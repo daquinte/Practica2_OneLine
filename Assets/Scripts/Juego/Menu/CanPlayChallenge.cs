@@ -10,6 +10,7 @@ public class CanPlayChallenge : MonoBehaviour
     public Text timeText;
     public GameObject[] gameObjectsToDeactivate;
     public CanvasMenu canvasMenu;
+    public Button challengeButton;
 
     public float time;
 
@@ -18,60 +19,61 @@ public class CanPlayChallenge : MonoBehaviour
 
     public bool actualiza = false;
 
-    void OnEnable()
-    {
-        actualiza = true;
-        InitTimer();
-        foreach (GameObject uiMember in gameObjectsToDeactivate)
-        {
-            uiMember.SetActive(false);
+
+    void Start() {
+        
+        if (GameManager.instance.GetDatosJugador().timerChallenge > 0) {
+            InitTimer();
         }
-    }
-    void OnDisable()
-    {
-        actualiza = false;
-        StopTimer();
-        foreach (GameObject uiMember in gameObjectsToDeactivate)
-        {
-            uiMember.SetActive(true);
+        else if (GameManager.instance.infoNivel.isChallenge) {
+            actualiza = true;
+            timer.ResetClock(time);
+            DisableObjects();
+        }
+        else {
+            actualiza = false;
+            StopTimer();
+            canvasMenu.PosibleJugarChallenge(this.gameObject, gameObjectsToDeactivate, challengeButton);
         }
     }
 
-    public void InitTimer()
-    {
-        if (GameManager.instance.GetDatosJugador().timerChallenge > 0)
-        {
-            time = GameManager.instance.GetDatosJugador().timerChallenge;
-            timer.InitClock(time);
-        }
-        else
-        {
-            timer.ResetClock(time);
-        }
+    public void InitTimer() {
+        actualiza = true;
+        time = GameManager.instance.GetDatosJugador().timerChallenge;
+        timer.InitClock(time);
+        DisableObjects();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if (!actualiza) return;
         Debug.Log("Challenge: " + timer.timeLeft);
         GameManager.instance.GetDatosJugador().timerChallenge = timer.timeLeft;
         minutes = Mathf.Floor(timer.timeLeft / 60);
         seconds = Mathf.Round(timer.timeLeft % 60);
-        timeText.text = string.Format("{00:0}:{1:00}", minutes, seconds);
         if (minutes < 0)
         {
             StopTimer();
             minutes = 0;
             seconds = 0;
-            canvasMenu.PosibleJugarChallenge(this.gameObject, gameObjectsToDeactivate);
+            canvasMenu.PosibleJugarChallenge(this.gameObject, gameObjectsToDeactivate, challengeButton);
         }
-
+        else
+        {
+            timeText.text = string.Format("{00:0}:{1:00}", minutes, seconds);
+        }
     }
 
     private void StopTimer()
     {
         actualiza = false;
         timer.ResetClock(0);
+    }
+
+    private void DisableObjects() {
+        challengeButton.interactable = false;
+        foreach (GameObject uiMember in gameObjectsToDeactivate) {
+            uiMember.SetActive(false);
+        }
     }
 }
