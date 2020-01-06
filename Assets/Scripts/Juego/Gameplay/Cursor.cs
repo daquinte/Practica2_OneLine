@@ -8,15 +8,13 @@ public class Cursor : MonoBehaviour {
 	//private Sprite fingerSprite;
 	private SpriteRenderer renderer;
 
-	void Awake()
-	{
+	void Awake() {
 		renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = false;
 	}
 
 	// Update is called once per frame
-	void Update()
-	{
+	void Update() {
 		if (GameManager.instance.GetInputManager().getInputInfo().pulsado)
 		{
 			transform.position = GameManager.instance.GetInputManager().getInputInfo().position;

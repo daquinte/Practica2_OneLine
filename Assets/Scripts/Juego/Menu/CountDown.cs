@@ -26,24 +26,26 @@ public class CountDown : MonoBehaviour
 
     public void StartTimer() {
         stop = false;
-        timer.InitClock(time);
+        timer.ResetClock(time);
     }
 
     public void StopTimer() {
         stop = true;
-        timer.ResetClock(time);
+        timer.ResetClock(0);
     }
 
     void Update() {
         if (stop) return;
         minutes = Mathf.Floor(timer.timeLeft / 60);
         seconds = Mathf.Round(timer.timeLeft % 60);
-        text.text = string.Format("{00:0}:{1:00}", minutes, seconds);
         if (minutes < 0) {
             stop = true;
             minutes = 0;
             seconds = 0;
             canvasJuego.ChallengeFallido();
+        }
+        else {
+            text.text = string.Format("{00:0}:{1:00}", minutes, seconds);
         }
     }
 }
