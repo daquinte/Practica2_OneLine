@@ -17,9 +17,12 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
     private string gameId = "1486550";
 #endif
 
-    Button myButton;
-    public string myPlacementId = "rewardedVideo";
+    public delegate void VoidRecompensa();
 
+    private Button myButton;
+    private string myPlacementId = "rewardedVideo";
+   
+    private VoidRecompensa callBackRecompensa; //Callback de este rewarded Ad
     void Start()
     {
         myButton = GetComponent<Button>();
@@ -41,6 +44,15 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
         Advertisement.Show(myPlacementId);
     }
 
+    /// <summary>
+    /// Asigna al callback privado la funcion que recibe por parámetro.
+    /// </summary>
+    /// <param name="recompensaCB">Función que queremos llamar como callback del anuncio.</param>
+    public void SetCallbackRecompensa(VoidRecompensa recompensaCB)
+    {
+        callBackRecompensa = recompensaCB;
+    }
+
     // Implement IUnityAdsListener interface methods:
     public void OnUnityAdsReady(string placementId)
     {
@@ -57,7 +69,8 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
         if (showResult == ShowResult.Finished)
         {
             // Reward the user for watching the ad to completion.
-            GameManager.instance.RecompensaJugador();
+            if (callBackRecompensa != null) callBackRecompensa();
+            //GameManager.instance.RecompensaJugador();
         }
         else if (showResult == ShowResult.Skipped)
         {

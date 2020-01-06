@@ -24,9 +24,13 @@ public class CanvasJuego : MonoBehaviour
     public Text textoDificultad;
 
     //Elementos de la HUD de una partida normal
+   
     public Button botonReset;
-    public Button botonAnuncio;
     public Button botonPista;
+
+    public RewardedAdsButton botonAnuncio;
+    public RewardedAdsButton botonDuplicar;
+    
 
     //Elementos de la HUD para partida de tipo challenge
     public CountDown countDown;
@@ -34,12 +38,16 @@ public class CanvasJuego : MonoBehaviour
     public Text TextoSigNivelDif; 
     public Text TextoSigNivelNum;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
         textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
         textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual + "  " + GameManager.instance.infoNivel.numNivelActual.ToString();
 
+        botonAnuncio.GetComponent<RewardedAdsButton>().SetCallbackRecompensa(AnuncioPorMonedas);
+        botonDuplicar.GetComponent<RewardedAdsButton>().SetCallbackRecompensa(DuplicarChallenge);
 
         if (GameManager.instance.infoNivel.isChallenge) {
             SetChallengeHUD();
@@ -106,16 +114,18 @@ public class CanvasJuego : MonoBehaviour
     }
 
     public void AnuncioPorMonedas() {
-        GameManager.instance.LanzaAnuncio(1);
+        GameManager.instance.OnRewardedAdWatched();
     }
 
     public void CompletarChallenge()
     {
         GameManager.instance.OnChallengeCompleted(false);
+        GoToTitulo();
     }
     public void DuplicarChallenge()
     {
-        GameManager.instance.OnChallengeCompleted(true); 
+        GameManager.instance.OnChallengeCompleted(true);
+        GoToTitulo();
     }
     #endregion
 

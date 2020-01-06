@@ -414,6 +414,7 @@ GameObject:
   - component: {fileID: 234056215}
   - component: {fileID: 234056214}
   - component: {fileID: 234056213}
+  - component: {fileID: 234056216}
   m_Layer: 5
   m_Name: Anuncio
   m_TagString: Untagged
@@ -482,18 +483,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 234056214}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1691342306}
-        m_MethodName: AnuncioPorMonedas
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &234056214
@@ -534,6 +524,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 234056211}
   m_CullTransparentMesh: 0
+--- !u!114 &234056216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234056211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e3be8fc483b5264d8839e03bcc85953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPlacementId: rewardedVideo
 --- !u!1 &320560079
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,7 +1007,6 @@ MonoBehaviour:
   prefabTile: {fileID: 114264903743301520, guid: 624ca05892be813429731df6d20c59dd,
     type: 3}
   cursor: {fileID: 1849881920}
-  preferedSkin: {fileID: 0}
   tileSkins:
   - {fileID: 11400000, guid: 6457f3b98d1d0f94da167705e3ee0ddf, type: 2}
   - {fileID: 11400000, guid: cdb0b786c9ab1364aa8178b76add939e, type: 2}
@@ -2839,8 +2841,9 @@ MonoBehaviour:
   textoMonedas: {fileID: 1040910231}
   textoDificultad: {fileID: 2096496241}
   botonReset: {fileID: 28334877}
-  botonAnuncio: {fileID: 234056213}
   botonPista: {fileID: 1918817157}
+  botonAnuncio: {fileID: 234056216}
+  botonDuplicar: {fileID: 2059879390}
   countDown: {fileID: 945557571}
   TextoSigNivelDif: {fileID: 1074593417}
   TextoSigNivelNum: {fileID: 935868496}
@@ -2926,17 +2929,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1691342306}
-        m_MethodName: GoToTitulo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1691342306}
         m_MethodName: CompletarChallenge
         m_Mode: 1
@@ -3494,6 +3486,7 @@ GameObject:
   - component: {fileID: 2059879389}
   - component: {fileID: 2059879388}
   - component: {fileID: 2059879387}
+  - component: {fileID: 2059879390}
   m_Layer: 5
   m_Name: Duplicar
   m_TagString: Untagged
@@ -3564,18 +3557,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2059879388}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1691342306}
-        m_MethodName: DuplicarChallenge
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2059879388
@@ -3616,6 +3598,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059879385}
   m_CullTransparentMesh: 0
+--- !u!114 &2059879390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059879385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e3be8fc483b5264d8839e03bcc85953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPlacementId: rewardedVideo
 --- !u!1 &2085828322
 GameObject:
   m_ObjectHideFlags: 0

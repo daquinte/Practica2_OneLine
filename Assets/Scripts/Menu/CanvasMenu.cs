@@ -11,6 +11,9 @@ public class CanvasMenu : MonoBehaviour {
 
 	public Text [] textoProgresoNiveles;
 
+	public RewardedAdsButton duplicaLogin;
+	public RewardedAdsButton freeChallenge;
+
 	[Tooltip("Panel de Challenge.")]
 	public GameObject challengePanel;
 
@@ -18,7 +21,9 @@ public class CanvasMenu : MonoBehaviour {
 	[Tooltip("Panel de Daily Login.")]
 	public GameObject loginPanel;
 
-
+	/// <summary>
+	/// Clase encargada de gestionar si se ve o no el login diario.
+	/// </summary>
 	private SeePresent seePresent;
 
 	/// <summary>
@@ -39,6 +44,9 @@ public class CanvasMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		nDificultades = 5;
+
+		duplicaLogin.SetCallbackRecompensa(DuplicaRecompensaDiaria);
+		freeChallenge.SetCallbackRecompensa(StartFreeChallenge);
 
 		datosJugador = GameManager.instance.GetDatosJugador();
 		textoMonedas.text = datosJugador._monedas.ToString();
@@ -71,11 +79,17 @@ public class CanvasMenu : MonoBehaviour {
 	public void HideChallengePanel() { challengePanel.SetActive(false); }
 
 	/// <summary>
-	/// Empieza un desafío. Tiene en cuenta si el usuario ha pagado o no.
+	/// Empieza un desafío pagando la cuota de entrada
 	/// </summary>
-	/// <param name="paid">¿Has pagado por este anuncio?</param>
-	public void StartChallenge(bool paid) {
-		GameManager.instance.OnChallengeStart(paid);
+	public void StartPaidChallenge()
+	{ 
+		
+		GameManager.instance.OnChallengeStart(false);
+	}
+
+	public void StartFreeChallenge()
+	{
+		GameManager.instance.OnChallengeStart(true);
 	}
 	#endregion
 
@@ -86,7 +100,10 @@ public class CanvasMenu : MonoBehaviour {
 
 	public void ShowLoginPanel()		  { loginPanel.SetActive(true); }
 	public void SumaRecompensaDiaria()    { GameManager.instance.OnDailyLoginReward(false); }
-	public void DuplicaRecompensaDiaria() { GameManager.instance.OnDailyLoginReward(true); }
+	public void DuplicaRecompensaDiaria() { 
+		GameManager.instance.OnDailyLoginReward(true);
+		loginPanel.SetActive(false);
+	}
 	public void HideLoginPanel() { 
 		loginPanel.SetActive(false);
 		seePresent.InitTimer();

@@ -12,22 +12,21 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
     LectorNiveles lectorNiveles;
-    AdsManager adsManager = null;
     BoardManager boardManager = null;
     InputManager inputManager = null;
     DatosJugador datosJugador;
 
 
-
-
     //Constantes
     private const int precioChallenge = 25;
+    private const int precioPista = 25;
     private const int recompensaAnuncio = 25;
-    private const int recompensaChallenge = 50;
+    private const int recompensaMonedasChallenge = 50;
+    private const int recompensaMedallasChallenge = 1;
     private const int recompensaLogin = 100;
 
-    //ultimo anuncio
-    private int tipoUltimoAnuncio;
+    //anuncios
+    public enum TipoRecompensa { WATCHTOPLAY, SUMAR, DUPLICAR };
     private int cantidadADuplicar;
 
     public int numberToCreate = 100;
@@ -71,10 +70,10 @@ public class GameManager : MonoBehaviour
         lectorNiveles = GetComponent<LectorNiveles>();
         lectorNiveles.CargaTodosLosNiveles();
 
-        //TEMPORAL
+        //Iniciamos por defecto
         infoNivel.tipoDificultadActual = "DEBUG";
-        infoNivel.numNivelActual = 0;
         infoNivel.numNivelActual = 203;
+        //infoNivel.isChallenge = false;
     }
 
     /// <summary>
@@ -83,7 +82,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     #region SceneManagement
 
-    public void CargaEscenaTitulo() {
+    public void CargaEscenaTitulo()
+    {
         SceneManager.LoadScene(0);
     }
 
@@ -119,7 +119,8 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void CargaEscenaJuego(int nivel, bool isChallenge) {
+    public void CargaEscenaJuego(int nivel, bool isChallenge)
+    {
         infoNivel.numNivelActual = nivel;
         infoNivel.isChallenge = isChallenge;
         SceneManager.LoadScene(2);
@@ -144,78 +145,111 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void LanzaAnuncio(int tipoAnuncio)
-    {
-        tipoUltimoAnuncio = tipoAnuncio;
-        adsManager.ShowAd();
-    }
+    //Estados
 
-    public void OnChallengeStart(bool pagadoConMonedas)
+    /// <summary>
+    /// Empieza el nivel de challenge. 
+    /// Tiene en cuenta si el jugador ha decidido pagar o ver un anuncio.
+    /// Recibe "true" si es gratis (anuncio), false en caso contrario.
+    /// </summary>
+    /// <param name="free">¿Has pagado para jugar?</param>
+    public void OnChallengeStart(bool free)
     {
-        if (pagadoConMonedas)
+        if (!free)
         {
             RestaMonedas(precioChallenge);
-            CargaEscenaJuego(1, true);
-
         }
-        else LanzaAnuncio(0);
-
+        CargaEscenaJuego(1, true);
     }
 
+    /// <summary>
+    /// Método que es llamado al completar un desafio 
+    /// para obtener las recompensas pertinentes
+    /// </summary>
+    /// <param name="duplicado">Notifica si el usuario ha decidido ver un anuncio para duplicar</param>
     public void OnChallengeCompleted(bool duplicado)
     {
+        int mult = 1;
         if (duplicado)
         {
-
-            cantidadADuplicar = recompensaChallenge;
-            LanzaAnuncio(2);
-
+            mult = 2;
         }
-        else
-        {
-            SumaMonedas(recompensaChallenge);
-        }
+        SumaMonedas(recompensaMonedasChallenge   * mult);
+        SumaMedallas(recompensaMedallasChallenge * mult);
 
-        //TODO: SUMAR MEDALLAS MEJOR :DD:D
-        //TODO: Sumar 2 al duplicar
-        datosJugador._medallas = datosJugador._medallas + 1;
     }
 
-
+    /// <summary>
+    /// Gestiona las recompensas del login diario
+    /// </summary>
+    /// <param name="duplicar"></param>
     public void OnDailyLoginReward(bool duplicar)
     {
-       
+        int mult = 1;
         if (duplicar)
         {
-            cantidadADuplicar = recompensaLogin;
-            LanzaAnuncio(2);
+            mult = 2;
         }
-        else SumaMonedas(recompensaLogin);
+        SumaMonedas(recompensaLogin * mult);
     }
 
-    public void RecompensaJugador()
+    /// <summary>
+    /// Llamado cuando el usuario ha visto un anuncio a cambio de monedas.
+    /// </summary>
+    public void OnRewardedAdWatched()
     {
-        switch (tipoUltimoAnuncio)
-        {
-            //0 = Normal, ir gratis a la escena de Challenge
-            case 0:
-                CargaEscenaJuego(1, true);
-                break;
-            //1 = +25 monedas
-            case 1:
-                SumaMonedas(recompensaAnuncio);
-                break;
-            //2 = monedas*2
-            case 2:
-                SumaMonedas(cantidadADuplicar * 2);
-                break;
-        }
-
+        SumaMonedas(recompensaAnuncio);
     }
+    /// <summary>
+    /// Llamado cuando el usuario ha visto un anuncio para pasar al challenge gratis.
+    /// </summary>
+    public void OnFreeChallengeAdWatched()
+    {
+        CargaEscenaJuego(1, true);
+    }
+
+    /// <summary>
+    /// Cobra al jugador el precio de una pista.
+    /// </summary>
+    public void CobraPista()
+    {
+        RestaMonedas(precioPista);
+    }
+
+    //--Niveles--//
+
+    public void NuevoNivelSerializable(int nivel)
+    {
+        // Serializacion
+        datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
+        ProgressManager.Save(datosJugador);
+    }
+
+    public void DesBloqueaSiguienteNivel()
+    {
+        infoNivel.numNivelActual++;
+        NuevoNivelSerializable(infoNivel.numNivelActual);
+    }
+    public void CargaSiguienteNivel()
+    {
+        if (infoNivel.numNivelActual > (infoNivel.dificultad * numberToCreate + numberToCreate))
+        {
+            CargaSeleccionNivel(infoNivel.dificultad);
+        }
+        GetBoardManager().ResetMap();
+        boardManager.InitMap(lectorNiveles.CargaNivel(infoNivel.numNivelActual));
+    }
+
+
+    //Métodos privados de suma y resta de monedas
 
     private void SumaMonedas(int cantidad)
     {
-        datosJugador._monedas += cantidad;
+        if (datosJugador._monedas + cantidad <= 999)
+        {
+            datosJugador._monedas += cantidad;
+        }
+        else datosJugador._monedas = 999;
         SavePlayer();
     }
 
@@ -228,23 +262,16 @@ public class GameManager : MonoBehaviour
         SavePlayer();
     }
 
-    public void NuevoNivelSerializable(int nivel) {
-        // Serializacion
-        datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
-        ProgressManager.Save(datosJugador);   
+    private void SumaMedallas(int cantidad)
+    {
+        if (datosJugador._medallas + cantidad <= 999)
+        {
+            datosJugador._medallas += cantidad;
+        }
+        else datosJugador._medallas = 999;
+        SavePlayer();
     }
 
-    public void DesBloqueaSiguienteNivel() {
-        infoNivel.numNivelActual++;
-        NuevoNivelSerializable(infoNivel.numNivelActual);
-    }
-    public void CargaSiguienteNivel() {
-        if (infoNivel.numNivelActual > (infoNivel.dificultad * numberToCreate + numberToCreate)) {
-            CargaSeleccionNivel(infoNivel.dificultad);
-        }
-        GetBoardManager().ResetMap();
-        boardManager.InitMap(lectorNiveles.CargaNivel(infoNivel.numNivelActual));
-    }
     #region Save and Load
     /// <summary>
     /// Guarda el estado del jugador
@@ -256,18 +283,22 @@ public class GameManager : MonoBehaviour
     private void LoadPlayer()
     {
         datosJugador = ProgressManager.Load();
-        if (datosJugador == null) {
+        if (datosJugador == null)
+        {
             datosJugador = new DatosJugador(100, 0);
         }
 
     }
 
-    void OnApplicationFocus(bool focus) {
-        if (!focus) {
+    void OnApplicationFocus(bool focus)
+    {
+        if (!focus)
+        {
             SavePlayer();
         }
     }
-    void OnApplicationQuit() {
+    void OnApplicationQuit()
+    {
         SavePlayer();
     }
     #endregion
@@ -294,17 +325,12 @@ public class GameManager : MonoBehaviour
         inputManager = instance;
     }
 
-    /// <summary>
-    /// Asigna el Ads Manager que se va a usar.
-    /// De esta manera, GameManager se encargará de lanzar anuncios cuando sea necesario
-    /// Y gestionará las recompensas de los mismos.
-    /// </summary>
-    /// <param name="instance">Instancia de AdsManager</param>
-    public void SetAdsManager(AdsManager instance)
-    {
-        adsManager = instance;
-    }
-
+/// <summary>
+/// Asigna la instancia de BoardManager a la que vamos a referenciar.
+/// De esta manera siempre tendremos la misma referencia, asegurando la coherencia durante las partidas.
+/// Se mantiene la misma instancia hasta
+/// </summary>
+/// <returns></returns>
     public BoardManager GetBoardManager()
     {
         return boardManager;
@@ -332,7 +358,7 @@ public class GameManager : MonoBehaviour
         return nivelesPorDificultad;
     }
 
-    public int [] GetNumberToCreate()
+    public int[] GetNumberToCreate()
     {
 
         int numNivelesTotales = lectorNiveles.GetNumNiveles();
