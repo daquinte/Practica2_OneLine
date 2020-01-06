@@ -22,8 +22,6 @@ public class BoardManager : MonoBehaviour
     public Cursor cursor;
 
     [Space]
-    [Tooltip("Si quieres una skin en particular, añadela aquí.")]
-    public TileSkin preferedSkin;
 
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
@@ -71,7 +69,8 @@ public class BoardManager : MonoBehaviour
     bool isChallenge = false;           //¿Estamos jugando un nivel Challenge?
 
     // Use this for initialization
-    void Start() { 
+    void Start()
+    {
         caminoTiles = new List<Tile>();
 
         GetRandomSkin();
@@ -90,16 +89,18 @@ public class BoardManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
-        //QUITAR ESTE IF CUANDO EL OBJETO SE CARGE DESDE EL MENU
-        if (init) {
-            if (GameManager.instance.GetInputManager().getInputInfo().pulsado) {
-                coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x),
-                                    (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
-            }
+    void Update()
+    {
+
+        if (GameManager.instance.GetInputManager().getInputInfo().pulsado)
+        {
+            coordsDentroMatriz((int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.x),
+                                (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
         }
-        if (screenWidth != Screen.width || screenHeight != Screen.height) {
-           ResizeCamera();
+
+        if (screenWidth != Screen.width || screenHeight != Screen.height)
+        {
+            ResizeCamera();
         }
     }
 
@@ -120,12 +121,14 @@ public class BoardManager : MonoBehaviour
     public void ResetMap()
     {
         caminoTiles = new List<Tile>();
-        for (int i = 0; i < transform.childCount; i++) {
+        for (int i = 0; i < transform.childCount; i++)
+        {
             Transform child = transform.GetChild(i);
             Destroy(child.gameObject);
         }
     }
-    public void InitMap(InfoNivel infoNivel) {
+    public void InitMap(InfoNivel infoNivel)
+    {
         nFils = infoNivel.layout.Length;
         nCols = infoNivel.layout[0].Length;
         pistas = infoNivel.path;
@@ -135,18 +138,22 @@ public class BoardManager : MonoBehaviour
         //Situamos la cámara
         ResizeCamera();
 
-        for (int filas = 0; filas < tiles.GetLength(1); filas++) {
+        for (int filas = 0; filas < tiles.GetLength(1); filas++)
+        {
             string infoFila = infoNivel.layout[filas];
-            for (int cols = 0; cols < tiles.GetLength(0); cols++) {
+            for (int cols = 0; cols < tiles.GetLength(0); cols++)
+            {
                 char tipoTile = infoFila[cols];
-                if (tipoTile != '0') {
+                if (tipoTile != '0')
+                {
                     ///Si en el futuro hay que escalar los bloques, si quitas que sean hijos de boardManager se pueden escalar!
                     Tile tile = Instantiate(prefabTile, new Vector3(cols, -filas, 0), Quaternion.identity, transform);
                     tile.gameObject.name = "Bloque" + cols + filas;
                     tile.SetTileSkin(currentTileSkin);
                     tiles[cols, filas] = tile;
                     nTotalTiles++;
-                    if (tipoTile == '2') { //Si es inicial...
+                    if (tipoTile == '2')
+                    { //Si es inicial...
                         tile.SetTileInicial();
                         caminoTiles.Add(tiles[cols, filas]);
                     }
@@ -157,15 +164,13 @@ public class BoardManager : MonoBehaviour
         init = true;
     }
 
- 
+
 
     private void GetRandomSkin()
     {
-        if (preferedSkin == null) {
-            int rnd = UnityEngine.Random.Range(0, tileSkins.Count);
-            currentTileSkin = tileSkins[rnd];
-        }
-        else currentTileSkin = preferedSkin;
+
+        int rnd = UnityEngine.Random.Range(0, tileSkins.Count);
+        currentTileSkin = tileSkins[rnd];
     }
 
     private void ResizeCamera()
@@ -192,18 +197,22 @@ public class BoardManager : MonoBehaviour
     #region Logic Methods
     public void SetTilePulsado(int x, int y)
     {
-        if (tiles[x, y].GetPulsado()) {
+        if (tiles[x, y].GetPulsado())
+        {
             DeshacerCamino(tiles[x, y]);
         }
-        else {
+        else
+        {
             Vector3 posicion = new Vector3(0, 0, 0);
             Vector3 sentido = new Vector3(0, 0, 0);
-            if (esCandidato(caminoTiles[caminoTiles.Count-1], tiles[x, y], ref posicion, ref sentido)) {
+            if (esCandidato(caminoTiles[caminoTiles.Count - 1], tiles[x, y], ref posicion, ref sentido))
+            {
                 tiles[x, y].Pulsar();
                 tiles[x, y].MarcarCamino(false, caminoTiles[caminoTiles.Count - 1], posicion, sentido);
                 caminoTiles.Add(tiles[x, y]);
 
-                if (NivelCompletado()) {
+                if (NivelCompletado())
+                {
 
                     if (isChallenge)
                     {
@@ -221,9 +230,11 @@ public class BoardManager : MonoBehaviour
 
     public void coordsDentroMatriz(int x, int y)
     {
-        if (y <= 0) {
+        if (y <= 0)
+        {
             y = Math.Abs(y);
-            if ((x >= 0 && x < tiles.GetLength(0)) && (y < tiles.GetLength(1)) && (tiles[x, y] != null)) {
+            if ((x >= 0 && x < tiles.GetLength(0)) && (y < tiles.GetLength(1)) && (tiles[x, y] != null))
+            {
                 SetTilePulsado(x, y);
             }
         }
@@ -243,16 +254,17 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     public void MostrarPista()
     {
-        if (!NivelCompletado()) {
+        if (!NivelCompletado())
+        {
             bool flag = false;
             int fila = 0;
             Tile ultimoCorrecto = null;
-            while(!flag && fila < caminoTiles.Count)
+            while (!flag && fila < caminoTiles.Count)
             {
                 if (tiles[pistas[fila, 1], pistas[fila, 0]] == caminoTiles[fila])
                 {
                     fila++;
-                    ultimoCorrecto = caminoTiles[fila-1];
+                    ultimoCorrecto = caminoTiles[fila - 1];
                     Debug.Log("ultimo correcto: " + ultimoCorrecto.gameObject.name);
                 }
                 else
@@ -261,11 +273,14 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-            if (flag) {
+            if (flag)
+            {
                 DeshacerCamino(ultimoCorrecto);
             }
             MarcarCaminoPistas(fila);
+            GameManager.instance.CobraPista();
         }
+
     }
 
     /// <summary>
@@ -277,17 +292,20 @@ public class BoardManager : MonoBehaviour
     {
         Vector3 posicion = Vector3.zero;
         Vector3 sentido = Vector3.zero;
-        
+
         Tile anterior = caminoTiles[0];
         int final = 0;
-        if (nTotalTiles - caminoTiles.Count >= 5) {
+        if (nTotalTiles - caminoTiles.Count >= 5)
+        {
             final = comienzo + 5;
         }
-        else {
+        else
+        {
             final = nTotalTiles;
         }
         Debug.Log("FINAL: " + final);
-        for (int fils = 1; fils < final; fils++) {
+        for (int fils = 1; fils < final; fils++)
+        {
             Debug.Log("Fila: " + fils);
             Debug.Log("X: " + pistas[fils, 1] + ", Y: " + pistas[fils, 0]);
             bool placebo = esCandidato(anterior, tiles[pistas[fils, 1], pistas[fils, 0]], ref posicion, ref sentido);
@@ -302,21 +320,27 @@ public class BoardManager : MonoBehaviour
         //Tile top = caminoTiles.Peek();
         int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - peek.gameObject.transform.position.x);
         int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - peek.gameObject.transform.position.y);
-        if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0) {
-            if (diferenciaX < 0) {
+        if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0)
+        {
+            if (diferenciaX < 0)
+            {
                 posicion = new Vector3(-0.5f, 0, 0);
             }
-            else {
+            else
+            {
                 posicion = new Vector3(0.5f, 0, 0);
             }
             sentido = new Vector3(0, 0, 0);
             return true;
         }
-        else if (diferenciaX == 0 && Math.Abs(diferenciaY) == 1) {
-            if (diferenciaY < 0) {
+        else if (diferenciaX == 0 && Math.Abs(diferenciaY) == 1)
+        {
+            if (diferenciaY < 0)
+            {
                 posicion = new Vector3(0, -0.5f, 0);
             }
-            else {
+            else
+            {
                 posicion = new Vector3(0, 0.5f, 0);
             }
             sentido = new Vector3(0, 0, 90);
@@ -332,7 +356,8 @@ public class BoardManager : MonoBehaviour
     /// <param name="bloquePulsado"></param>
     private void DeshacerCamino(Tile bloquePulsado)
     {
-        while (caminoTiles[caminoTiles.Count - 1] != bloquePulsado) {
+        while (caminoTiles[caminoTiles.Count - 1] != bloquePulsado)
+        {
             caminoTiles[caminoTiles.Count - 1].Despulsar();
             caminoTiles.Remove(caminoTiles[caminoTiles.Count - 1]);
             caminoTiles[caminoTiles.Count - 1].DesmarcarCamino();
@@ -343,7 +368,8 @@ public class BoardManager : MonoBehaviour
     /// Encargado de determinar si el nivel se ha completado con éxito o no.
     /// </summary>
     /// <returns>-True si se han marcado todas las casillas, false en caso contrario</returns>
-    private bool NivelCompletado() {
+    private bool NivelCompletado()
+    {
         return (caminoTiles.Count == nTotalTiles);
     }
     #endregion
