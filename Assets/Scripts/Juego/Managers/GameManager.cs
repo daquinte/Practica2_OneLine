@@ -25,10 +25,6 @@ public class GameManager : MonoBehaviour
     private const int recompensaMedallasChallenge = 1;
     private const int recompensaLogin = 100;
 
-    //anuncios
-    public enum TipoRecompensa { WATCHTOPLAY, SUMAR, DUPLICAR };
-    private int cantidadADuplicar;
-
     public int numberToCreate = 100;
 
     private int[] nivelesPorDificultad;

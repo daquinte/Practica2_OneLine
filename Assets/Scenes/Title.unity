@@ -577,7 +577,6 @@ GameObject:
   - component: {fileID: 282264945}
   - component: {fileID: 282264944}
   - component: {fileID: 282264943}
-  - component: {fileID: 282264946}
   m_Layer: 5
   m_Name: Challenge
   m_TagString: Untagged
@@ -702,18 +701,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282264941}
   m_CullTransparentMesh: 0
---- !u!114 &282264946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 282264941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb9d23ff2419cf141b1ad888413a2f63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &288918361
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +933,7 @@ RectTransform:
   - {fileID: 624454251}
   - {fileID: 288918362}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -977,6 +964,7 @@ MonoBehaviour:
   freeChallenge: {fileID: 449730523}
   challengePanel: {fileID: 1774297319}
   loginPanel: {fileID: 1827847796}
+  panelTiempoChallenge: {fileID: 0}
 --- !u!114 &290732187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,7 +979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: {fileID: 290732188}
   regaloLogin: {fileID: 315242020}
-  time: 30
+  time: 86400
   regaloUsado: 0
 --- !u!114 &290732188
 MonoBehaviour:
@@ -1005,7 +993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a5a37e5578f1144917ea44e15907dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeft: 30
+  timeLeft: 86400
 --- !u!1 &315242020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,7 +1508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3be8fc483b5264d8839e03bcc85953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPlacementId: rewardedVideo
 --- !u!1 &590089199
 GameObject:
   m_ObjectHideFlags: 0
@@ -2716,6 +2703,7 @@ MonoBehaviour:
   - {fileID: 1637704844}
   - {fileID: 822374543}
   canvasMenu: {fileID: 290732186}
+  challengeButton: {fileID: 282264943}
   time: 30
   actualiza: 0
 --- !u!114 &951198475
@@ -4002,7 +3990,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1492684528
 GameObject:
@@ -4085,7 +4073,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1518077542
 GameObject:
@@ -4098,7 +4086,6 @@ GameObject:
   - component: {fileID: 1518077544}
   - component: {fileID: 1518077545}
   - component: {fileID: 1518077543}
-  - component: {fileID: 1518077546}
   - component: {fileID: 1518077547}
   m_Layer: 5
   m_Name: GameManager
@@ -4131,7 +4118,7 @@ RectTransform:
   m_LocalScale: {x: 0.44467586, y: 0.44467586, z: 0.44467586}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4151,18 +4138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberToCreate: 100
---- !u!114 &1518077546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518077542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4936b8b1343961048a5f58b9fcb4df87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1518077547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4817,7 +4792,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3be8fc483b5264d8839e03bcc85953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPlacementId: rewardedVideo
 --- !u!1 &1649922479
 GameObject:
   m_ObjectHideFlags: 0
