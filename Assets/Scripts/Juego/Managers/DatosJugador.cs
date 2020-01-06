@@ -19,8 +19,8 @@ public class DatosJugador {
     public int hash;
     public int salt;
 
-    public long timerChallenge;
-    public long timerDaily;
+    public float timerChallenge;
+    public float timerDaily;
 
     /// <summary>
     /// Constructora vacia, necesaria para el hash
@@ -34,6 +34,8 @@ public class DatosJugador {
         _monedas = monedas;
         _medallas = medallas;
         _noAds = false;
+        timerChallenge = 0;
+        timerDaily = 0;
     }
 
     public void AsignaNivel(int nivel) {

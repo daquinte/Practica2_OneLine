@@ -41,8 +41,7 @@ public class CanvasJuego : MonoBehaviour
         textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual + "  " + GameManager.instance.infoNivel.numNivelActual.ToString();
 
 
-        if (GameManager.instance.infoNivel.isChallenge)
-        {
+        if (GameManager.instance.infoNivel.isChallenge) {
             SetChallengeHUD();
         }
         else SetStandardHUD();

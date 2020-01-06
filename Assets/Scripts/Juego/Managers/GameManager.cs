@@ -83,8 +83,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     #region SceneManagement
 
-    public void CargaEscenaTitulo()
-    {
+    public void CargaEscenaTitulo() {
         SceneManager.LoadScene(0);
     }
 
@@ -120,8 +119,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void CargaEscenaJuego(int nivel, bool isChallenge)
-    {
+    public void CargaEscenaJuego(int nivel, bool isChallenge) {
         infoNivel.numNivelActual = nivel;
         infoNivel.isChallenge = isChallenge;
         SceneManager.LoadScene(2);
@@ -262,6 +260,15 @@ public class GameManager : MonoBehaviour
             datosJugador = new DatosJugador(100, 0);
         }
 
+    }
+
+    void OnApplicationFocus(bool focus) {
+        if (!focus) {
+            SavePlayer();
+        }
+    }
+    void OnApplicationQuit() {
+        SavePlayer();
     }
     #endregion
 

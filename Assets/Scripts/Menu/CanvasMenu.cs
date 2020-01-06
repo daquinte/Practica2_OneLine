@@ -18,6 +18,12 @@ public class CanvasMenu : MonoBehaviour {
 	[Tooltip("Panel de Daily Login.")]
 	public GameObject loginPanel;
 
+	[Tooltip("Panel de Tiempo de Challenge.")]
+	public GameObject panelTiempoChallenge;
+
+
+	private SeePresent seePresent;
+
 	/// <summary>
 	/// Numero de niveles de dificultad que vamos a tener.
 	/// No tiene en cuenta los Challenge, que van aparte.
@@ -39,8 +45,11 @@ public class CanvasMenu : MonoBehaviour {
 
 		datosJugador = GameManager.instance.GetDatosJugador();
 		textoMonedas.text = datosJugador._monedas.ToString();
-
+		seePresent = GetComponent<SeePresent>();
 		AnalizaProgreso();
+		if (GameManager.instance.infoNivel.isChallenge) {
+			NoJugarChallenge(panelTiempoChallenge);
+		}
 	}
 	
 	// Update is called once per frame
@@ -84,8 +93,9 @@ public class CanvasMenu : MonoBehaviour {
 	public void ShowLoginPanel()		  { loginPanel.SetActive(true); }
 	public void SumaRecompensaDiaria()    { GameManager.instance.OnDailyLoginReward(false); }
 	public void DuplicaRecompensaDiaria() { GameManager.instance.OnDailyLoginReward(true); }
-	public void HideLoginPanel()		  { 
+	public void HideLoginPanel() { 
 		loginPanel.SetActive(false);
+		seePresent.InitTimer();
 	}
 
 	#endregion
@@ -111,5 +121,19 @@ public class CanvasMenu : MonoBehaviour {
 	private void ActualizaMonedas()
 	{
 		textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
+	}
+
+	public void PosibleJugarChallenge(GameObject deactivateObjects, GameObject[] activateObjects)
+	{
+		deactivateObjects.SetActive(false);
+		foreach (GameObject uiMember in activateObjects)
+		{
+			uiMember.SetActive(true);
+		}
+	}
+
+	public void NoJugarChallenge(GameObject timerChallenge)
+	{
+		timerChallenge.SetActive(true);
 	}
 }

@@ -1319,6 +1319,7 @@ GameObject:
   - component: {fileID: 945557570}
   - component: {fileID: 945557569}
   - component: {fileID: 945557571}
+  - component: {fileID: 945557572}
   m_Layer: 5
   m_Name: TextoCountDown
   m_TagString: Untagged
@@ -1400,9 +1401,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasJuego: {fileID: 1691342306}
+  timer: {fileID: 945557572}
   time: 30
   stop: 1
   text: {fileID: 945557569}
+--- !u!114 &945557572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945557567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a5a37e5578f1144917ea44e15907dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLeft: 30
 --- !u!1 &965021601
 GameObject:
   m_ObjectHideFlags: 0

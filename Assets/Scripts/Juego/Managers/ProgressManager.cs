@@ -27,8 +27,6 @@ public static class ProgressManager {
         datosJugador.salt = baseSalt + datosJugador._monedas;
         
         datosJugador.hash = Crypto(bf, datosJugador);
-        Debug.Log("Hash" + datosJugador.hash);
-        Debug.Log("Salt" + datosJugador.salt);
 
         //Serializamos data y lo guardamos en file
         bf.Serialize(file, datosJugador);
