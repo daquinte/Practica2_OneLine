@@ -17,8 +17,16 @@ public class CountDown : MonoBehaviour
 
     public bool stop = true;
 
- 
 
+    //timeLeft -= TimeManager.instance.CheckDate(); // Esto en el init
+    //timeLeft -= Time.deltaTime; // Esto en el Update
+
+    void ResetClock(float time)
+    {
+        TimeManager.instance.SaveDate();
+        timeLeft = time;
+        timeLeft -= TimeManager.instance.CheckDate();
+    }
 
 
     public Text text;

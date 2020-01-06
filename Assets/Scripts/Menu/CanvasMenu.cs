@@ -84,7 +84,9 @@ public class CanvasMenu : MonoBehaviour {
 	public void ShowLoginPanel()		  { loginPanel.SetActive(true); }
 	public void SumaRecompensaDiaria()    { GameManager.instance.OnDailyLoginReward(false); }
 	public void DuplicaRecompensaDiaria() { GameManager.instance.OnDailyLoginReward(true); }
-	public void HideLoginPanel()		  { loginPanel.SetActive(false); }
+	public void HideLoginPanel()		  { 
+		loginPanel.SetActive(false);
+	}
 
 	#endregion
 

@@ -19,6 +19,8 @@ public class DatosJugador {
     public int hash;
     public int salt;
 
+    public long timerChallenge;
+    public long timerDaily;
 
     /// <summary>
     /// Constructora vacia, necesaria para el hash
