@@ -1056,7 +1056,6 @@ MonoBehaviour:
   - {fileID: 253172845}
   challengePanel: {fileID: 1774297319}
   loginPanel: {fileID: 1827847796}
-  panelTiempoChallenge: {fileID: 951198470}
 --- !u!114 &290732187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2715,7 +2714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &951198471
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2793,7 +2792,8 @@ MonoBehaviour:
   - {fileID: 1637704844}
   - {fileID: 822374543}
   canvasMenu: {fileID: 290732186}
-  time: 30
+  time: 1800
+  actualiza: 0
 --- !u!114 &951198475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2806,7 +2806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a5a37e5578f1144917ea44e15907dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeft: 30
+  timeLeft: 1800
 --- !u!1 &963489182
 GameObject:
   m_ObjectHideFlags: 0
