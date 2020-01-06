@@ -10,7 +10,8 @@ public class CountDown : MonoBehaviour
 
     public CanvasJuego canvasJuego;
 
-    public float timeLeft = 300.0f;
+    private Timer timer;
+    public float time;
 
     private float minutes;
     private float seconds;
@@ -25,35 +26,29 @@ public class CountDown : MonoBehaviour
 
     public void StartTimer() {
         stop = false;
-        TimeManager.instance.SaveDate();
-        timeLeft -= TimeManager.instance.CheckDate();
+        timer = new Timer();
+        timer.SetTime(time);
+        timer.ResetClock();
         Update();
         StartCoroutine(updateCoroutine());
     }
 
     public void StopTimer() {
         stop = true;
+        timer.ResetClock();
     }
 
     void Update() {
         if (stop) return;
-        timeLeft -= Time.deltaTime;
-        Debug.Log("Tiempo: " + timeLeft);
-        minutes = Mathf.Floor(timeLeft / 60);
-        seconds = Mathf.Round(timeLeft % 60);
+        timer.Update();
+        minutes = Mathf.Floor(timer.timeLeft / 60);
+        seconds = Mathf.Round(timer.timeLeft % 60);
         if (minutes < 0) {
             stop = true;
             minutes = 0;
             seconds = 0;
             canvasJuego.ChallengeFallido();
         }
-    }
-
-    void ResetClock(float time)
-    {
-        TimeManager.instance.SaveDate();
-        timeLeft = time;
-        timeLeft -= TimeManager.instance.CheckDate();
     }
 
     private IEnumerator updateCoroutine()

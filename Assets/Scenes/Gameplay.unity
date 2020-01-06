@@ -1400,7 +1400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasJuego: {fileID: 1691342306}
-  timeLeft: 30
+  time: 30
   stop: 1
   text: {fileID: 945557569}
 --- !u!1 &965021601
