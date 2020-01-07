@@ -58,7 +58,7 @@ public class LectorNiveles : MonoBehaviour
         while (!reader.isDone) { }
         json = reader.text;
 #else
-        json = File.ReadAllText(Application.dataPath + "/Niveles/niveles.json");
+        json = File.ReadAllText(Application.streamingAssetsPath + "/niveles.json");
 #endif
         JSONNode niveles = JSON.Parse(json);
 
