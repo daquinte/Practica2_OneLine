@@ -206,6 +206,8 @@ public class GameManager : MonoBehaviour
         CargaEscenaJuego(1, true);
     }
 
+    public bool PuedoCobrarPista() { return (datosJugador._monedas - precioPista >= 0); }
+
     /// <summary>
     /// Cobra al jugador el precio de una pista.
     /// </summary>

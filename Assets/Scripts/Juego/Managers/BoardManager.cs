@@ -27,12 +27,13 @@ public class BoardManager : MonoBehaviour
     public List<TileSkin> tileSkins;
 
     //Atributos privados//
-
-
-    private int TARGET_WIDTH;
-    private int TARGET_HEIGHT;
     private int PIXELS_TO_UNITS = 110;
 
+    /// <summary>
+    /// Controla el ultimo tile desde el que se ha preguntado la pista
+    /// Así evitamos que el jugador pierda dinero al darle dos veces al botón de pista
+    /// </summary>
+    private Tile ultimoInicioPista;
 
 
     /// <summary>
@@ -262,7 +263,7 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     public void MostrarPista()
     {
-        if (!NivelCompletado())
+        if (!NivelCompletado() && GameManager.instance.PuedoCobrarPista())
         {
             bool flag = false;
             int fila = 0;
@@ -273,7 +274,6 @@ public class BoardManager : MonoBehaviour
                 {
                     fila++;
                     ultimoCorrecto = caminoTiles[fila - 1];
-                    Debug.Log("ultimo correcto: " + ultimoCorrecto.gameObject.name);
                 }
                 else
                 {
@@ -285,8 +285,13 @@ public class BoardManager : MonoBehaviour
             {
                 DeshacerCamino(ultimoCorrecto);
             }
-            MarcarCaminoPistas(fila);
-            GameManager.instance.CobraPista();
+
+            //Comprobamos que no se pida la pista dos veces desde el mismo sitio.
+            if (ultimoInicioPista == null || ultimoInicioPista != ultimoCorrecto) {
+                ultimoInicioPista = ultimoCorrecto;
+                MarcarCaminoPistas(fila);
+                GameManager.instance.CobraPista();
+            }
         }
 
     }
@@ -311,11 +316,9 @@ public class BoardManager : MonoBehaviour
         {
             final = nTotalTiles;
         }
-        Debug.Log("FINAL: " + final);
+
         for (int fils = 1; fils < final; fils++)
         {
-            Debug.Log("Fila: " + fils);
-            Debug.Log("X: " + pistas[fils, 1] + ", Y: " + pistas[fils, 0]);
             bool placebo = esCandidato(anterior, tiles[pistas[fils, 1], pistas[fils, 0]], ref posicion, ref sentido);
             tiles[pistas[fils, 1], pistas[fils, 0]].MarcarCamino(true, anterior, posicion, sentido);
             anterior = tiles[pistas[fils, 1], pistas[fils, 0]];

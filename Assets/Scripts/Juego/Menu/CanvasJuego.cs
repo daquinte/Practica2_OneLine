@@ -68,7 +68,7 @@ public class CanvasJuego : MonoBehaviour
     public void ShowSiguienteNivelPanel() {
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         TextoSigNivelDif.text = GameManager.instance.infoNivel.tipoDificultadActual;
-        TextoSigNivelNum.text = (GameManager.instance.infoNivel.numNivelActual - 1).ToString(); //Restamos 1 porque se ha sumado previamente.
+        TextoSigNivelNum.text = (GameManager.instance.infoNivel.numNivelActual).ToString(); //Restamos 1 porque se ha sumado previamente.
 
         panelSiguienteNivel.SetActive(true);
     }
