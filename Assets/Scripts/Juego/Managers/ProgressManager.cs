@@ -41,7 +41,6 @@ public static class ProgressManager {
     /// </summary>
     public static DatosJugador Load()
     {
-        Debug.Log(Application.persistentDataPath);
         //Comprobamos si el archivo existe antes de abrirlo
         if (File.Exists(Application.persistentDataPath + "/ProgresoJugador.dat"))
         {
@@ -57,8 +56,6 @@ public static class ProgressManager {
             int miSal = baseSalt + data._monedas;   //Si se han modificado de forma externa, la sal cambiará.
             file.Close();
 
-            Debug.Log("mi Hash" + miHash);
-            Debug.Log("mi Sal" + miSal);
             if (miHash == hashLeida && miSal == salLeida)
             {
                 return data;

@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
+    [Tooltip("Define el numero de niveles por dificultad")]
+    public int numberToCreate = 100;
+
     LectorNiveles lectorNiveles;
     BoardManager boardManager = null;
     InputManager inputManager = null;
@@ -23,9 +26,8 @@ public class GameManager : MonoBehaviour
     private const int recompensaAnuncio = 25;
     private const int recompensaMonedasChallenge = 50;
     private const int recompensaMedallasChallenge = 1;
-    private const int recompensaLogin = 100;
+    private const int recompensaLogin = 35;
 
-    public int numberToCreate = 100;
 
     private int[] nivelesPorDificultad;
 
@@ -39,7 +41,6 @@ public class GameManager : MonoBehaviour
         public bool isChallenge;
         public int dificultad;
     }
-
     public InfoEleccionJugador infoNivel;
 
     //Awake is always called before any Start functions
@@ -78,6 +79,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     #region SceneManagement
 
+
+    //Cierra la aplicación
+    public void CierraJuego()
+    {
+        Application.Quit();
+    }
     public void CargaEscenaTitulo()
     {
         SceneManager.LoadScene(0);
@@ -105,8 +112,6 @@ public class GameManager : MonoBehaviour
                 case 4:
                     infoNivel.tipoDificultadActual = "MASTER";
                     break;
-
-                    //ETC ETC
             }
             infoNivel.dificultad = dificultad;
             datosJugador.AsignaNivel(numberToCreate * dificultad + 1);
@@ -155,7 +160,7 @@ public class GameManager : MonoBehaviour
         {
             RestaMonedas(precioChallenge);
         }
-        CargaEscenaJuego(1, true);
+        CargaEscenaJuego(Random.Range(100, 400), true);
     }
 
     /// <summary>
@@ -232,7 +237,6 @@ public class GameManager : MonoBehaviour
         {
             CargaSeleccionNivel(infoNivel.dificultad);
         }
-        GetBoardManager().ResetMap();
         boardManager.InitMap(lectorNiveles.CargaNivel(infoNivel.numNivelActual));
     }
 

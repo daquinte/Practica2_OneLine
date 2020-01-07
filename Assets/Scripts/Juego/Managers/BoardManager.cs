@@ -220,12 +220,20 @@ public class BoardManager : MonoBehaviour
                     }
                     else
                     {
-                        GameManager.instance.DesBloqueaSiguienteNivel();
-                        canvasJuego.ShowSiguienteNivelPanel();
+                        //Cuestión de estética
+                        StartCoroutine(EndGameAfterDelay(0.5f));
                     }
                 }
             }
         }
+    }
+
+    IEnumerator EndGameAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        ResetMap();
+        canvasJuego.ShowSiguienteNivelPanel();
+        GameManager.instance.DesBloqueaSiguienteNivel();
     }
 
     public void coordsDentroMatriz(int x, int y)

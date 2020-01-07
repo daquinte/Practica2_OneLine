@@ -19,12 +19,14 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
 
     public delegate void VoidRecompensa();
 
-    private Button myButton;
+    private Button myButton;                                //Mi botón de callback
+    private bool recompensado;                              //Controla que no se recompense al jugador más de una vez
     private string myPlacementId = "rewardedVideo";
    
-    private VoidRecompensa callBackRecompensa; //Callback de este rewarded Ad
+    private VoidRecompensa callBackRecompensa;              //Callback de este rewarded Ad
     void Start()
     {
+        recompensado = false;
         myButton = GetComponent<Button>();
 
         // Set interactivity to be dependent on the Placement’s status:
@@ -38,9 +40,18 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
         Advertisement.Initialize(gameId, true);
     }
 
+    /// <summary>
+    /// Para ponerlo a null al cambiar de escena, así evitamos que se llame a otros callbacks
+    /// </summary>
+    void OnDestroy()
+    {
+        callBackRecompensa = null;
+    }
+
     // Implement a function for showing a rewarded video ad:
     void ShowRewardedVideo()
     {
+        recompensado = false;
         Advertisement.Show(myPlacementId);
     }
 
@@ -66,11 +77,11 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         // Define conditional logic for each ad completion status:
-        if (showResult == ShowResult.Finished)
+        if (showResult == ShowResult.Finished && !recompensado)
         {
+            recompensado = true;
             // Reward the user for watching the ad to completion.
             if (callBackRecompensa != null) callBackRecompensa();
-            //GameManager.instance.RecompensaJugador();
         }
         else if (showResult == ShowResult.Skipped)
         {

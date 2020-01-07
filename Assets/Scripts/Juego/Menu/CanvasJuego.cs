@@ -44,15 +44,18 @@ public class CanvasJuego : MonoBehaviour
     void Start()
     {
         textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
-        textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual + "  " + GameManager.instance.infoNivel.numNivelActual.ToString();
 
         botonAnuncio.GetComponent<RewardedAdsButton>().SetCallbackRecompensa(AnuncioPorMonedas);
         botonDuplicar.GetComponent<RewardedAdsButton>().SetCallbackRecompensa(DuplicarChallenge);
 
-        if (GameManager.instance.infoNivel.isChallenge) {
+        if (GameManager.instance.infoNivel.isChallenge)
+        {
             SetChallengeHUD();
         }
-        else SetStandardHUD();
+        else
+        {
+            SetStandardHUD();
+        }
     }
 
     // Update is called once per frame
@@ -65,7 +68,8 @@ public class CanvasJuego : MonoBehaviour
     public void ShowSiguienteNivelPanel() {
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         TextoSigNivelDif.text = GameManager.instance.infoNivel.tipoDificultadActual;
-        TextoSigNivelNum.text = GameManager.instance.infoNivel.numNivelActual.ToString();
+        TextoSigNivelNum.text = (GameManager.instance.infoNivel.numNivelActual - 1).ToString(); //Restamos 1 porque se ha sumado previamente.
+
         panelSiguienteNivel.SetActive(true);
     }
     public void HideSiguienteNivelPanel() { panelSiguienteNivel.SetActive(false); }
@@ -110,6 +114,7 @@ public class CanvasJuego : MonoBehaviour
         GameManager.instance.CargaSiguienteNivel();
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         this.GetComponent<Canvas>().worldCamera = Camera.main;
+        textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual + "  " + GameManager.instance.infoNivel.numNivelActual.ToString();
         HideSiguienteNivelPanel();
     }
 
@@ -134,6 +139,8 @@ public class CanvasJuego : MonoBehaviour
     #region HUD Change
     private void SetChallengeHUD()
     {
+        textoDificultad.text = "CHALLENGE";
+
         botonReset.gameObject.SetActive(false);
         botonAnuncio.gameObject.SetActive(false);
         botonPista.gameObject.SetActive(false);
@@ -143,6 +150,8 @@ public class CanvasJuego : MonoBehaviour
 
     private void SetStandardHUD()
     {
+        textoDificultad.text = GameManager.instance.infoNivel.tipoDificultadActual + "  " + GameManager.instance.infoNivel.numNivelActual.ToString();
+
         botonReset.gameObject.SetActive(true);
         botonAnuncio.gameObject.SetActive(true);
         botonPista.gameObject.SetActive(true);

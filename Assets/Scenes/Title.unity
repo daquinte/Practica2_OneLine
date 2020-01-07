@@ -540,7 +540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.4745098}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2123,7 +2123,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 121.9, y: -0.000011444}
+  m_AnchoredPosition: {x: 112.790016, y: -1.499944}
   m_SizeDelta: {x: 34.21, y: 44.64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &822374545
@@ -2704,7 +2704,7 @@ MonoBehaviour:
   - {fileID: 822374543}
   canvasMenu: {fileID: 290732186}
   challengeButton: {fileID: 282264943}
-  time: 30
+  time: 1800
   actualiza: 0
 --- !u!114 &951198475
 MonoBehaviour:
@@ -2718,7 +2718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a5a37e5578f1144917ea44e15907dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeft: 30
+  timeLeft: 1800
 --- !u!1 &970199618
 GameObject:
   m_ObjectHideFlags: 0
@@ -3514,7 +3514,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1159108307}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 290732186}
+        m_MethodName: CierraApp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1159108307
@@ -3668,8 +3679,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 162, y: -0.000015259}
-  m_SizeDelta: {x: 85.232, y: 120.9}
+  m_AnchoredPosition: {x: 169.6, y: -1.5}
+  m_SizeDelta: {x: 168.79, y: 120.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1235439832
 MonoBehaviour:
@@ -3698,13 +3709,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 100
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0
+  m_Text: 999
 --- !u!222 &1235439833
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5857,8 +5868,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000013351, y: -65}
-  m_SizeDelta: {x: 243.9, y: 113.7}
+  m_AnchoredPosition: {x: 0.000011444, y: -65}
+  m_SizeDelta: {x: 193.82, y: 113.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2083192225
 MonoBehaviour:
@@ -5887,13 +5898,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 100
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +100
+  m_Text: +35
 --- !u!222 &2083192226
 CanvasRenderer:
   m_ObjectHideFlags: 0

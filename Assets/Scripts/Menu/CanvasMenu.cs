@@ -29,31 +29,15 @@ public class CanvasMenu : MonoBehaviour {
 	/// </summary>
 	private SeePresent seePresent;
 
-	/// <summary>
-	/// Numero de niveles de dificultad que vamos a tener.
-	/// No tiene en cuenta los Challenge, que van aparte.
-	/// </summary>
-	private int nDificultades;
-
-	/// <summary>
-	/// Copia de solo lectura de los datos del jugador
-	/// </summary>
-	private DatosJugador datosJugador;
-
-
-	
-
 
 	// Use this for initialization
 	void Start () {
-		nDificultades = 5;
+		seePresent = GetComponent<SeePresent>();
 
 		duplicaLogin.SetCallbackRecompensa(DuplicaRecompensaDiaria);
 		freeChallenge.SetCallbackRecompensa(StartFreeChallenge);
 
-		datosJugador = GameManager.instance.GetDatosJugador();
-		textoMonedas.text = datosJugador._monedas.ToString();
-		seePresent = GetComponent<SeePresent>();
+		ActualizaCanvas();
 		AnalizaProgreso();
 	}
 	
@@ -61,9 +45,16 @@ public class CanvasMenu : MonoBehaviour {
 	void Update () {
 
 		//Actualiza en el menú, porque puedes obtener monedas del login diario
-		ActualizaMonedas();
+		ActualizaCanvas();
 	}
 
+	/// <summary>
+	/// Informa al GameManager de que el usuario quiere cerrar la aplicación
+	/// </summary>
+	public void CierraApp()
+	{
+		GameManager.instance.CierraJuego();
+	}
 
 	public void GoToSeleccionNiveles(int dificultad)
 	{
@@ -105,7 +96,7 @@ public class CanvasMenu : MonoBehaviour {
 	public void SumaRecompensaDiaria()    { GameManager.instance.OnDailyLoginReward(false); }
 	public void DuplicaRecompensaDiaria() { 
 		GameManager.instance.OnDailyLoginReward(true);
-		loginPanel.SetActive(false);
+		HideLoginPanel();
 	}
 	public void HideLoginPanel() { 
 		loginPanel.SetActive(false);
@@ -132,9 +123,10 @@ public class CanvasMenu : MonoBehaviour {
 	/// <summary>
 	/// Actualiza las monedas del menú
 	/// </summary>
-	private void ActualizaMonedas()
+	private void ActualizaCanvas()
 	{
 		textoMonedas.text = GameManager.instance.GetDatosJugador()._monedas.ToString();
+		textoMedallas.text = GameManager.instance.GetDatosJugador()._medallas.ToString();
 	}
 
 	public void PosibleJugarChallenge(GameObject deactivateObjects, GameObject[] activateObjects, Button challengeButton)
