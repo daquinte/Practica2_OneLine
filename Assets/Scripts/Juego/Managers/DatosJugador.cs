@@ -8,36 +8,33 @@ using UnityEngine;
 /// </summary>
 [System.Serializable]
 public class DatosJugador {
-    public int _monedas;
-    public int _medallas;
+    public int _monedas;                            //Monedas del jugador
+    public int _medallas;                           //Medallas del jugador
 
-    public Dictionary<int, bool> playedLevels;
-    public bool _noAds;
+    public Dictionary<int, bool> playedLevels;      //Diccionario con los niveles que el jugador puede jugar
 
+    //Serializacion y encriptado    
+    public int hash;                                //Clave hash
+    public int salt;                                //Sal que le aplicaremos a la clave hash
 
-    //Serializacion y encriptado
-    public int hash;
-    public int salt;
-
-    public float timerChallenge;
-    public float timerDaily;
-
-    /// <summary>
-    /// Constructora vacia, necesaria para el hash
-    /// </summary>
-    public DatosJugador() { }
+    public float timerChallenge;                    //Tiempo restante al desafío
+    public float timerDaily;                        //Tiempo restante al login diario
 
     //Constructora del objeto serializable con datos por defecto
+    //Se llamará cuando se cree un nuevo jugador en el dispositivo
     public DatosJugador(int monedas, int medallas)
     {
         playedLevels = new Dictionary<int, bool>();
         _monedas = monedas;
         _medallas = medallas;
-        _noAds = false;
         timerChallenge = 0;
         timerDaily = 0;
     }
 
+    /// <summary>
+    /// Asigna el nivel por parámetro como jugable en el diccionario
+    /// </summary>
+    /// <param name="nivel">indice del nivel jugable</param>
     public void AsignaNivel(int nivel) {
         if (!playedLevels.ContainsKey(nivel)) {
             playedLevels.Add(nivel, true);
@@ -47,6 +44,13 @@ public class DatosJugador {
         }
     }
 
+    /// <summary>
+    /// Obtiene el número de niveles desbloqueados por dificultad
+    /// En base a los topes pasados por parámetro
+    /// </summary>
+    /// <param name="topeInferior">Tope inferior</param>
+    /// <param name="topeSuperior">Tope superior</param>
+    /// <returns></returns>
     public int GetNumLevels(int topeInferior, int topeSuperior) {
         int count = 0;
         if (playedLevels.Count == 0) return 1;

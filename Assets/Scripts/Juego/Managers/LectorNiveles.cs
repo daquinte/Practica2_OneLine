@@ -3,10 +3,16 @@ using System.IO;
 using UnityEngine;
 using SimpleJSON;
 
+/// <summary>
+/// Lee los niveles de fichero
+/// Devuelve la información del nivel solicitado
+/// </summary>
 public class LectorNiveles : MonoBehaviour
 {
     private Dictionary<int, InfoNivel> _niveles;
-    public void CargaNivel(JSONNode level)
+
+    //Carga un nivel y guarda su informacion en "level info"
+    private void CargaNivel(JSONNode level)
     {
         try
         {
@@ -62,12 +68,20 @@ public class LectorNiveles : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Devuelve la información del nivel indicado
+    /// </summary>
+    /// <param name="nNivel">indice del nivel</param>
+    /// <returns></returns>
     public InfoNivel CargaNivel(int nNivel)
     {
         return _niveles[nNivel];
     }
 
+    /// <summary>
+    /// Devuelve el numero de niveles actual
+    /// </summary>
+    /// <returns></returns>
     public int GetNumNiveles()
     {
         return _niveles.Count;

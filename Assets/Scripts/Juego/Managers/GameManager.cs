@@ -6,14 +6,20 @@ using UnityEngine.SceneManagement;
 //Necesitamos el lector de niveles para cargarlos desde cualquier escena
 [RequireComponent(typeof(LectorNiveles))]
 
+/// <summary>
+/// Clase encargada de la gestión general del juego
+/// Es permanente entre escenas, y cumple con el patrón singleton.
+/// La información que contiene es común a todo el juego, y puede ser consultada mediante su instancia estática
+/// </summary>
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance = null;                //Static instance of GameManager which allows it to be accessed by any other script.
 
     [Tooltip("Define el numero de niveles por dificultad")]
-    public int numberToCreate = 100;
+    public int numberToCreate = 100;                          //Número de niveles por dificultad
 
+    //Atributos de otras clases
     LectorNiveles lectorNiveles;
     BoardManager boardManager = null;
     InputManager inputManager = null;
@@ -28,7 +34,7 @@ public class GameManager : MonoBehaviour
     private const int recompensaMedallasChallenge = 1;
     private const int recompensaLogin = 35;
 
-
+    //Atributos de niveles por dificultad
     private int nDificultades;
     private int[] nivelesPorDificultad;
 
@@ -73,77 +79,6 @@ public class GameManager : MonoBehaviour
         infoNivel.numNivelActual = 1;
     }
 
-    /// <summary>
-    /// Actualmente, todos los cambios de escena tienen efecto en el *siguiente frame*
-    /// Debido a que usamos LoadScene en lugar de su versión asíncrona
-    /// </summary>
-    #region SceneManagement
-
-
-    //Cierra la aplicación
-    public void CierraJuego()
-    {
-        Application.Quit();
-    }
-    public void CargaEscenaTitulo()
-    {
-        SceneManager.LoadScene(0);
-    }
-
-    public void CargaSeleccionNivel(int dificultad)
-    {
-        if (dificultad >= 0 && dificultad <= 4)
-        {
-            switch (dificultad)
-            {
-                case 0:
-                    infoNivel.tipoDificultadActual = "BEGINNER";
-                    break;
-                case 1:
-                    infoNivel.tipoDificultadActual = "REGULAR";
-                    break;
-                case 2:
-                    infoNivel.tipoDificultadActual = "ADVANCED";
-                    break;
-                case 3:
-                    infoNivel.tipoDificultadActual = "EXPERT";
-                    break;
-                case 4:
-                    infoNivel.tipoDificultadActual = "MASTER";
-                    break;
-            }
-            infoNivel.dificultad = dificultad;
-        }
-
-        SceneManager.LoadScene(1);
-    }
-
-
-    public void CargaEscenaJuego(int nivel, bool isChallenge)
-    {
-        infoNivel.numNivelActual = nivel;
-        infoNivel.isChallenge = isChallenge;
-        SceneManager.LoadScene(2);
-    }
-    #endregion
-
-
-    public InfoNivel GetInfoNivel(int nivel)
-    {
-        return lectorNiveles.CargaNivel(nivel);
-    }
-
-
-    private void CalculaNivelesPorDificultad()
-    {
-        nivelesPorDificultad = new int[nDificultades];
-        for (int i = 0; i < nivelesPorDificultad.Length; i++)
-        {
-            nivelesPorDificultad[i] = datosJugador.GetNumLevels(numberToCreate * i + 1, numberToCreate * i + numberToCreate);
-        }
-    }
-
-    //Estados
 
     /// <summary>
     /// Empieza el nivel de challenge. 
@@ -155,7 +90,8 @@ public class GameManager : MonoBehaviour
     {
         if (!free)
         {
-            if (datosJugador._monedas - precioChallenge >= 0) { 
+            if (datosJugador._monedas - precioChallenge >= 0)
+            {
                 RestaMonedas(precioChallenge);
                 CargaEscenaJuego(Random.Range(100, 400), true);
             }
@@ -177,7 +113,7 @@ public class GameManager : MonoBehaviour
         {
             mult = 2;
         }
-        SumaMonedas(recompensaMonedasChallenge   * mult);
+        SumaMonedas(recompensaMonedasChallenge * mult);
         SumaMedallas(recompensaMedallasChallenge * mult);
 
     }
@@ -211,7 +147,11 @@ public class GameManager : MonoBehaviour
         CargaEscenaJuego(1, true);
     }
 
-    public bool PuedoCobrarPista() { return (datosJugador._monedas - precioPista >= 0); }
+    //¿Es posible cobrar una pista?
+    public bool PuedoCobrarPista()
+    {
+        return (datosJugador._monedas - precioPista >= 0);
+    }
 
     /// <summary>
     /// Cobra al jugador el precio de una pista.
@@ -221,34 +161,7 @@ public class GameManager : MonoBehaviour
         RestaMonedas(precioPista);
     }
 
-    //--Niveles--//
-
-    public void NuevoNivelSerializable(int nivel)
-    {
-        // Serializacion
-        if (!infoNivel.isChallenge) { 
-            datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
-            ProgressManager.Save(datosJugador);
-        }
-    }
-
-    public void DesBloqueaSiguienteNivel()
-    {
-        infoNivel.numNivelActual++;
-        NuevoNivelSerializable(infoNivel.numNivelActual);
-    }
-    public void CargaSiguienteNivel()
-    {
-        if (infoNivel.numNivelActual > (infoNivel.dificultad * numberToCreate + numberToCreate))
-        {
-            CargaSeleccionNivel(infoNivel.dificultad);
-        }
-        boardManager.InitMap(lectorNiveles.CargaNivel(infoNivel.numNivelActual));
-    }
-
-
     //Métodos privados de suma y resta de monedas
-
     private void SumaMonedas(int cantidad)
     {
         if (datosJugador._monedas + cantidad <= 999)
@@ -278,6 +191,125 @@ public class GameManager : MonoBehaviour
         SavePlayer();
     }
 
+    /// <summary>
+    /// Gestion de niveles
+    /// </summary>
+    #region Gestion Niveles
+
+    /// <summary>
+    /// Añade el nivel que se va a jugar al diccionario de niveles jugados
+    /// Siempre y cuando no sea un nivel de tipo challenge
+    /// </summary>
+    public void NuevoNivelSerializable(int nivel)
+    {
+        // Serializacion
+        if (!infoNivel.isChallenge)
+        {
+            datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
+            ProgressManager.Save(datosJugador);
+        }
+    }
+
+    /// <summary>
+    /// Desbloquea el siguiente nivel, pero no lo carga en escena.
+    /// Por si queremos dejarlo disponible pero no cargarlo inmediatamente
+    /// </summary>
+    public void DesBloqueaSiguienteNivel()
+    {
+        infoNivel.numNivelActual++;
+        NuevoNivelSerializable(infoNivel.numNivelActual);
+    }
+    /// <summary>
+    /// Carga el siguiente nivel en escena
+    /// </summary>
+    public void CargaSiguienteNivel()
+    {
+        if (infoNivel.numNivelActual > (infoNivel.dificultad * numberToCreate + numberToCreate))
+        {
+            CargaSeleccionNivel(infoNivel.dificultad);
+        }
+        boardManager.InitMap(lectorNiveles.CargaNivel(infoNivel.numNivelActual));
+    }
+
+    //Obtiene la información del nivel por parámetro
+    public InfoNivel GetInfoNivel(int nivel)
+    {
+        return lectorNiveles.CargaNivel(nivel);
+    }
+
+    //Obtiene el número de niveles desbloqueados por nivel de dificultad
+    //Y lo almacena en una tupla
+    private void CalculaNivelesPorDificultad()
+    {
+        nivelesPorDificultad = new int[nDificultades];
+        for (int i = 0; i < nivelesPorDificultad.Length; i++)
+        {
+            nivelesPorDificultad[i] = datosJugador.GetNumLevels(numberToCreate * i + 1, numberToCreate * i + numberToCreate);
+        }
+    }
+    #endregion
+
+
+
+    /// <summary>
+    /// Actualmente, todos los cambios de escena tienen efecto en el *siguiente frame*
+    /// Debido a que usamos LoadScene en lugar de su versión asíncrona
+    /// </summary>
+    #region SceneManagement
+
+
+    //Cierra la aplicación
+    public void CierraJuego()
+    {
+        Application.Quit();
+    }
+    //Carga escena de título
+    public void CargaEscenaTitulo()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    //Carga la escena de seleccion de nivel para la dificultad adecuada
+    public void CargaSeleccionNivel(int dificultad)
+    {
+        if (dificultad >= 0 && dificultad <= 4)
+        {
+            switch (dificultad)
+            {
+                case 0:
+                    infoNivel.tipoDificultadActual = "BEGINNER";
+                    break;
+                case 1:
+                    infoNivel.tipoDificultadActual = "REGULAR";
+                    break;
+                case 2:
+                    infoNivel.tipoDificultadActual = "ADVANCED";
+                    break;
+                case 3:
+                    infoNivel.tipoDificultadActual = "EXPERT";
+                    break;
+                case 4:
+                    infoNivel.tipoDificultadActual = "MASTER";
+                    break;
+            }
+            infoNivel.dificultad = dificultad;
+        }
+
+        SceneManager.LoadScene(1);
+    }
+
+    //Carga la escena de juego
+    public void CargaEscenaJuego(int nivel, bool isChallenge)
+    {
+        infoNivel.numNivelActual = nivel;
+        infoNivel.isChallenge = isChallenge;
+        SceneManager.LoadScene(2);
+    }
+    #endregion
+
+    /// <summary>
+    /// Carga y guardado de los datos del jugador
+    /// </summary>
     #region Save and Load
     /// <summary>
     /// Guarda el estado del jugador
@@ -308,6 +340,9 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// Todos los Getters y Setters del Game Manager
+    /// </summary>
     #region Set and gets
 
     /// <summary>
@@ -340,12 +375,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-/// <summary>
-/// Asigna la instancia de BoardManager a la que vamos a referenciar.
-/// De esta manera siempre tendremos la misma referencia, asegurando la coherencia durante las partidas.
-/// Se mantiene la misma instancia hasta
-/// </summary>
-/// <returns></returns>
+    /// <summary>
+    /// Asigna la instancia de BoardManager a la que vamos a referenciar.
+    /// De esta manera siempre tendremos la misma referencia, asegurando la coherencia durante las partidas.
+    /// Se mantiene la misma instancia hasta
+    /// </summary>
+    /// <returns></returns>
     public BoardManager GetBoardManager()
     {
         return boardManager;

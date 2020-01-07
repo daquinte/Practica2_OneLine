@@ -163,7 +163,7 @@ public class BoardManager : MonoBehaviour
 
     /// <summary>
     /// Redimensionamos la cámara en función del tamaño de la pantalla 
-    /// y del canvas
+    /// y las barras del canvas, tanto la superior como la inferior
     /// </summary>
     private void ResizeCamera()
     {
@@ -187,6 +187,12 @@ public class BoardManager : MonoBehaviour
     /// Métodos de lógica de juego y comprobaciones del mismo.
     /// </summary>
     #region Logic Methods
+
+    /// <summary>
+    /// Lógica de cuando un tile ha sido pulsado.
+    /// Comprobamos si hay que retroceder hasta ese tile
+    /// Si no tenemos que hacerlo, lo marcaremos como parte del camino hacia la solución
+    /// </summary>
     public void SetTilePulsado(int x, int y)
     {
         if (tiles[x, y].GetPulsado())
@@ -219,7 +225,7 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-
+    //Por estética, esperamos unos pocos segundos antes de mostrar el panel.
     IEnumerator EndGameAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -228,6 +234,12 @@ public class BoardManager : MonoBehaviour
         GameManager.instance.DesBloqueaSiguienteNivel();
     }
 
+    /// <summary>
+    /// Comprueba si las coordenadas que recibe como parámetro están dentro de la matriz
+    /// Si lo están, llamará al método de "SetTilePulsado"
+    /// </summary>
+    /// <param name="x">Componente X de la coordenada</param>
+    /// <param name="y">Componente Y de la coordenada</param>
     public void coordsDentroMatriz(int x, int y)
     {
         if (y <= 0)
@@ -316,10 +328,18 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    // TODO: Comentar
+    /// <summary>
+    /// Determina si es posible pasar por el tile "TileCandidato" debido a su proximidad 
+    /// con el tile "top" de la lista de tiles del camino. 
+    /// Si es candidato y el movimiento es "legal", devuelve en sus parámetros por referencia la posición y el sentido del camino.
+    /// </summary>
+    /// <param name="peek">El "top" de nuestra lista de tiles</param>
+    /// <param name="tileCandidato">El tile que has pulsado</param>
+    /// <param name="posicion">Posicion del camino, por referencia</param>
+    /// <param name="sentido">Sentido del camino, por referencia</param>
+    /// <returns></returns>
     private bool esCandidato(Tile peek, Tile tileCandidato, ref Vector3 posicion, ref Vector3 sentido)
     {
-        //Tile top = caminoTiles.Peek();
         int diferenciaX = (int)(tileCandidato.gameObject.transform.position.x - peek.gameObject.transform.position.x);
         int diferenciaY = (int)(tileCandidato.gameObject.transform.position.y - peek.gameObject.transform.position.y);
         if (Math.Abs(diferenciaX) == 1 && diferenciaY == 0)

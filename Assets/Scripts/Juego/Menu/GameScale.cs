@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Analiza el tamaño del juego en función del tamaño de la pantalla y del tamaño del canvas
+/// Guarda la información para el escalado posterior.
+/// </summary>
 public class GameScale : MonoBehaviour
 {
 

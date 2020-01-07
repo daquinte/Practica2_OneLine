@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase que gestiona el input de la aplicacion
+/// </summary>
 public class InputManager : MonoBehaviour {
 
+	/// <summary>
+	/// Contiene información del input para ser consultado
+	/// </summary>
 	public struct inputInfo
 	{
 		public Vector3 position;
@@ -32,6 +38,10 @@ public class InputManager : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Devuelve la información del input
+	/// </summary>
+	/// <returns>Struct con información</returns>
 	public inputInfo getInputInfo()
 	{
 		return infoInput;

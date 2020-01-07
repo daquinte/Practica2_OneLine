@@ -9,9 +9,9 @@ using System.IO;
 /// </summary>
 public static class ProgressManager {
 
-
-    static int customSalt;
     static private int baseSalt = 1234;
+
+
     /// <summary>
     /// Guarda el estado del juego en un .dat
     /// crea el archivo y lo guarda.
@@ -68,6 +68,13 @@ public static class ProgressManager {
 
     }
 
+    /// <summary>
+    /// Encripta la información del jugador con el hash del objeto serializado
+    /// Obtenemos el hash que vamos a usar para encriptar
+    /// </summary>
+    /// <param name="bf">Binary formatter</param>
+    /// <param name="datos">Datos a encriptar</param>
+    /// <returns></returns>
     private static int Crypto (BinaryFormatter bf, DatosJugador datos)
     {
         MemoryStream memoryStream = new MemoryStream();

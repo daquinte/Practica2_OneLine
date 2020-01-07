@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Clase encargada de gestionar el canvas del menu principal
+/// </summary>
 public class CanvasMenu : MonoBehaviour {
 
 
-	public Text textoMonedas;
-	public Text textoMedallas;
+	public Text textoMonedas;					//Texto para las monedas del jugador
+	public Text textoMedallas;					//Texto para las medallas del jugador
 
-	public Text [] textoProgresoNiveles;
+	public Text [] textoProgresoNiveles;		//Textos para cada nivel
 
-	public RewardedAdsButton duplicaLogin;
-	public RewardedAdsButton freeChallenge;
+	public RewardedAdsButton duplicaLogin;		//Botones encargados de lanzar anuncio
+	public RewardedAdsButton freeChallenge;		//Boton de free challenge que lanza anuncio
 
 	[Tooltip("Panel de Challenge.")]
 	public GameObject challengePanel;
@@ -58,6 +61,7 @@ public class CanvasMenu : MonoBehaviour {
 	{
 		GameManager.instance.CierraJuego();
 	}
+
 
 	public void GoToSeleccionNiveles(int dificultad)
 	{
@@ -132,6 +136,7 @@ public class CanvasMenu : MonoBehaviour {
 		textoMedallas.text = GameManager.instance.GetDatosJugador()._medallas.ToString();
 	}
 
+	//Activa la posibilidad de jugar un challenge
 	public void PosibleJugarChallenge(GameObject deactivateObjects, GameObject[] activateObjects, Button challengeButton)
 	{
 		deactivateObjects.SetActive(false);
