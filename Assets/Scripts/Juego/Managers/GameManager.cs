@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private const int recompensaLogin = 35;
 
 
+    private int nDificultades;
     private int[] nivelesPorDificultad;
 
     /// <summary>
@@ -68,9 +69,8 @@ public class GameManager : MonoBehaviour
         lectorNiveles.CargaTodosLosNiveles();
 
         //Iniciamos por defecto
-        infoNivel.tipoDificultadActual = "DEBUG";
-        infoNivel.numNivelActual = 203;
-        //infoNivel.isChallenge = false;
+        infoNivel.tipoDificultadActual = "BEGINNER";
+        infoNivel.numNivelActual = 1;
     }
 
     /// <summary>
@@ -99,7 +99,6 @@ public class GameManager : MonoBehaviour
                 case 0:
                     infoNivel.tipoDificultadActual = "BEGINNER";
                     break;
-
                 case 1:
                     infoNivel.tipoDificultadActual = "REGULAR";
                     break;
@@ -114,8 +113,8 @@ public class GameManager : MonoBehaviour
                     break;
             }
             infoNivel.dificultad = dificultad;
-            datosJugador.AsignaNivel(numberToCreate * dificultad + 1);
         }
+
         SceneManager.LoadScene(1);
     }
 
@@ -129,17 +128,15 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-
     public InfoNivel GetInfoNivel(int nivel)
     {
-        //PRIMERO: CAMBIO ESCENA A ESCENA JUEGO
         return lectorNiveles.CargaNivel(nivel);
     }
 
 
     private void CalculaNivelesPorDificultad()
     {
-        nivelesPorDificultad = new int[5];
+        nivelesPorDificultad = new int[nDificultades];
         for (int i = 0; i < nivelesPorDificultad.Length; i++)
         {
             nivelesPorDificultad[i] = datosJugador.GetNumLevels(numberToCreate * i + 1, numberToCreate * i + numberToCreate);
@@ -287,7 +284,6 @@ public class GameManager : MonoBehaviour
         {
             datosJugador = new DatosJugador(100, 0);
         }
-
     }
 
     void OnApplicationFocus(bool focus)
@@ -323,6 +319,16 @@ public class GameManager : MonoBehaviour
     public void SetInputManager(InputManager instance)
     {
         inputManager = instance;
+    }
+
+
+    public void SetNumDificultades(int numDif)
+    {
+        nDificultades = numDif;
+        for (int i = 0; i < nDificultades; i++)
+        {
+            datosJugador.AsignaNivel(numberToCreate * i + 1);
+        }
     }
 
 /// <summary>

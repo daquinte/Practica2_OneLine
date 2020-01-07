@@ -8,7 +8,7 @@ public class TimeManager : MonoBehaviour
     DateTime currentDate;
     DateTime oldTime;
 
-    public string saveLocation;
+    private string saveLocation;
     public static TimeManager instance;
     
     // Start is called before the first frame update

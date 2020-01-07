@@ -37,8 +37,11 @@ public class CanvasMenu : MonoBehaviour {
 		duplicaLogin.SetCallbackRecompensa(DuplicaRecompensaDiaria);
 		freeChallenge.SetCallbackRecompensa(StartFreeChallenge);
 
+		GameManager.instance.SetNumDificultades(textoProgresoNiveles.Length);
+
 		ActualizaCanvas();
 		AnalizaProgreso();
+
 	}
 	
 	// Update is called once per frame
@@ -113,7 +116,7 @@ public class CanvasMenu : MonoBehaviour {
 	private void AnalizaProgreso()
 	{
 		int [] npd = GameManager.instance.GetNivelesPorDificultad();
-		for(int i = 0; i < 5; i++)
+		for(int i = 0; i < textoProgresoNiveles.Length; i++)
 		{
 			string numtostr = npd[i].ToString();
 			textoProgresoNiveles[i].text = numtostr + "/100";
