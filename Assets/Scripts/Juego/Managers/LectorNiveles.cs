@@ -79,7 +79,6 @@ public class LectorNiveles : MonoBehaviour
 /// </summary>
 public class InfoNivel
 {
-    //public int index { get; set; }
     public string[] layout { get; set; }
     public int[,] path { get; set; }
 }

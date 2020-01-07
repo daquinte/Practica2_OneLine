@@ -7,11 +7,11 @@ using UnityEngine;
 /// <summary>
 /// Clase que funciona como manager de un nivel. 
 /// Controla la logica de los tiles del nivel
-/// Gestiona el input en la aplicación
+/// Gestiona la carga de niveles en función de sus datos
 /// </summary>
 public class BoardManager : MonoBehaviour
 {
-    //Atributos publicos
+    //---Atributos publicos---//
     [Tooltip("Canvas de la escena de juego. Debe tener los componentes GameScale y CanvasJuego.")]
     public GameObject _CanvasJuego;
 
@@ -26,7 +26,7 @@ public class BoardManager : MonoBehaviour
     [Tooltip("Array de ScriptableObjects para las skins.")]
     public List<TileSkin> tileSkins;
 
-    //Atributos privados//
+    //---Atributos privados---//
     private int PIXELS_TO_UNITS = 110;
 
     /// <summary>
@@ -34,46 +34,30 @@ public class BoardManager : MonoBehaviour
     /// Así evitamos que el jugador pierda dinero al darle dos veces al botón de pista
     /// </summary>
     private Tile ultimoInicioPista;
+    private Tile[,] tiles;                  //Array con los tiles del nivel
+    private List<Tile> caminoTiles;         //Recorrido efectuado por el jugador
+                                            
+    private int[,] pistas;                  //Camino hasta la meta
+                                            
+                                            
+    private TileSkin currentTileSkin;       //TileSkin del nivel actual
+    private GameScale gameScale;            //componente GameScale del objeto canvas de tu escena.
+    private CanvasJuego canvasJuego;        //componente Canvas Juego del objeto canvas de tu escena.
+                                            
+    private int nTotalTiles;                //Número total de tiles 
+    private int nFils;                      //numero filas del tablero
+    private int nCols;                      //numero columnas del tablero
+    private int screenWidth;                //ancho de la pantalla en píxeles
+    private int screenHeight;               //alto de la pantalla en píxeles
 
-
-    /// <summary>
-    /// Array con los tiles
-    /// </summary>
-    private Tile[,] tiles;
-
-
-    /// <summary>
-    /// Recorrido efectuado en forma de pila.
-    /// </summary>
-    private List<Tile> caminoTiles;
-
-
-    /// <summary>
-    /// Camino a la meta
-    /// </summary>
-    private int[,] pistas;
-
-
-    private TileSkin currentTileSkin;   //TileSkin del nivel actual
-
-    private GameScale gameScale;        //componente GameScale del objeto canvas de tu escena.
-    private CanvasJuego canvasJuego;    //componente Canvas Juego del objeto canvas de tu escena.
-
-    private int nTotalTiles;            //Número total de tiles 
-    private int nFils;                  //numero filas del tablero
-    private int nCols;                  //numero columnas del tablero
-
-    private int screenWidth;
-    private int screenHeight;
-
-    bool init = false; //TEMPORAL, QUITAR CUANDO SE CARGE EL NIVEL DESDE EL MENU
-    bool isChallenge = false;           //¿Estamos jugando un nivel Challenge?
+    bool isChallenge = false;               //¿Estamos jugando un nivel Challenge?
 
     // Use this for initialization
     void Start()
     {
         caminoTiles = new List<Tile>();
 
+        //Tomamos una skin aleatoria
         GetRandomSkin();
         cursor.SetSprite(currentTileSkin.spriteDedo);
 
@@ -99,6 +83,7 @@ public class BoardManager : MonoBehaviour
                                 (int)Math.Round(GameManager.instance.GetInputManager().getInputInfo().position.y));
         }
 
+        //Si ha cambiado la pantalla, redimensionamos la escena.
         if (screenWidth != Screen.width || screenHeight != Screen.height)
         {
             ResizeCamera();
@@ -111,14 +96,8 @@ public class BoardManager : MonoBehaviour
     #region Start Methods
 
     /// <summary>
-    /// Ponemos este mapa a tipo challenge.
-    /// Es decir: no se guarda el progreso "general", y el mapa puede acabar abruptamente.
+    /// Borra el mapa actual instanciado en la escena
     /// </summary>
-    public void SetCurrentMapAsChallenge()
-    {
-        isChallenge = true;
-    }
-
     public void ResetMap()
     {
         caminoTiles = new List<Tile>();
@@ -128,6 +107,10 @@ public class BoardManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+    /// <summary>
+    /// Inicializa un mapa en base al infonivel de referencia
+    /// </summary>
+    /// <param name="infoNivel">Struct con información necesaria para cargar un nivel</param>
     public void InitMap(InfoNivel infoNivel)
     {
         nFils = infoNivel.layout.Length;
@@ -136,7 +119,8 @@ public class BoardManager : MonoBehaviour
 
         tiles = new Tile[nCols, nFils];
         nTotalTiles = 0;
-        //Situamos la cámara
+
+        //Escalamos y situamos la cámara
         ResizeCamera();
 
         for (int filas = 0; filas < tiles.GetLength(1); filas++)
@@ -153,8 +137,10 @@ public class BoardManager : MonoBehaviour
                     tile.SetTileSkin(currentTileSkin);
                     tiles[cols, filas] = tile;
                     nTotalTiles++;
+
+                    //Si es inicial...
                     if (tipoTile == '2')
-                    { //Si es inicial...
+                    { 
                         tile.SetTileInicial();
                         caminoTiles.Add(tiles[cols, filas]);
                     }
@@ -162,11 +148,12 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
-        init = true;
     }
 
 
-
+    /// <summary>
+    /// Elige una skin aleatoria del array de TileSkins.
+    /// </summary>
     private void GetRandomSkin()
     {
 
@@ -174,6 +161,10 @@ public class BoardManager : MonoBehaviour
         currentTileSkin = tileSkins[rnd];
     }
 
+    /// <summary>
+    /// Redimensionamos la cámara en función del tamaño de la pantalla 
+    /// y del canvas
+    /// </summary>
     private void ResizeCamera()
     {
         screenWidth = Screen.width;

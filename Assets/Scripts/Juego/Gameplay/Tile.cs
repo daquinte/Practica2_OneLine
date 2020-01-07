@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * Script que controla la infraestructura de un Tile. 
- * Prefab. El prefab se marca automaticamente :D
- * TODO: Cambiar el Sprite de ConCamino según la skin, ya llegará.
-*/
+
+/// <summary>
+/// Constrolamos la estructura de cada tile particular que componen el tablero.
+/// Cada tile se encarga de saber si ha sido pulsado, y de pintar su camino según el input del usuario.
+/// </summary>
 public class Tile : MonoBehaviour
 {
     [Tooltip("Skin de tile no pulsado.")]
@@ -80,6 +80,29 @@ public class Tile : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = spriteNoPulsado;
         }
     }
+
+    /// <summary>
+    /// Dibuja el camino, de pista o normal, en función de la información del Tile previo.
+    /// En base a esa información, se añade el camino correspondiente como hijo y
+    /// lo modifica adecuadamente.
+    /// </summary>
+    /// <param name="pista">¿Es pista o no?</param>
+    /// <param name="tile">Tile del que procede</param>
+    /// <param name="posicion">posición del anterior tile</param>
+    /// <param name="sentido">sentido del camino</param>
+    public void MarcarCamino(bool pista, Tile tile, Vector3 posicion, Vector3 sentido)
+    {
+        SpriteRenderer spriteR = (pista) ? pistaSprite : spriteDireccionCamino;
+        SpriteRenderer child = Instantiate(spriteR, tile.transform);
+        // Es muy importante hacer esto porque si no, empieza en el origen de coordenadas
+        child.transform.position = tile.transform.position + posicion;
+        child.transform.eulerAngles = sentido;
+    }
+
+    /// <summary>
+    /// Desmarca el camino que tuviera este tile. 
+    /// Sólo borramos el camino normal, nunca borraremos el camino formado por pistas.
+    /// </summary>
     public void DesmarcarCamino()
     {
         for (int i = 0; i < transform.childCount; i++) {
@@ -97,16 +120,13 @@ public class Tile : MonoBehaviour
     /// <returns>Estado del bool "Pulsado" interno</returns>
     public bool GetPulsado() { return _pulsado; }
 
+    /// <summary>
+    /// Pregunta si se ha pulsado dentro del Tile
+    /// </summary>
     void OnMouseDown() {
         GameManager.instance.GetBoardManager().coordsDentroMatriz((int)this.transform.position.x, Mathf.Abs((int)this.transform.position.y));
     }
 
-    public void MarcarCamino(bool pista, Tile tile, Vector3 posicion, Vector3 sentido) {
-        SpriteRenderer spriteR = (pista) ? pistaSprite : spriteDireccionCamino;
-        SpriteRenderer child = Instantiate(spriteR, tile.transform);
-        // Es muy importante hacer esto porque si no, empieza en el origen de coordenadas
-        child.transform.position = tile.transform.position + posicion;
-        child.transform.eulerAngles = sentido;
-    }
+
 
 }
