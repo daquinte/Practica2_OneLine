@@ -3,8 +3,6 @@ using System.IO;
 using UnityEngine;
 using SimpleJSON;
 
-using Newtonsoft.Json; //Lo que usabamos en USABILIDAD Y ANALISIS
-
 public class LectorNiveles : MonoBehaviour
 {
     private Dictionary<int, InfoNivel> _niveles;
@@ -54,7 +52,7 @@ public class LectorNiveles : MonoBehaviour
         while (!reader.isDone) { }
         json = reader.text;
 #else
-        json = File.ReadAllText(Application.streamingAssetsPath + "/niveles.json");
+        json = File.ReadAllText(Application.dataPath + "/Niveles/niveles.json");
 #endif
         JSONNode niveles = JSON.Parse(json);
 
