@@ -155,9 +155,14 @@ public class GameManager : MonoBehaviour
     {
         if (!free)
         {
-            RestaMonedas(precioChallenge);
+            if (datosJugador._monedas - precioChallenge >= 0) { 
+                RestaMonedas(precioChallenge);
+                CargaEscenaJuego(Random.Range(100, 400), true);
+            }
         }
-        CargaEscenaJuego(Random.Range(100, 400), true);
+        else CargaEscenaJuego(Random.Range(100, 400), true);
+
+
     }
 
     /// <summary>
@@ -221,8 +226,10 @@ public class GameManager : MonoBehaviour
     public void NuevoNivelSerializable(int nivel)
     {
         // Serializacion
-        datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
-        ProgressManager.Save(datosJugador);
+        if (!infoNivel.isChallenge) { 
+            datosJugador.AsignaNivel(GameManager.instance.infoNivel.numNivelActual);
+            ProgressManager.Save(datosJugador);
+        }
     }
 
     public void DesBloqueaSiguienteNivel()

@@ -24,21 +24,21 @@ public class CanvasJuego : MonoBehaviour
     public Text textoDificultad;
 
     //Elementos de la HUD de una partida normal
-   
+
     public Button botonReset;
     public Button botonPista;
 
     public RewardedAdsButton botonAnuncio;
     public RewardedAdsButton botonDuplicar;
-    
+
 
     //Elementos de la HUD para partida de tipo challenge
     public CountDown countDown;
 
-    public Text TextoSigNivelDif; 
+    public Text TextoSigNivelDif;
     public Text TextoSigNivelNum;
 
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +65,8 @@ public class CanvasJuego : MonoBehaviour
 
     }
 
-    public void ShowSiguienteNivelPanel() {
+    public void ShowSiguienteNivelPanel()
+    {
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         TextoSigNivelDif.text = GameManager.instance.infoNivel.tipoDificultadActual;
         TextoSigNivelNum.text = (GameManager.instance.infoNivel.numNivelActual).ToString(); //Restamos 1 porque se ha sumado previamente.
@@ -74,24 +75,35 @@ public class CanvasJuego : MonoBehaviour
     }
     public void HideSiguienteNivelPanel() { panelSiguienteNivel.SetActive(false); }
 
-    public void ShowChallengeCompletado() {
+    public void ShowChallengeCompletado()
+    {
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         countDown.StopTimer();
-        panelChallengeWin.SetActive(true); 
+        panelChallengeWin.SetActive(true);
     }
 
-    public void ChallengeFallido() {
+    public void ChallengeFallido()
+    {
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-        panelChallengeLost.SetActive(true); 
+        panelChallengeLost.SetActive(true);
     }
 
-    public void HideChallengeFallido() { 
-        
-        panelChallengeLost.SetActive(false); 
+    public void HideChallengeFallido()
+    {
+
+        panelChallengeLost.SetActive(false);
     }
 
     ///Callbacks de la escena
     #region Callbacks
+
+    ///Callback para el botón de "atrás"
+    public void BackButtonCallback()
+    {
+        if (GameManager.instance.infoNivel.isChallenge) GoToTitulo();
+        else GoToSeleccionNivel();
+    }
+
     /// <summary>
     /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
     /// </summary>
@@ -103,14 +115,16 @@ public class CanvasJuego : MonoBehaviour
     /// <summary>
     /// Callback para informar a la instancia del nivel que queremos volver al titulo
     /// </summary>
-    public void GoToTitulo() {
+    public void GoToTitulo()
+    {
         GameManager.instance.CargaEscenaTitulo();
     }
 
     /// <summary>
     /// Callback para informar a la instancia del nivel que queremos volver a seleccionar nivel
     /// </summary>
-    public void GoToSiguienteNivel() {
+    public void GoToSiguienteNivel()
+    {
         GameManager.instance.CargaSiguienteNivel();
         this.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         this.GetComponent<Canvas>().worldCamera = Camera.main;
@@ -118,7 +132,8 @@ public class CanvasJuego : MonoBehaviour
         HideSiguienteNivelPanel();
     }
 
-    public void AnuncioPorMonedas() {
+    public void AnuncioPorMonedas()
+    {
         GameManager.instance.OnRewardedAdWatched();
     }
 
